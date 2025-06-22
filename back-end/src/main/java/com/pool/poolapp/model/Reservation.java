@@ -23,7 +23,7 @@ public class Reservation {
     @Column
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private ZonedDateTime date;
 
     @Column

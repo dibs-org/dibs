@@ -43,7 +43,7 @@ public class ReservationController {
         return reservationRepo.save(reservation);
     }
 
-    @PutMapping("/{id}")
+   /*  @PutMapping("/{id}")
     public Reservation updateReservation(@PathVariable UUID id, @RequestBody Reservation updatedReservation) {
         return reservationRepo.findById(id.getMostSignificantBits())
                 .map(existing -> {
@@ -112,5 +112,5 @@ public class ReservationController {
                 .filter(reservation -> reservation.getPoolId().equals(poolId) && 
                                        reservation.getDate().toLocalDate().toString().equals(date))
                 .toList();
-    }
+    } */
 }
