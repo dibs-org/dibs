@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { Reservation, ReservationFormData } from "./types";
+import { Reservation } from "../../types";
 
-export const useCreateReservation = () => {
+export const useModifyReservation = () => {
   return useMutation({
-    mutationFn: (reservation: ReservationFormData) => {
+    // Replace with actual API call
+    mutationFn: (reservation: Reservation) => {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve({
@@ -16,7 +17,7 @@ export const useCreateReservation = () => {
             updatedAt: new Date().toISOString(),
             status: "pending",
           } as Reservation);
-        }, 1000);
+        }, 300);
       });
     },
   });

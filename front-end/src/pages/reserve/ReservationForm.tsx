@@ -1,10 +1,12 @@
-import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
-import { useState } from "react";
-import { useCreateReservation } from "./useCreateReservation";
-import { ReservationFormDataShape } from "./types";
+import { useState, useId } from "react";
+import { useCreateReservation } from "../../services/reservation/useCreateReservation";
+import { ReservationRequestFormShape } from "../../types";
 import z from "zod/v4";
 import Field from "../../components/Field";
+import { isValid, parse } from "date-fns";
+import { useListingDetails } from "../../services/listing/useListing";
+import { Calendar } from "./Calendar";
 
 const MIN_GUESTS = 1;
 const MAX_GUESTS = 50;
@@ -18,10 +20,12 @@ type ReservationFormState = {
 
 type ValueOf<T> = T[keyof T];
 
-export const ReservationForm = () => {
+export const ReservationForm = ({ listingId }: { listingId: string }) => {
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});
+  const { data: listingDetails, isLoading: isLoadingListingDetails } =
+    useListingDetails({ listingId });
   const [reservationFormState, setReservationFormState] =
     useState<ReservationFormState>({
       date: new Date().toISOString().split("T")[0],
@@ -29,6 +33,8 @@ export const ReservationForm = () => {
       endTime: "18:00",
       numberOfGuests: 1,
     });
+
+  const inputId = useId();
 
   const {
     mutate: createReservation,
@@ -39,7 +45,7 @@ export const ReservationForm = () => {
 
   const handleSubmit = () => {
     try {
-      const parsed = ReservationFormDataShape.parse(reservationFormState);
+      const parsed = ReservationRequestFormShape.parse(reservationFormState);
       createReservation(parsed);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -67,35 +73,43 @@ export const ReservationForm = () => {
     }));
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const parsedDate = parse(e.target.value, "yyyy-MM-dd", new Date());
+
+    if (isValid(parsedDate)) {
+      handleDateChange("date", e.target.value);
+    } else {
+      handleDateChange("date", undefined);
+    }
+  };
+
+  if (isLoadingListingDetails) {
+    return (
+      <div>
+        <h3 className="text-2xl font-bold">Reserve</h3>
+        <div className="h-10 w-10 bg-neutral-200 dark:bg-neutral-800 rounded-full animate-pulse" />
+      </div>
+    );
+  }
+
   const reservationForm = (
     <>
-      <h3 className="text-2xl font-bold">Reserve David's pool</h3>
+      <h3 className="text-2xl font-bold">Reserve</h3>
+      <h4 className="text-lg font-bold">{listingDetails?.name}</h4>
       <div className="flex flex-col md:flex-row gap-2 items-center">
-        <div>
-          <DayPicker
-            animate
-            mode="single"
-            selected={
-              reservationFormState.date
-                ? new Date(reservationFormState.date)
-                : undefined
-            }
-            disabled={{ dayOfWeek: [0, 6] }}
-            onSelect={(date) =>
-              handleDateChange(
-                "date",
-                date ? date.toISOString().split("T")[0] : ""
-              )
-            }
-          />
-        </div>
+        <Calendar
+          value={reservationFormState.date}
+          onChange={(date) => handleDateChange("date", date)}
+          listingId={listingId}
+        />
         <div className="flex flex-col gap-4 w-full">
           <Field label="Date" errorMessage={fieldErrors.date}>
             <input
+              id={inputId}
               type="date"
               className="border border-neutral-300 dark:border-neutral-800 rounded-md p-2"
               value={reservationFormState.date}
-              onChange={(e) => handleDateChange("date", e.target.value)}
+              onChange={handleInputChange}
             />
           </Field>
           <Field label="Time">
@@ -175,7 +189,17 @@ export const ReservationForm = () => {
           </button>
         </div>
       </div>
-      <pre>{JSON.stringify({ reservationFormState }, null, 2)}</pre>
+      <pre>{JSON.stringify({ listingDetails }, null, 2)}</pre>
+      <pre>
+        {JSON.stringify(
+          {
+            reservationFormState,
+            parsedDate: reservationFormState.date,
+          },
+          null,
+          2
+        )}
+      </pre>
     </>
   );
 

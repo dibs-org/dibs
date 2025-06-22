@@ -1,8 +1,8 @@
-import { useParams, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const EditListingPage = () => {
-  const { listingId } = useParams({ from: "/manage/listings/$listingId" });
+export const EditListingPage = ({ listingId }: { listingId: number }) => {
+  // const { listingId } = useParams({ from: "/manage/listings/$listingId" });
 
   // Mock data - in a real app, this would be fetched based on listingId
   const [formData, setFormData] = useState({
