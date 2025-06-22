@@ -45,7 +45,7 @@ public class ReservationController {
 
     @PutMapping("/{id}")
     public Reservation updateReservation(@PathVariable UUID id, @RequestBody Reservation updatedReservation) {
-        return reservationRepo.findById(id)
+        return reservationRepo.findById(id.getMostSignificantBits())
                 .map(existing -> {
                     existing.setEmail(updatedReservation.getEmail());
                     existing.setDate(updatedReservation.getDate());
@@ -55,11 +55,11 @@ public class ReservationController {
     }
     @DeleteMapping("/{id}")
     public void deleteReservation(@PathVariable UUID id) {
-        reservationRepo.deleteById(id);
+        reservationRepo.deleteById(id.getMostSignificantBits());
     }
     @GetMapping("/{id}")
     public Reservation getReservationById(@PathVariable UUID id) {
-        return reservationRepo.findById(id)
+        return reservationRepo.findById(id.getMostSignificantBits())
                 .orElseThrow(() -> new RuntimeException("Reservation not found with id " + id));
     }
     @GetMapping("/email/{email}")
