@@ -16,7 +16,7 @@ function Index() {
         <Link to="/manage">Owner dashboard</Link>
         <Link to="/manage/listings">Manage listings</Link>
         <Link to="/manage/listings/new">Create listing</Link>
-        <Link to="/manage/reservations">Manage bookings</Link>
+        <Link to="/manage/reservations">Manage reservations</Link>
         <br />
         <span className="text-sm text-gray-500">Renter</span>
         <Link to="/reserve">Reserve</Link>

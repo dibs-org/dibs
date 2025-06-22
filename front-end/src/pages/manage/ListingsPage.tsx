@@ -8,7 +8,7 @@ export const ListingsPage = () => {
       name: "Beautiful Backyard Pool",
       description: "A stunning 20x40 pool with spa and outdoor kitchen",
       status: "active",
-      bookings: 5,
+      reservations: 5,
       monthlyRevenue: 850,
       features: ["Heated", "Hot Tub", "Pool Bar"],
     },
@@ -17,7 +17,7 @@ export const ListingsPage = () => {
       name: "Resort-Style Pool",
       description: "Olympic-sized pool with waterfall and grotto",
       status: "active",
-      bookings: 8,
+      reservations: 8,
       monthlyRevenue: 1200,
       features: ["Olympic Size", "Waterfall", "Grotto"],
     },
@@ -26,7 +26,7 @@ export const ListingsPage = () => {
       name: "Cozy Family Pool",
       description: "Perfect for families with shallow end and slide",
       status: "inactive",
-      bookings: 0,
+      reservations: 0,
       monthlyRevenue: 0,
       features: ["Shallow End", "Slide", "Family Friendly"],
     },
@@ -91,9 +91,11 @@ export const ListingsPage = () => {
 
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Bookings</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Reservations
+                  </p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {listing.bookings}
+                    {listing.reservations}
                   </p>
                 </div>
                 <div>

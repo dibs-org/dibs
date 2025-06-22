@@ -97,7 +97,9 @@ export const ReservationsPage = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">My Reservations</h1>
-        <p className="text-gray-600">View and manage all your pool bookings</p>
+        <p className="text-gray-600">
+          View and manage all your pool reservations
+        </p>
       </div>
 
       {/* Stats */}
@@ -106,7 +108,7 @@ export const ReservationsPage = () => {
           <div className="text-2xl font-bold text-blue-600">
             {reservations.length}
           </div>
-          <div className="text-sm text-gray-500">Total Bookings</div>
+          <div className="text-sm text-gray-500">Total Reservations</div>
         </div>
         <div className="bg-white p-4 rounded-lg shadow">
           <div className="text-2xl font-bold text-green-600">

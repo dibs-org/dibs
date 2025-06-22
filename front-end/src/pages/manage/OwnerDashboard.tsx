@@ -4,12 +4,12 @@ export const OwnerDashboard = () => {
   // Mock data - in a real app, this would come from an API
   const stats = {
     totalListings: 3,
-    activeBookings: 5,
+    activeReservations: 5,
     monthlyRevenue: 2450,
-    upcomingBookings: 2,
+    upcomingReservations: 2,
   };
 
-  const recentBookings = [
+  const recentReservations = [
     {
       id: "1",
       guestName: "John Doe",
@@ -72,10 +72,10 @@ export const OwnerDashboard = () => {
               <div className="ml-5 w-0 flex-1">
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">
-                    Active Bookings
+                    Active Reservations
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
-                    {stats.activeBookings}
+                    {stats.activeReservations}
                   </dd>
                 </dl>
               </div>
@@ -119,7 +119,7 @@ export const OwnerDashboard = () => {
                     Upcoming
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
-                    {stats.upcomingBookings}
+                    {stats.upcomingReservations}
                   </dd>
                 </dl>
               </div>
@@ -136,7 +136,7 @@ export const OwnerDashboard = () => {
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <Link
-              to="/manage/listings/create"
+              to="/manage/listings/new"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Add New Listing
@@ -148,23 +148,23 @@ export const OwnerDashboard = () => {
               Manage Listings
             </Link>
             <Link
-              to="/manage/bookings"
+              to="/manage/reservations"
               className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              View Bookings
+              View Reservations
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Recent Bookings */}
+      {/* Recent Reservations */}
       <div className="bg-white shadow rounded-lg">
         <div className="px-4 py-5 sm:p-6">
           <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-            Recent Bookings
+            Recent Reservations
           </h3>
           <div className="space-y-4">
-            {recentBookings.map((booking) => (
+            {recentReservations.map((booking) => (
               <div
                 key={booking.id}
                 className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
@@ -191,8 +191,8 @@ export const OwnerDashboard = () => {
                     {booking.status}
                   </span>
                   <Link
-                    to="/manage/bookings/$bookingId"
-                    params={{ bookingId: booking.id }}
+                    to="/manage/reservations/$reservationId"
+                    params={{ reservationId: booking.id }}
                     className="text-blue-600 hover:text-blue-500 text-sm font-medium"
                   >
                     View Details

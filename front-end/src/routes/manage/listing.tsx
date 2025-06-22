@@ -9,5 +9,5 @@ export const Route = createFileRoute("/manage/listing")({
 });
 
 function RouteComponent() {
-  return <EditListingPage listingId={1} />;
+  return <EditListingPage listingId="1" />;
 }

@@ -1,11 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const BookingsPage = () => {
+export const ReservationsPage = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
   // Mock data - in a real app, this would come from an API
-  const bookings = [
+  const reservations = [
     {
       id: "1",
       guestName: "John Doe",
@@ -50,10 +50,10 @@ export const BookingsPage = () => {
     },
   ];
 
-  const filteredBookings =
+  const filteredreservations =
     statusFilter === "all"
-      ? bookings
-      : bookings.filter((booking) => booking.status === statusFilter);
+      ? reservations
+      : reservations.filter((booking) => booking.status === statusFilter);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -71,7 +71,7 @@ export const BookingsPage = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Bookings</h1>
+        <h1 className="text-2xl font-bold text-gray-900">reservations</h1>
         <p className="text-gray-600">Manage all your pool reservations</p>
       </div>
 
@@ -79,21 +79,27 @@ export const BookingsPage = () => {
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8" aria-label="Tabs">
           {[
-            { key: "all", label: "All Bookings", count: bookings.length },
+            {
+              key: "all",
+              label: "All reservations",
+              count: reservations.length,
+            },
             {
               key: "pending",
               label: "Pending",
-              count: bookings.filter((b) => b.status === "pending").length,
+              count: reservations.filter((b) => b.status === "pending").length,
             },
             {
               key: "confirmed",
               label: "Confirmed",
-              count: bookings.filter((b) => b.status === "confirmed").length,
+              count: reservations.filter((b) => b.status === "confirmed")
+                .length,
             },
             {
               key: "cancelled",
               label: "Cancelled",
-              count: bookings.filter((b) => b.status === "cancelled").length,
+              count: reservations.filter((b) => b.status === "cancelled")
+                .length,
             },
           ].map((tab) => (
             <button
@@ -114,10 +120,10 @@ export const BookingsPage = () => {
         </nav>
       </div>
 
-      {/* Bookings List */}
+      {/* reservations List */}
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
         <ul className="divide-y divide-gray-200">
-          {filteredBookings.map((booking) => (
+          {filteredreservations.map((booking) => (
             <li key={booking.id}>
               <div className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
@@ -173,8 +179,8 @@ export const BookingsPage = () => {
 
                 <div className="mt-4 flex items-center space-x-3">
                   <Link
-                    to="/manage/bookings/$bookingId"
-                    params={{ bookingId: booking.id }}
+                    to="/manage/reservations/$reservationId"
+                    params={{ reservationId: booking.id }}
                     className="text-blue-600 hover:text-blue-500 text-sm font-medium"
                   >
                     View Details
@@ -206,7 +212,7 @@ export const BookingsPage = () => {
         </ul>
       </div>
 
-      {filteredBookings.length === 0 && (
+      {filteredreservations.length === 0 && (
         <div className="text-center py-12">
           <div className="mx-auto h-12 w-12 text-gray-400">
             <svg
@@ -224,12 +230,12 @@ export const BookingsPage = () => {
             </svg>
           </div>
           <h3 className="mt-2 text-sm font-medium text-gray-900">
-            No bookings
+            No reservations
           </h3>
           <p className="mt-1 text-sm text-gray-500">
             {statusFilter === "all"
-              ? "No bookings yet."
-              : `No ${statusFilter} bookings.`}
+              ? "No reservations yet."
+              : `No ${statusFilter} reservations.`}
           </p>
         </div>
       )}

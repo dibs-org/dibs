@@ -1,13 +1,15 @@
 import { useParams, Link } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const BookingDetailPage = () => {
-  const { bookingId } = useParams({ from: "/manage/bookings/$bookingId" });
+export const ReservationDetailPage = () => {
+  const { reservationId } = useParams({
+    from: "/manage/reservations/$reservationId",
+  });
   const [showCancelModal, setShowCancelModal] = useState(false);
 
   // Mock data - in a real app, this would be fetched based on bookingId
   const booking = {
-    id: bookingId,
+    id: reservationId,
     guestName: "John Doe",
     guestEmail: "john@example.com",
     guestPhone: "(717) 917-5881",
@@ -45,12 +47,12 @@ export const BookingDetailPage = () => {
 
   const handleConfirm = () => {
     // TODO: Implement confirm booking logic
-    console.log("Confirming booking:", bookingId);
+    console.log("Confirming booking:", reservationId);
   };
 
   const handleCancel = () => {
     // TODO: Implement cancel booking logic
-    console.log("Cancelling booking:", bookingId);
+    console.log("Cancelling booking:", reservationId);
     setShowCancelModal(false);
   };
 
@@ -65,10 +67,10 @@ export const BookingDetailPage = () => {
             <p className="text-gray-600">Reservation #{booking.id}</p>
           </div>
           <Link
-            to="/manage/bookings"
+            to="/manage/reservations"
             className="text-gray-600 hover:text-gray-900"
           >
-            Back to bookings
+            Back to reservations
           </Link>
         </div>
       </div>
