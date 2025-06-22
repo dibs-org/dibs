@@ -1,0 +1,19 @@
+.App {
+  font-family: sans-serif;
+  padding: 2rem;
+  max-width: 600px;
+  margin: auto;
+}
+
+input[type="email"] {
+  margin-left: 0.5rem;
+  padding: 0.25rem;
+  width: 60%;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
