@@ -41,6 +41,7 @@ package com.pool.poolapp.controller;
 import com.pool.poolapp.model.Pool;
 import com.pool.poolapp.repository.PoolRepository;
 import org.springframework.web.bind.annotation.*;
+import java.util.UUID;
 
 import java.util.List;
 
@@ -64,5 +65,79 @@ public class PoolController {
     public Pool createPool(@RequestBody Pool pool) {
         System.out.println("Creating pool: " + pool);
         return poolRepo.save(pool);
+    }
+    @GetMapping("/{id}")
+    public Pool getPoolById(@PathVariable String id) {
+        return poolRepo.findById(UUID.fromString(id))
+                .orElseThrow(() -> new RuntimeException("Pool not found with id " + id));
+    }
+    @PutMapping("/{id}")
+    public Pool updatePool(@PathVariable String id, @RequestBody Pool updatedPool) {
+        return poolRepo.findById(UUID.fromString(id))
+                .map(existing -> {
+                    existing.setName(updatedPool.getName());
+                    existing.setAddress(updatedPool.getAddress());
+                    return poolRepo.save(existing);
+                })
+                .orElseThrow(() -> new RuntimeException("Pool not found with id " + id));
+    }
+    @DeleteMapping("/{id}")
+    public void deletePool(@PathVariable String id) {
+        poolRepo.deleteById(UUID.fromString(id));
+    }
+    @GetMapping("/name/{name}")
+    public List<Pool> getPoolsByName(@PathVariable String name) {
+        return poolRepo.findAll().stream()
+                .filter(pool -> pool.getName().equalsIgnoreCase(name))
+                .toList();
+    }
+    @GetMapping("/location/{location}")
+    public List<Pool> getPoolsByLocation(@PathVariable String location) {
+        return poolRepo.findAll().stream()
+                .filter(pool -> pool.getAddress().equalsIgnoreCase(location))
+                .toList();
+    }
+    @GetMapping("/active")
+    public List<Pool> getActivePools() {
+        return poolRepo.findAll().stream()
+                .filter(Pool::getIsActive)
+                .toList();
+    }
+    @GetMapping("/inactive")
+    public List<Pool> getInactivePools() {
+        return poolRepo.findAll().stream()
+                .filter(pool -> !pool.getIsActive())
+                .toList();
+    }
+    @GetMapping("/owner/{ownerId}")
+    public List<Pool> getPoolsByOwnerId(@PathVariable String ownerId) {
+        return poolRepo.findAll().stream()
+                .filter(pool -> pool.getOwner().toString().equals(ownerId))
+                .toList();
+    }
+    @GetMapping("/created-at/{date}")
+    public List<Pool> getPoolsByCreatedAt(@PathVariable String date) {
+        return poolRepo.findAll().stream()
+                .filter(pool -> pool.getCreatedAt().toLocalDate().toString().equals(date))
+                .toList();
+    }
+    @GetMapping("/description/{description}")
+    public List<Pool> getPoolsByDescription(@PathVariable String description) {
+        return poolRepo.findAll().stream()
+                .filter(pool -> pool.getDescription() != null && pool.getDescription().contains(description))
+                .toList();
+    }
+    @GetMapping("/count")
+    public long countPools() {
+        return poolRepo.count();
+    }
+    @GetMapping("/exists/{id}")
+    public boolean poolExists(@PathVariable String id) {
+        return poolRepo.existsById(UUID.fromString(id));
+    }
+    @GetMapping("/exists/name/{name}")
+    public boolean poolExistsByName(@PathVariable String name) {
+        return poolRepo.findAll().stream()
+                .anyMatch(pool -> pool.getName().equalsIgnoreCase(name));
     }
 }

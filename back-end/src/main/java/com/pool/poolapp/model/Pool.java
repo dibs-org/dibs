@@ -35,8 +35,59 @@ public class Pool {
     @Column(nullable = false)
     private UUID owner;
 
-    // Optionally, you can map this as a @ManyToOne relationship if you have a User entity
-    // @ManyToOne
-    // @JoinColumn(name = "owner", nullable = false)
-    // private User owner;
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public UUID getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+    }
 }

@@ -33,7 +33,7 @@ public class Reservation {
     @Column
     private UUID userId; 
 
-    @Column
+    @Column(nullable = false)
     private UUID poolId; 
 
     @Column
@@ -41,5 +41,69 @@ public class Reservation {
 
     @Column
     private ZonedDateTime endTime; 
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public ZonedDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(ZonedDateTime date) {
+        this.date = date;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public UUID getPoolId() {
+        return poolId;
+    }
+
+    public void setPoolId(UUID poolId) {
+        this.poolId = poolId;
+    }
+
+    public ZonedDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public ZonedDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(ZonedDateTime endTime) {
+        this.endTime = endTime;
+    }
 
 }

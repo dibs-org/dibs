@@ -36,7 +36,7 @@ public class UserController {
         return userRepo.save(user);
     }
 
-   /* @GetMapping("/{id}")
+    @GetMapping("/{id}")
     public User getUserById(@PathVariable String id) {
         return userRepo.findById(UUID.fromString(id))
                 .orElseThrow(() -> new RuntimeException("User not found with id " + id));
@@ -141,5 +141,5 @@ public class UserController {
         return userRepo.findAll().stream()
                 .filter(user -> user.getCreatedAt().toInstant().isAfter(Instant.now().minusSeconds(60 * 60 * 24 * 30))) // Active in the last 30 days
                 .count();
-    } */
+    } 
 }

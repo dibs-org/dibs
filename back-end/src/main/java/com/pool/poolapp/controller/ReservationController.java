@@ -18,7 +18,7 @@ package com.pool.poolapp.controller;
 import com.pool.poolapp.model.Reservation;
 import com.pool.poolapp.repository.ReservationRepository;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import java.util.UUID;
 
 import java.util.List;
@@ -43,35 +43,26 @@ public class ReservationController {
         return reservationRepo.save(reservation);
     }
 
-   /*  @PutMapping("/{id}")
-    public Reservation updateReservation(@PathVariable UUID id, @RequestBody Reservation updatedReservation) {
-        return reservationRepo.findById(id.getMostSignificantBits())
-                .map(existing -> {
-                    existing.setEmail(updatedReservation.getEmail());
-                    existing.setDate(updatedReservation.getDate());
-                    return reservationRepo.save(existing);
-                })
-                .orElseThrow(() -> new RuntimeException("Reservation not found with id " + id));
+    @GetMapping("/{id}")
+    public Reservation getReservationById(@PathVariable UUID id) {
+        return reservationRepo.findById(id).orElse(null);
     }
     @DeleteMapping("/{id}")
     public void deleteReservation(@PathVariable UUID id) {
-        reservationRepo.deleteById(id.getMostSignificantBits());
+        reservationRepo.deleteById(id);
     }
-    @GetMapping("/{id}")
-    public Reservation getReservationById(@PathVariable UUID id) {
-        return reservationRepo.findById(id.getMostSignificantBits())
-                .orElseThrow(() -> new RuntimeException("Reservation not found with id " + id));
-    }
-    @GetMapping("/email/{email}")
-    public List<Reservation> getReservationsByEmail(@PathVariable String email) {
-        return reservationRepo.findAll().stream()
-                .filter(reservation -> reservation.getEmail().equalsIgnoreCase(email))
-                .toList();
+    @PutMapping("/{id}")
+    public Reservation updateReservation(@PathVariable UUID id, @RequestBody Reservation reservation) {
+        if (!reservationRepo.existsById(id)) {
+            return null; // or throw an exception
+        }
+        reservation.setId(id);
+        return reservationRepo.save(reservation);
     }
     @GetMapping("/user/{userId}")
-    public List<Reservation> getReservationsByUserId(@PathVariable String userId) {
+    public List<Reservation> getReservationsByUserId(@PathVariable UUID userId) {
         return reservationRepo.findAll().stream()
-                .filter(reservation -> reservation.getUserId().toString().equals(userId))
+                .filter(reservation -> reservation.getUserId().equals(userId))
                 .toList();
     }
     @GetMapping("/pool/{poolId}")
@@ -80,37 +71,52 @@ public class ReservationController {
                 .filter(reservation -> reservation.getPoolId().equals(poolId))
                 .toList();
     }
+    @GetMapping("/email/{email}")
+    public List<Reservation> getReservationsByEmail(@PathVariable String email) {
+        return reservationRepo.findAll().stream()
+                .filter(reservation -> reservation.getEmail().equalsIgnoreCase(email))
+                .toList();
+    }
     @GetMapping("/date/{date}")
     public List<Reservation> getReservationsByDate(@PathVariable String date) {
         return reservationRepo.findAll().stream()
                 .filter(reservation -> reservation.getDate().toLocalDate().toString().equals(date))
                 .toList();
     }
-    @GetMapping("/time/{time}")
-    public List<Reservation> getReservationsByTime(@PathVariable String time) {
+    @GetMapping("/start-time/{startTime}")
+    public List<Reservation> getReservationsByStartTime(@PathVariable String startTime) {
         return reservationRepo.findAll().stream()
-                .filter(reservation -> reservation.getDate().toLocalTime().toString().equals(time))
+                .filter(reservation -> reservation.getStartTime().toLocalTime().toString().equals(startTime))
+                .toList();
+    }
+    @GetMapping("/end-time/{endTime}")
+    public List<Reservation> getReservationsByEndTime(@PathVariable String endTime) {
+        return reservationRepo.findAll().stream()
+                .filter(reservation -> reservation.getEndTime().toLocalTime().toString().equals(endTime))
+                .toList();
+    }
+    @GetMapping("/created-at/{createdAt}")
+    public List<Reservation> getReservationsByCreatedAt(@PathVariable String createdAt) {
+        return reservationRepo.findAll().stream()
+                .filter(reservation -> reservation.getCreatedAt().toLocalDate().toString().equals(createdAt))
+                .toList();
+    }
+    @GetMapping("/user/{userId}/pool/{poolId}")
+    public List<Reservation> getReservationsByUserIdAndPoolId(@PathVariable UUID userId, @PathVariable UUID poolId) {
+        return reservationRepo.findAll().stream()
+                .filter(reservation -> reservation.getUserId().equals(userId) && reservation.getPoolId().equals(poolId))
                 .toList();
     }
     @GetMapping("/user/{userId}/date/{date}")
-    public List<Reservation> getReservationsByUserIdAndDate(@PathVariable String userId, @PathVariable String date) {
+    public List<Reservation> getReservationsByUserIdAndDate(@PathVariable UUID userId, @PathVariable String date) {
         return reservationRepo.findAll().stream()
-                .filter(reservation -> reservation.getUserId().toString().equals(userId) && 
-                                       reservation.getDate().toLocalDate().toString().equals(date))
-                .toList();
-    }
-    @GetMapping("/user/{userId}/time/{time}")
-    public List<Reservation> getReservationsByUserIdAndTime(@PathVariable String userId, @PathVariable String time) {
-        return reservationRepo.findAll().stream()
-                .filter(reservation -> reservation.getUserId().toString().equals(userId) && 
-                                       reservation.getDate().toLocalTime().toString().equals(time))
+                .filter(reservation -> reservation.getUserId().equals(userId) && reservation.getDate().toLocalDate().toString().equals(date))
                 .toList();
     }
     @GetMapping("/pool/{poolId}/date/{date}")
-    public List<Reservation> getReservationsByPoolIdAndDate(@PathVariable Long poolId, @PathVariable String date) {
+    public List<Reservation> getReservationsByPoolIdAndDate(@PathVariable UUID poolId, @PathVariable String date) {
         return reservationRepo.findAll().stream()
-                .filter(reservation -> reservation.getPoolId().equals(poolId) && 
-                                       reservation.getDate().toLocalDate().toString().equals(date))
+                .filter(reservation -> reservation.getPoolId().equals(poolId) && reservation.getDate().toLocalDate().toString().equals(date))
                 .toList();
-    } */
+    }
 }
