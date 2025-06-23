@@ -1,20 +1,23 @@
 @import "tailwindcss";
 
 :root {
+  --color-bg-default: #fafafa;
   --color-surface: #ffffff;
 }
 
 @theme {
+  --color-bg-default: var(--color-white);
   --color-surface: var(--color-surface);
 }
 
 body {
-  background-color: var(--color-gray-50);
+  background-color: var(--color-bg-default);
   color: var(--color-gray-950);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --color-bg-default: #111827;
     --color-surface: #111827;
   }
 

@@ -2,12 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { listings, reservations, users } from "../../fakeData";
 import { Listing, Reservation, User } from "../../types";
 
+export type ReservationWithListingAndHostUserAndRenterUser = Reservation & {
+  listing?: Listing;
+  hostUser?: User;
+  renterUser?: User;
+};
+
 export const useReservations = (args?: { listingId?: string }) => {
   const { listingId } = args || {};
 
-  return useQuery<
-    (Reservation & { listing?: Listing; hostUser?: User; renterUser?: User })[]
-  >({
+  return useQuery<ReservationWithListingAndHostUserAndRenterUser[]>({
     queryKey: ["reservations", listingId],
     // Replace with actual API call
     queryFn: () => {
