@@ -1,4 +1,4 @@
-import { useParams, Link } from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 import { useReservation } from "../../services/reservation/useReservation";
 
 export const ReservationDetailPage = () => {
@@ -36,19 +36,13 @@ export const ReservationDetailPage = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="w-full">
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-medium">Reservation Details</h1>
             <p className="text-gray-600">Booking #{reservation.id}</p>
           </div>
-          <Link
-            to="/reservations"
-            className="text-gray-600 hover:text-gray-900"
-          >
-            Back to reservations
-          </Link>
         </div>
       </div>
 

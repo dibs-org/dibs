@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useReservations } from "../../services/reservation/useReservations";
+import { useReservations } from "../../../services/reservation/useReservations";
 
 export const ManageReservationsListPage = () => {
   const { data: reservations = [] } = useReservations();

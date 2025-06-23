@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useListings } from "../../services/listing/useListings";
+import { useListings } from "../../../services/listing/useListings";
 
 export const ManageListingsPage = () => {
   const { data: listings = [] } = useListings();

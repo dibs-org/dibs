@@ -3,7 +3,7 @@ import { useMyReservations } from "../../services/reservation/useMyReservations"
 
 export const MyReservationsListPage = () => {
   const navigate = useNavigate();
-  const { data: reservations = [] } = useMyReservations();
+  const { data: reservations = [] } = useMyReservations({ userId: "3" });
 
   return (
     <div className="space-y-6 w-full">

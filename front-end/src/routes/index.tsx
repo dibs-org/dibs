@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-start gap-2">
         <h3>Home</h3>
         <Link to="/login">Login</Link>
         <Link to="/signup">Signup</Link>

@@ -34,6 +34,18 @@ export const reservations: Reservation[] = [
     updatedAt: "2025-01-01",
     status: "pending",
   },
+  {
+    id: "2",
+    listingId: "1",
+    userId: "2",
+    date: "2025-06-23",
+    startTime: "10:00",
+    endTime: "12:00",
+    numberOfGuests: 1,
+    createdAt: "2025-01-01",
+    updatedAt: "2025-01-01",
+    status: "confirmed",
+  },
 ];
 
 export const listings: Listing[] = [
