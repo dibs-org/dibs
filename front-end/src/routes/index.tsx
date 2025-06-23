@@ -36,6 +36,9 @@ function Index() {
               <Link to="/login" className={makeButtonClasses()}>
                 Login
               </Link>
+              <Link to="/login-phone" className={makeButtonClasses()}>
+                Login with phone
+              </Link>
               <Link to="/signup" className={makeButtonClasses()}>
                 Signup
               </Link>
