@@ -40,7 +40,7 @@ export const ReservationDetailPage = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Reservation Details</h1>
+            <h1 className="text-2xl font-medium">Reservation Details</h1>
             <p className="text-gray-600">Booking #{reservation.id}</p>
           </div>
           <Link

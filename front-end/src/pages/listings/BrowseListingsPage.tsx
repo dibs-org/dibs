@@ -91,7 +91,7 @@ export const BrowseListingsPage = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Browse Pools</h1>
+        <h1 className="text-2xl font-medium">Browse Pools</h1>
         <p className="text-gray-600">
           Find the perfect pool for your next gathering
         </p>
@@ -218,7 +218,7 @@ export const BrowseListingsPage = () => {
 
                 <div className="mt-4 flex items-center justify-between">
                   <div>
-                    <span className="text-lg font-bold">
+                    <span className="text-lg font-medium">
                       ${listing.pricePerHour}
                     </span>
                     <span className="text-sm text-gray-500">/hour</span>

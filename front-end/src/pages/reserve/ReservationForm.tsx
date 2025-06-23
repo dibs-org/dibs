@@ -86,7 +86,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
   if (isLoadingListingDetails) {
     return (
       <div>
-        <h3 className="text-2xl font-bold">Reserve</h3>
+        <h3 className="text-2xl font-medium">Reserve</h3>
         <div className="h-10 w-10 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse" />
       </div>
     );
@@ -94,8 +94,13 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
 
   const reservationForm = (
     <>
-      <h3 className="text-2xl font-bold">Reserve</h3>
-      <h4 className="text-lg font-bold">{listingDetails?.name}</h4>
+      <div className="flex flex-col gap-2">
+        <h3 className="text-sm text-gray-500">Reserve</h3>
+        <h4 className="text-lg font-medium leading-none">
+          {listingDetails?.name}
+        </h4>
+        <p className="text-sm text-gray-500">{listingDetails?.description}</p>
+      </div>
       <div className="flex flex-col md:flex-row gap-2 items-center">
         <Calendar
           value={reservationFormState.date}

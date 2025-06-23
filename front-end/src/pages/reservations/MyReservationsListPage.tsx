@@ -8,7 +8,7 @@ export const MyReservationsListPage = () => {
   return (
     <div className="space-y-6 w-full">
       <div>
-        <h1 className="text-2xl font-bold">Reservations</h1>
+        <h1 className="text-2xl font-medium">Reservations</h1>
         <p className="text-gray-600">
           View and manage all your pool reservations
         </p>

@@ -61,7 +61,7 @@ export const ReservationDetailPage = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Booking Details</h1>
+            <h1 className="text-2xl font-medium">Booking Details</h1>
             <p className="text-gray-600">Reservation #{booking.id}</p>
           </div>
           <Link
@@ -89,7 +89,9 @@ export const ReservationDetailPage = () => {
               >
                 {booking.status}
               </span>
-              <span className="text-xl font-bold">${booking.totalAmount}</span>
+              <span className="text-xl font-medium">
+                ${booking.totalAmount}
+              </span>
             </div>
           </div>
         </div>

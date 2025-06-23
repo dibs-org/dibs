@@ -22,7 +22,7 @@ export const OwnerDashboard = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <h1 className="text-2xl font-medium">Dashboard</h1>
         <p className="text-gray-600">
           Welcome back! Here's an overview of your pool business.
         </p>
@@ -31,7 +31,7 @@ export const OwnerDashboard = () => {
       {/* Reservations Section */}
       <div className="space-y-6">
         <div>
-          <h2 className="text-xl font-bold">Recent Reservations</h2>
+          <h2 className="text-xl font-medium">Recent Reservations</h2>
           <p className="text-gray-600">Your latest pool reservations</p>
         </div>
 
@@ -138,7 +138,7 @@ export const OwnerDashboard = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-xl font-bold">My Listings</h2>
+            <h2 className="text-xl font-medium">My Listings</h2>
             <p className="text-gray-600">Your pool listings</p>
           </div>
         </div>

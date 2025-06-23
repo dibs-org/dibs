@@ -39,7 +39,7 @@ export const EditListingPage = ({ listingId }: { listingId: string }) => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Edit Listing</h1>
+            <h1 className="text-2xl font-medium">Edit Listing</h1>
             <p className="text-gray-600">Update your pool listing details</p>
           </div>
           <Link

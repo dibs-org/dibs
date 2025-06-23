@@ -81,7 +81,7 @@ export const ListingDetailPage = () => {
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold">{listing.name}</h1>
+        <h1 className="text-3xl font-medium">{listing.name}</h1>
         <div className="flex items-center space-x-4 mt-2">
           <div className="flex items-center space-x-1">
             <span className="text-yellow-400">★</span>
@@ -173,7 +173,7 @@ export const ListingDetailPage = () => {
           <div className="bg-surface border border-gray-200 rounded-lg shadow-lg p-6 sticky top-4">
             <div className="mb-4">
               <div className="flex items-baseline space-x-1">
-                <span className="text-2xl font-bold">
+                <span className="text-2xl font-medium">
                   ${listing.pricePerHour}
                 </span>
                 <span className="text-gray-500">per hour</span>

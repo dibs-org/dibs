@@ -398,7 +398,7 @@ export const CreateListingPage = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Create New Listing</h1>
+            <h1 className="text-2xl font-medium">Create New Listing</h1>
             <p className="text-gray-600">
               Step {currentStep} of {totalSteps}
             </p>
