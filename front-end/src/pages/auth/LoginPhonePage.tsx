@@ -65,7 +65,7 @@ export const LoginPhonePage = () => {
         <div className="flex flex-col items-center gap-8 max-w-md w-full px-4">
           <div className="flex flex-col">
             <Heading as="h2" size="3xl">
-              Enter the code
+              Enter the code, silly
             </Heading>
             <p className="text-center text-sm text-gray-600 dark:text-gray-400">
               We sent a code to {formData.phone}
