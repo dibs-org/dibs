@@ -81,7 +81,7 @@ export const ListingDetailPage = () => {
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">{listing.name}</h1>
+        <h1 className="text-3xl font-bold">{listing.name}</h1>
         <div className="flex items-center space-x-4 mt-2">
           <div className="flex items-center space-x-1">
             <span className="text-yellow-400">★</span>
@@ -121,9 +121,7 @@ export const ListingDetailPage = () => {
 
           {/* Description */}
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              About this pool
-            </h2>
+            <h2 className="text-xl font-semibold mb-4">About this pool</h2>
             <p className="text-gray-700 leading-relaxed">
               {listing.description}
             </p>
@@ -131,7 +129,7 @@ export const ListingDetailPage = () => {
 
           {/* Features */}
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            <h2 className="text-xl font-semibold mb-4">
               What this place offers
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -146,9 +144,7 @@ export const ListingDetailPage = () => {
 
           {/* Amenities */}
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Included amenities
-            </h2>
+            <h2 className="text-xl font-semibold mb-4">Included amenities</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {listing.amenities.map((amenity, index) => (
                 <div key={index} className="flex items-center space-x-2">
@@ -161,9 +157,7 @@ export const ListingDetailPage = () => {
 
           {/* Rules */}
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Pool rules
-            </h2>
+            <h2 className="text-xl font-semibold mb-4">Pool rules</h2>
             <ul className="space-y-2">
               {listing.rules.map((rule, index) => (
                 <li key={index} className="text-sm text-gray-700">
@@ -176,10 +170,10 @@ export const ListingDetailPage = () => {
 
         {/* Booking Card */}
         <div className="lg:col-span-1">
-          <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-6 sticky top-4">
+          <div className="bg-surface border border-gray-200 rounded-lg shadow-lg p-6 sticky top-4">
             <div className="mb-4">
               <div className="flex items-baseline space-x-1">
-                <span className="text-2xl font-bold text-gray-900">
+                <span className="text-2xl font-bold">
                   ${listing.pricePerHour}
                 </span>
                 <span className="text-gray-500">per hour</span>
@@ -195,7 +189,7 @@ export const ListingDetailPage = () => {
               </button>
             ) : (
               <div className="space-y-4">
-                <h3 className="font-medium text-gray-900">Select your dates</h3>
+                <h3 className="font-medium">Select your dates</h3>
 
                 {/* Calendar */}
                 <div className="border border-gray-200 rounded-lg p-4">

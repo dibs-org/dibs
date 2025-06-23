@@ -1,6 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ReservationsPage } from "../../pages/reservations/ReservationsPage";
+import { MyReservationsListPage } from "../../pages/reservations/MyReservationsListPage";
 
 export const Route = createFileRoute("/reservations/")({
-  component: () => <ReservationsPage />,
+  component: () => (
+    <div className="min-h-[calc(100vh-100px)] w-full max-w-[1000px] mx-auto flex justify-center p-4">
+      <MyReservationsListPage />
+    </div>
+  ),
 });

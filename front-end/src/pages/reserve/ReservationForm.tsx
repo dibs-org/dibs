@@ -87,7 +87,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
     return (
       <div>
         <h3 className="text-2xl font-bold">Reserve</h3>
-        <div className="h-10 w-10 bg-neutral-200 dark:bg-neutral-800 rounded-full animate-pulse" />
+        <div className="h-10 w-10 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse" />
       </div>
     );
   }
@@ -107,7 +107,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
             <input
               id={inputId}
               type="date"
-              className="border border-neutral-300 dark:border-neutral-800 rounded-md p-2"
+              className="border border-gray-300 dark:border-gray-800 rounded-md p-2"
               value={reservationFormState.date}
               onChange={handleInputChange}
             />
@@ -117,7 +117,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
               <Field errorMessage={fieldErrors.startTime}>
                 <input
                   type="time"
-                  className="border border-neutral-300 dark:border-neutral-800 rounded-md p-2 flex-1"
+                  className="border border-gray-300 dark:border-gray-800 rounded-md p-2 flex-1"
                   value={reservationFormState.startTime}
                   onChange={(e) =>
                     handleDateChange("startTime", e.target.value)
@@ -128,7 +128,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
               <Field errorMessage={fieldErrors.endTime}>
                 <input
                   type="time"
-                  className="border border-neutral-300 dark:border-neutral-800 rounded-md p-2 flex-1"
+                  className="border border-gray-300 dark:border-gray-800 rounded-md p-2 flex-1"
                   value={reservationFormState.endTime}
                   onChange={(e) => handleDateChange("endTime", e.target.value)}
                 />
@@ -141,7 +141,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
           >
             <div className="flex gap-2 items-center w-full">
               <button
-                className="bg-neutral-300 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-300 rounded-md p-2 w-10"
+                className="bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300 rounded-md p-2 w-10"
                 onClick={() =>
                   handleDateChange(
                     "numberOfGuests",
@@ -156,7 +156,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
               </button>
               <input
                 type="number"
-                className="border border-neutral-300 dark:border-neutral-800 rounded-md p-2 flex-1 text-center"
+                className="border border-gray-300 dark:border-gray-800 rounded-md p-2 flex-1 text-center"
                 value={reservationFormState.numberOfGuests}
                 min={MIN_GUESTS}
                 max={MAX_GUESTS}
@@ -165,7 +165,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
                 }
               />
               <button
-                className="bg-neutral-300 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-300 rounded-md p-2 w-10"
+                className="bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300 rounded-md p-2 w-10"
                 onClick={() => {
                   handleDateChange(
                     "numberOfGuests",
@@ -189,22 +189,11 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
           </button>
         </div>
       </div>
-      <pre>{JSON.stringify({ listingDetails }, null, 2)}</pre>
-      <pre>
-        {JSON.stringify(
-          {
-            reservationFormState,
-            parsedDate: reservationFormState.date,
-          },
-          null,
-          2
-        )}
-      </pre>
     </>
   );
 
   return (
-    <div className="flex flex-col gap-4 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6 bg-white dark:bg-neutral-900">
+    <div className="flex flex-col gap-4 border border-gray-200 dark:border-gray-800 rounded-xl p-6 bg-surface dark:bg-gray-900">
       {isSuccess ? (
         <div>
           Success{" "}

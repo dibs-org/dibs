@@ -61,9 +61,7 @@ export const ReservationDetailPage = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              Booking Details
-            </h1>
+            <h1 className="text-2xl font-bold">Booking Details</h1>
             <p className="text-gray-600">Reservation #{booking.id}</p>
           </div>
           <Link
@@ -75,14 +73,12 @@ export const ReservationDetailPage = () => {
         </div>
       </div>
 
-      <div className="bg-white shadow rounded-lg overflow-hidden">
+      <div className="bg-surface shadow rounded-lg overflow-hidden">
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">
-                {booking.guestName}
-              </h2>
+              <h2 className="text-xl font-semibold">{booking.guestName}</h2>
               <p className="text-sm text-gray-500">
                 Booked on {new Date(booking.createdAt).toLocaleDateString()}
               </p>
@@ -93,9 +89,7 @@ export const ReservationDetailPage = () => {
               >
                 {booking.status}
               </span>
-              <span className="text-xl font-bold text-gray-900">
-                ${booking.totalAmount}
-              </span>
+              <span className="text-xl font-bold">${booking.totalAmount}</span>
             </div>
           </div>
         </div>
@@ -105,19 +99,17 @@ export const ReservationDetailPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Reservation Details */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Reservation Details
-              </h3>
+              <h3 className="text-lg font-medium mb-4">Reservation Details</h3>
               <dl className="space-y-3">
                 <div>
                   <dt className="text-sm font-medium text-gray-500">Pool</dt>
-                  <dd className="text-sm text-gray-900">{booking.poolName}</dd>
+                  <dd className="text-sm">{booking.poolName}</dd>
                 </div>
                 <div>
                   <dt className="text-sm font-medium text-gray-500">
                     Date & Time
                   </dt>
-                  <dd className="text-sm text-gray-900">
+                  <dd className="text-sm">
                     {booking.date} • {booking.startTime} - {booking.endTime} (
                     {booking.duration}h)
                   </dd>
@@ -126,11 +118,11 @@ export const ReservationDetailPage = () => {
                   <dt className="text-sm font-medium text-gray-500">
                     Number of Guests
                   </dt>
-                  <dd className="text-sm text-gray-900">{booking.guests}</dd>
+                  <dd className="text-sm">{booking.guests}</dd>
                 </div>
                 <div>
                   <dt className="text-sm font-medium text-gray-500">Price</dt>
-                  <dd className="text-sm text-gray-900">
+                  <dd className="text-sm">
                     ${booking.pricePerHour}/hour × {booking.duration} hours = $
                     {booking.totalAmount}
                   </dd>
@@ -140,13 +132,11 @@ export const ReservationDetailPage = () => {
 
             {/* Guest Information */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Guest Information
-              </h3>
+              <h3 className="text-lg font-medium mb-4">Guest Information</h3>
               <dl className="space-y-3">
                 <div>
                   <dt className="text-sm font-medium text-gray-500">Contact</dt>
-                  <dd className="text-sm text-gray-900">
+                  <dd className="text-sm">
                     <div>{booking.guestEmail}</div>
                     <div>{booking.guestPhone}</div>
                   </dd>
@@ -155,7 +145,7 @@ export const ReservationDetailPage = () => {
                   <dt className="text-sm font-medium text-gray-500">
                     Guest List
                   </dt>
-                  <dd className="text-sm text-gray-900">
+                  <dd className="text-sm">
                     <ul className="list-disc list-inside">
                       {booking.guestList.map((guest, index) => (
                         <li key={index}>{guest}</li>
@@ -170,9 +160,7 @@ export const ReservationDetailPage = () => {
           {/* Special Requests */}
           {booking.specialRequests && (
             <div className="mt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Special Requests
-              </h3>
+              <h3 className="text-lg font-medium mb-2">Special Requests</h3>
               <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-md">
                 {booking.specialRequests}
               </p>
@@ -182,7 +170,7 @@ export const ReservationDetailPage = () => {
           {/* Information to Share */}
           {booking.status === "confirmed" && (
             <div className="mt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
+              <h3 className="text-lg font-medium mb-4">
                 Information Shared with Guest
               </h3>
               <div className="bg-blue-50 p-4 rounded-md">
@@ -227,7 +215,7 @@ export const ReservationDetailPage = () => {
               </a>
               <a
                 href={`mailto:${booking.guestEmail}`}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-surface hover:bg-gray-50"
               >
                 Email Guest
               </a>
@@ -244,7 +232,7 @@ export const ReservationDetailPage = () => {
                   </button>
                   <button
                     onClick={() => setShowCancelModal(true)}
-                    className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50"
+                    className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-red-700 bg-surface hover:bg-red-50"
                   >
                     Decline
                   </button>
@@ -254,7 +242,7 @@ export const ReservationDetailPage = () => {
               {booking.status === "confirmed" && (
                 <button
                   onClick={() => setShowCancelModal(true)}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-red-700 bg-surface hover:bg-red-50"
                 >
                   Cancel Booking
                 </button>
@@ -267,11 +255,9 @@ export const ReservationDetailPage = () => {
       {/* Cancel Modal */}
       {showCancelModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-surface">
             <div className="mt-3 text-center">
-              <h3 className="text-lg font-medium text-gray-900">
-                Cancel Booking
-              </h3>
+              <h3 className="text-lg font-medium">Cancel Booking</h3>
               <div className="mt-2 px-7 py-3">
                 <p className="text-sm text-gray-500">
                   Are you sure you want to cancel this booking? This action
@@ -287,7 +273,7 @@ export const ReservationDetailPage = () => {
                 </button>
                 <button
                   onClick={() => setShowCancelModal(false)}
-                  className="mt-3 px-4 py-2 bg-white text-gray-500 text-base font-medium rounded-md w-full shadow-sm border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  className="mt-3 px-4 py-2 bg-surface text-gray-500 text-base font-medium rounded-md w-full shadow-sm border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300"
                 >
                   No, Keep Booking
                 </button>

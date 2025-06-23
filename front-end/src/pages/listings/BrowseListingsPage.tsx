@@ -91,14 +91,14 @@ export const BrowseListingsPage = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Browse Pools</h1>
+        <h1 className="text-2xl font-bold">Browse Pools</h1>
         <p className="text-gray-600">
           Find the perfect pool for your next gathering
         </p>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-surface shadow rounded-lg p-6">
         <div className="space-y-4">
           {/* Search */}
           <div>
@@ -164,7 +164,7 @@ export const BrowseListingsPage = () => {
           {filteredListings.map((listing) => (
             <div
               key={listing.id}
-              className="bg-white overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow"
+              className="bg-surface overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow"
             >
               <div className="aspect-w-16 aspect-h-9">
                 <img
@@ -177,9 +177,7 @@ export const BrowseListingsPage = () => {
               <div className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="text-lg font-medium text-gray-900">
-                      {listing.name}
-                    </h3>
+                    <h3 className="text-lg font-medium">{listing.name}</h3>
                     <p className="text-sm text-gray-500">
                       by {listing.ownerName}
                     </p>
@@ -187,7 +185,7 @@ export const BrowseListingsPage = () => {
                   </div>
                   <div className="flex items-center space-x-1">
                     <span className="text-yellow-400">★</span>
-                    <span className="text-sm font-medium text-gray-900">
+                    <span className="text-sm font-medium">
                       {listing.rating}
                     </span>
                     <span className="text-sm text-gray-500">
@@ -220,7 +218,7 @@ export const BrowseListingsPage = () => {
 
                 <div className="mt-4 flex items-center justify-between">
                   <div>
-                    <span className="text-lg font-bold text-gray-900">
+                    <span className="text-lg font-bold">
                       ${listing.pricePerHour}
                     </span>
                     <span className="text-sm text-gray-500">/hour</span>
@@ -263,9 +261,7 @@ export const BrowseListingsPage = () => {
                 />
               </svg>
             </div>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">
-              No pools found
-            </h3>
+            <h3 className="mt-2 text-sm font-medium">No pools found</h3>
             <p className="mt-1 text-sm text-gray-500">
               Try adjusting your search criteria.
             </p>

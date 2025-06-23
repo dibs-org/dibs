@@ -127,9 +127,7 @@ export const CreateListingPage = () => {
       case 1:
         return (
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Basic Information
-            </h2>
+            <h2 className="text-xl font-semibold">Basic Information</h2>
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -229,9 +227,7 @@ export const CreateListingPage = () => {
       case 2:
         return (
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Features & Amenities
-            </h2>
+            <h2 className="text-xl font-semibold">Features & Amenities</h2>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -294,9 +290,7 @@ export const CreateListingPage = () => {
       case 3:
         return (
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Availability
-            </h2>
+            <h2 className="text-xl font-semibold">Availability</h2>
 
             <div className="space-y-4">
               {Object.entries(formData.availability).map(([day, schedule]) => (
@@ -318,7 +312,7 @@ export const CreateListingPage = () => {
                         }
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="ml-2 text-sm font-medium text-gray-900 capitalize">
+                      <span className="ml-2 text-sm font-medium capitalize">
                         {day}
                       </span>
                     </label>
@@ -362,9 +356,7 @@ export const CreateListingPage = () => {
       case 4:
         return (
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Additional Information
-            </h2>
+            <h2 className="text-xl font-semibold">Additional Information</h2>
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -406,9 +398,7 @@ export const CreateListingPage = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              Create New Listing
-            </h1>
+            <h1 className="text-2xl font-bold">Create New Listing</h1>
             <p className="text-gray-600">
               Step {currentStep} of {totalSteps}
             </p>
@@ -432,7 +422,10 @@ export const CreateListingPage = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-surface shadow rounded-lg p-6"
+      >
         {renderStep()}
 
         <div className="mt-8 flex justify-between">
@@ -443,7 +436,7 @@ export const CreateListingPage = () => {
             className={`px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
               currentStep === 1
                 ? "text-gray-400 cursor-not-allowed"
-                : "text-gray-700 bg-white hover:bg-gray-50"
+                : "text-gray-700 bg-surface hover:bg-gray-50"
             }`}
           >
             Previous

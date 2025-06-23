@@ -20,14 +20,14 @@ function Index() {
         <br />
         <span className="text-sm text-gray-500">Renter</span>
         <Link to="/reserve">Reserve</Link>
-        <Link to="/listings">Browse listings (future)</Link>
-        <Link to="/listings/$listingId" params={{ listingId: "1" }}>
-          Listing details (future)
-        </Link>
         <Link to="/reservations">Reservations</Link>
         <Link to="/reservations/$reservationId" params={{ reservationId: "1" }}>
           Reservation details
         </Link>
+        {/* <Link to="/listings">Browse listings (future)</Link>
+        <Link to="/listings/$listingId" params={{ listingId: "1" }}>
+          Listing details (future)
+        </Link> */}
       </div>
     </div>
   );

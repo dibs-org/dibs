@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ReserveRouteImport } from './routes/reserve'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ReservationsRouteRouteImport } from './routes/reservations/route'
+import { Route as ManageRouteRouteImport } from './routes/manage/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReservationsIndexRouteImport } from './routes/reservations/index'
 import { Route as ManageIndexRouteImport } from './routes/manage/index'
@@ -40,20 +42,30 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReservationsRouteRoute = ReservationsRouteRouteImport.update({
+  id: '/reservations',
+  path: '/reservations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManageRouteRoute = ManageRouteRouteImport.update({
+  id: '/manage',
+  path: '/manage',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReservationsIndexRoute = ReservationsIndexRouteImport.update({
-  id: '/reservations/',
-  path: '/reservations/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => ReservationsRouteRoute,
 } as any)
 const ManageIndexRoute = ManageIndexRouteImport.update({
-  id: '/manage/',
-  path: '/manage/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => ManageRouteRoute,
 } as any)
 const ListingsIndexRoute = ListingsIndexRouteImport.update({
   id: '/listings/',
@@ -62,14 +74,14 @@ const ListingsIndexRoute = ListingsIndexRouteImport.update({
 } as any)
 const ReservationsReservationIdRoute =
   ReservationsReservationIdRouteImport.update({
-    id: '/reservations/$reservationId',
-    path: '/reservations/$reservationId',
-    getParentRoute: () => rootRouteImport,
+    id: '/$reservationId',
+    path: '/$reservationId',
+    getParentRoute: () => ReservationsRouteRoute,
   } as any)
 const ManageListingRoute = ManageListingRouteImport.update({
-  id: '/manage/listing',
-  path: '/manage/listing',
-  getParentRoute: () => rootRouteImport,
+  id: '/listing',
+  path: '/listing',
+  getParentRoute: () => ManageRouteRoute,
 } as any)
 const ListingsListingIdRoute = ListingsListingIdRouteImport.update({
   id: '/listings/$listingId',
@@ -77,34 +89,36 @@ const ListingsListingIdRoute = ListingsListingIdRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManageReservationsIndexRoute = ManageReservationsIndexRouteImport.update({
-  id: '/manage/reservations/',
-  path: '/manage/reservations/',
-  getParentRoute: () => rootRouteImport,
+  id: '/reservations/',
+  path: '/reservations/',
+  getParentRoute: () => ManageRouteRoute,
 } as any)
 const ManageListingsIndexRoute = ManageListingsIndexRouteImport.update({
-  id: '/manage/listings/',
-  path: '/manage/listings/',
-  getParentRoute: () => rootRouteImport,
+  id: '/listings/',
+  path: '/listings/',
+  getParentRoute: () => ManageRouteRoute,
 } as any)
 const ManageReservationsReservationIdRoute =
   ManageReservationsReservationIdRouteImport.update({
-    id: '/manage/reservations/$reservationId',
-    path: '/manage/reservations/$reservationId',
-    getParentRoute: () => rootRouteImport,
+    id: '/reservations/$reservationId',
+    path: '/reservations/$reservationId',
+    getParentRoute: () => ManageRouteRoute,
   } as any)
 const ManageListingsNewRoute = ManageListingsNewRouteImport.update({
-  id: '/manage/listings/new',
-  path: '/manage/listings/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/listings/new',
+  path: '/listings/new',
+  getParentRoute: () => ManageRouteRoute,
 } as any)
 const ManageListingsListingIdRoute = ManageListingsListingIdRouteImport.update({
-  id: '/manage/listings/$listingId',
-  path: '/manage/listings/$listingId',
-  getParentRoute: () => rootRouteImport,
+  id: '/listings/$listingId',
+  path: '/listings/$listingId',
+  getParentRoute: () => ManageRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/manage': typeof ManageRouteRouteWithChildren
+  '/reservations': typeof ReservationsRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/reserve': typeof ReserveRoute
   '/signup': typeof SignupRoute
@@ -112,8 +126,8 @@ export interface FileRoutesByFullPath {
   '/manage/listing': typeof ManageListingRoute
   '/reservations/$reservationId': typeof ReservationsReservationIdRoute
   '/listings': typeof ListingsIndexRoute
-  '/manage': typeof ManageIndexRoute
-  '/reservations': typeof ReservationsIndexRoute
+  '/manage/': typeof ManageIndexRoute
+  '/reservations/': typeof ReservationsIndexRoute
   '/manage/listings/$listingId': typeof ManageListingsListingIdRoute
   '/manage/listings/new': typeof ManageListingsNewRoute
   '/manage/reservations/$reservationId': typeof ManageReservationsReservationIdRoute
@@ -140,6 +154,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/manage': typeof ManageRouteRouteWithChildren
+  '/reservations': typeof ReservationsRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/reserve': typeof ReserveRoute
   '/signup': typeof SignupRoute
@@ -159,6 +175,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/manage'
+    | '/reservations'
     | '/login'
     | '/reserve'
     | '/signup'
@@ -166,8 +184,8 @@ export interface FileRouteTypes {
     | '/manage/listing'
     | '/reservations/$reservationId'
     | '/listings'
-    | '/manage'
-    | '/reservations'
+    | '/manage/'
+    | '/reservations/'
     | '/manage/listings/$listingId'
     | '/manage/listings/new'
     | '/manage/reservations/$reservationId'
@@ -193,6 +211,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/manage'
+    | '/reservations'
     | '/login'
     | '/reserve'
     | '/signup'
@@ -211,20 +231,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ManageRouteRoute: typeof ManageRouteRouteWithChildren
+  ReservationsRouteRoute: typeof ReservationsRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
   ReserveRoute: typeof ReserveRoute
   SignupRoute: typeof SignupRoute
   ListingsListingIdRoute: typeof ListingsListingIdRoute
-  ManageListingRoute: typeof ManageListingRoute
-  ReservationsReservationIdRoute: typeof ReservationsReservationIdRoute
   ListingsIndexRoute: typeof ListingsIndexRoute
-  ManageIndexRoute: typeof ManageIndexRoute
-  ReservationsIndexRoute: typeof ReservationsIndexRoute
-  ManageListingsListingIdRoute: typeof ManageListingsListingIdRoute
-  ManageListingsNewRoute: typeof ManageListingsNewRoute
-  ManageReservationsReservationIdRoute: typeof ManageReservationsReservationIdRoute
-  ManageListingsIndexRoute: typeof ManageListingsIndexRoute
-  ManageReservationsIndexRoute: typeof ManageReservationsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -250,6 +263,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reservations': {
+      id: '/reservations'
+      path: '/reservations'
+      fullPath: '/reservations'
+      preLoaderRoute: typeof ReservationsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manage': {
+      id: '/manage'
+      path: '/manage'
+      fullPath: '/manage'
+      preLoaderRoute: typeof ManageRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -259,17 +286,17 @@ declare module '@tanstack/react-router' {
     }
     '/reservations/': {
       id: '/reservations/'
-      path: '/reservations'
-      fullPath: '/reservations'
+      path: '/'
+      fullPath: '/reservations/'
       preLoaderRoute: typeof ReservationsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ReservationsRouteRoute
     }
     '/manage/': {
       id: '/manage/'
-      path: '/manage'
-      fullPath: '/manage'
+      path: '/'
+      fullPath: '/manage/'
       preLoaderRoute: typeof ManageIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ManageRouteRoute
     }
     '/listings/': {
       id: '/listings/'
@@ -280,17 +307,17 @@ declare module '@tanstack/react-router' {
     }
     '/reservations/$reservationId': {
       id: '/reservations/$reservationId'
-      path: '/reservations/$reservationId'
+      path: '/$reservationId'
       fullPath: '/reservations/$reservationId'
       preLoaderRoute: typeof ReservationsReservationIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ReservationsRouteRoute
     }
     '/manage/listing': {
       id: '/manage/listing'
-      path: '/manage/listing'
+      path: '/listing'
       fullPath: '/manage/listing'
       preLoaderRoute: typeof ManageListingRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ManageRouteRoute
     }
     '/listings/$listingId': {
       id: '/listings/$listingId'
@@ -301,58 +328,88 @@ declare module '@tanstack/react-router' {
     }
     '/manage/reservations/': {
       id: '/manage/reservations/'
-      path: '/manage/reservations'
+      path: '/reservations'
       fullPath: '/manage/reservations'
       preLoaderRoute: typeof ManageReservationsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ManageRouteRoute
     }
     '/manage/listings/': {
       id: '/manage/listings/'
-      path: '/manage/listings'
+      path: '/listings'
       fullPath: '/manage/listings'
       preLoaderRoute: typeof ManageListingsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ManageRouteRoute
     }
     '/manage/reservations/$reservationId': {
       id: '/manage/reservations/$reservationId'
-      path: '/manage/reservations/$reservationId'
+      path: '/reservations/$reservationId'
       fullPath: '/manage/reservations/$reservationId'
       preLoaderRoute: typeof ManageReservationsReservationIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ManageRouteRoute
     }
     '/manage/listings/new': {
       id: '/manage/listings/new'
-      path: '/manage/listings/new'
+      path: '/listings/new'
       fullPath: '/manage/listings/new'
       preLoaderRoute: typeof ManageListingsNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ManageRouteRoute
     }
     '/manage/listings/$listingId': {
       id: '/manage/listings/$listingId'
-      path: '/manage/listings/$listingId'
+      path: '/listings/$listingId'
       fullPath: '/manage/listings/$listingId'
       preLoaderRoute: typeof ManageListingsListingIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ManageRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  LoginRoute: LoginRoute,
-  ReserveRoute: ReserveRoute,
-  SignupRoute: SignupRoute,
-  ListingsListingIdRoute: ListingsListingIdRoute,
+interface ManageRouteRouteChildren {
+  ManageListingRoute: typeof ManageListingRoute
+  ManageIndexRoute: typeof ManageIndexRoute
+  ManageListingsListingIdRoute: typeof ManageListingsListingIdRoute
+  ManageListingsNewRoute: typeof ManageListingsNewRoute
+  ManageReservationsReservationIdRoute: typeof ManageReservationsReservationIdRoute
+  ManageListingsIndexRoute: typeof ManageListingsIndexRoute
+  ManageReservationsIndexRoute: typeof ManageReservationsIndexRoute
+}
+
+const ManageRouteRouteChildren: ManageRouteRouteChildren = {
   ManageListingRoute: ManageListingRoute,
-  ReservationsReservationIdRoute: ReservationsReservationIdRoute,
-  ListingsIndexRoute: ListingsIndexRoute,
   ManageIndexRoute: ManageIndexRoute,
-  ReservationsIndexRoute: ReservationsIndexRoute,
   ManageListingsListingIdRoute: ManageListingsListingIdRoute,
   ManageListingsNewRoute: ManageListingsNewRoute,
   ManageReservationsReservationIdRoute: ManageReservationsReservationIdRoute,
   ManageListingsIndexRoute: ManageListingsIndexRoute,
   ManageReservationsIndexRoute: ManageReservationsIndexRoute,
+}
+
+const ManageRouteRouteWithChildren = ManageRouteRoute._addFileChildren(
+  ManageRouteRouteChildren,
+)
+
+interface ReservationsRouteRouteChildren {
+  ReservationsReservationIdRoute: typeof ReservationsReservationIdRoute
+  ReservationsIndexRoute: typeof ReservationsIndexRoute
+}
+
+const ReservationsRouteRouteChildren: ReservationsRouteRouteChildren = {
+  ReservationsReservationIdRoute: ReservationsReservationIdRoute,
+  ReservationsIndexRoute: ReservationsIndexRoute,
+}
+
+const ReservationsRouteRouteWithChildren =
+  ReservationsRouteRoute._addFileChildren(ReservationsRouteRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  ManageRouteRoute: ManageRouteRouteWithChildren,
+  ReservationsRouteRoute: ReservationsRouteRouteWithChildren,
+  LoginRoute: LoginRoute,
+  ReserveRoute: ReserveRoute,
+  SignupRoute: SignupRoute,
+  ListingsListingIdRoute: ListingsListingIdRoute,
+  ListingsIndexRoute: ListingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

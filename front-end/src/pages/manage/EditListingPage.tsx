@@ -39,7 +39,7 @@ export const EditListingPage = ({ listingId }: { listingId: string }) => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Edit Listing</h1>
+            <h1 className="text-2xl font-bold">Edit Listing</h1>
             <p className="text-gray-600">Update your pool listing details</p>
           </div>
           <Link
@@ -53,7 +53,7 @@ export const EditListingPage = ({ listingId }: { listingId: string }) => {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow rounded-lg p-6 space-y-6"
+        className="bg-surface shadow rounded-lg p-6 space-y-6"
       >
         <div>
           <label className="block text-sm font-medium text-gray-700">
@@ -114,7 +114,7 @@ export const EditListingPage = ({ listingId }: { listingId: string }) => {
         <div className="flex justify-end space-x-3">
           <Link
             to="/manage/listings"
-            className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-surface hover:bg-gray-50"
           >
             Cancel
           </Link>

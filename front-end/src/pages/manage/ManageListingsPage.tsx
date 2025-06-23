@@ -1,42 +1,14 @@
 import { Link } from "@tanstack/react-router";
+import { useListings } from "../../services/listing/useListings";
 
-export const ListingsPage = () => {
-  // Mock data - in a real app, this would come from an API
-  const listings = [
-    {
-      id: "1",
-      name: "Beautiful Backyard Pool",
-      description: "A stunning 20x40 pool with spa and outdoor kitchen",
-      status: "active",
-      reservations: 5,
-      monthlyRevenue: 850,
-      features: ["Heated", "Hot Tub", "Pool Bar"],
-    },
-    {
-      id: "2",
-      name: "Resort-Style Pool",
-      description: "Olympic-sized pool with waterfall and grotto",
-      status: "active",
-      reservations: 8,
-      monthlyRevenue: 1200,
-      features: ["Olympic Size", "Waterfall", "Grotto"],
-    },
-    {
-      id: "3",
-      name: "Cozy Family Pool",
-      description: "Perfect for families with shallow end and slide",
-      status: "inactive",
-      reservations: 0,
-      monthlyRevenue: 0,
-      features: ["Shallow End", "Slide", "Family Friendly"],
-    },
-  ];
+export const ManageListingsPage = () => {
+  const { data: listings = [] } = useListings();
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Pool Listings</h1>
+          <h1 className="text-2xl font-bold">My Listings</h1>
           <p className="text-gray-600">
             Manage your pool listings and availability
           </p>
@@ -54,22 +26,11 @@ export const ListingsPage = () => {
         {listings.map((listing) => (
           <div
             key={listing.id}
-            className="bg-white overflow-hidden shadow rounded-lg"
+            className="bg-surface overflow-hidden shadow rounded-lg"
           >
             <div className="px-4 py-5 sm:p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-gray-900">
-                  {listing.name}
-                </h3>
-                <span
-                  className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                    listing.status === "active"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
-                >
-                  {listing.status}
-                </span>
+                <h3 className="text-lg font-medium">{listing.name}</h3>
               </div>
 
               <p className="text-sm text-gray-600 mb-4">
@@ -78,33 +39,14 @@ export const ListingsPage = () => {
 
               <div className="mb-4">
                 <div className="flex flex-wrap gap-1">
-                  {listing.features.map((feature) => (
+                  {listing.amenities.map((amenity) => (
                     <span
-                      key={feature}
+                      key={amenity}
                       className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800"
                     >
-                      {feature}
+                      {amenity}
                     </span>
                   ))}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">
-                    Reservations
-                  </p>
-                  <p className="text-lg font-semibold text-gray-900">
-                    {listing.reservations}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">
-                    Monthly Revenue
-                  </p>
-                  <p className="text-lg font-semibold text-gray-900">
-                    ${listing.monthlyRevenue}
-                  </p>
                 </div>
               </div>
 
@@ -112,7 +54,7 @@ export const ListingsPage = () => {
                 <Link
                   to="/manage/listings/$listingId"
                   params={{ listingId: listing.id }}
-                  className="flex-1 inline-flex justify-center items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="flex-1 inline-flex justify-center items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-surface hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Edit
                 </Link>
@@ -139,9 +81,7 @@ export const ListingsPage = () => {
               />
             </svg>
           </div>
-          <h3 className="mt-2 text-sm font-medium text-gray-900">
-            No listings
-          </h3>
+          <h3 className="mt-2 text-sm font-medium">No listings</h3>
           <p className="mt-1 text-sm text-gray-500">
             Get started by creating your first pool listing.
           </p>

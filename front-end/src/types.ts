@@ -4,6 +4,7 @@ export const UserShape = z.object({
   id: z.string(),
   name: z.string(),
   email: z.string(),
+  phone: z.string(),
 });
 
 export type User = z.infer<typeof UserShape>;
@@ -29,7 +30,7 @@ export const ReservationShape = z.object({
   numberOfGuests: z.number(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  status: z.enum(["pending", "confirmed", "cancelled"]),
+  status: z.enum(["pending", "confirmed", "cancelled", "completed"]),
 });
 
 export type Reservation = z.infer<typeof ReservationShape>;
