@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { twMerge } from "tailwind-merge";
+import { HeadingProps, makeHeadingClasses } from "./Heading";
 
 function Dialog({
   ...props
@@ -114,14 +115,15 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function DialogTitle({
+function DialogTitle<T extends React.ElementType = "h1">({
   className,
+  size = "lg",
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Title>) {
+}: React.ComponentProps<typeof DialogPrimitive.Title> & HeadingProps<T>) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={twMerge("text-lg leading-none font-semibold", className)}
+      className={twMerge(makeHeadingClasses({ size }), className)}
       {...props}
     />
   );

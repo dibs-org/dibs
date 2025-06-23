@@ -26,52 +26,57 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="w-screen min-h-screen flex items-center justify-center">
-      <div className="flex flex-col items-start gap-4 max-w-md w-full px-4">
+      <div className="flex flex-col items-start gap-4 max-w-4xl w-full px-4">
         <h3 className="text-2xl font-semibold mb-4">Pool reservation 🏖️</h3>
 
-        <div className="flex flex-col gap-3 w-full">
-          <Link to="/login" className={makeButtonClasses()}>
-            Login
-          </Link>
-          <Link to="/signup" className={makeButtonClasses()}>
-            Signup
-          </Link>
-        </div>
-
-        <div className="w-full mt-6">
-          <span className="text-sm text-gray-500 font-medium">Owner</span>
-          <div className="flex flex-col gap-3 w-full mt-2">
-            <Link to="/manage" className={makeButtonClasses()}>
-              Owner dashboard
-            </Link>
-            <Link to="/manage/listings" className={makeButtonClasses()}>
-              Manage listings
-            </Link>
-            <Link to="/manage/listings/new" className={makeButtonClasses()}>
-              Create listing
-            </Link>
-            <Link to="/manage/reservations" className={makeButtonClasses()}>
-              Manage reservations
-            </Link>
+        <div className="flex flex-col md:flex-row gap-8 w-full">
+          <div className="w-full">
+            <span className="text-sm text-gray-500 font-medium">Auth</span>
+            <div className="flex flex-col gap-3 w-full mt-2">
+              <Link to="/login" className={makeButtonClasses()}>
+                Login
+              </Link>
+              <Link to="/signup" className={makeButtonClasses()}>
+                Signup
+              </Link>
+            </div>
           </div>
-        </div>
 
-        <div className="w-full mt-6">
-          <span className="text-sm text-gray-500 font-medium">Renter</span>
-          <div className="flex flex-col gap-3 w-full mt-2">
-            <Link to="/reserve" className={makeButtonClasses()}>
-              Reserve
-            </Link>
-            <Link to="/reservations" className={makeButtonClasses()}>
-              Reservations
-            </Link>
-            <Link
-              to="/reservations/$reservationId"
-              params={{ reservationId: "1" }}
-              className={makeButtonClasses()}
-            >
-              Reservation details
-            </Link>
+          <div className="w-full">
+            <span className="text-sm text-gray-500 font-medium">Owner</span>
+            <div className="flex flex-col gap-3 w-full mt-2">
+              <Link to="/manage" className={makeButtonClasses()}>
+                Owner dashboard
+              </Link>
+              <Link to="/manage/listings" className={makeButtonClasses()}>
+                Manage listings
+              </Link>
+              <Link to="/manage/listings/new" className={makeButtonClasses()}>
+                Create listing
+              </Link>
+              <Link to="/manage/reservations" className={makeButtonClasses()}>
+                Manage reservations
+              </Link>
+            </div>
+          </div>
+
+          <div className="w-full">
+            <span className="text-sm text-gray-500 font-medium">Renter</span>
+            <div className="flex flex-col gap-3 w-full mt-2">
+              <Link to="/reserve" className={makeButtonClasses()}>
+                Reserve
+              </Link>
+              <Link to="/reservations" className={makeButtonClasses()}>
+                Reservations
+              </Link>
+              <Link
+                to="/reservations/$reservationId"
+                params={{ reservationId: "1" }}
+                className={makeButtonClasses()}
+              >
+                Reservation details
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -106,7 +111,7 @@ function Index() {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Welcome to the Dialog</DialogTitle>
+              <DialogTitle size="xl">Welcome to the Dialog</DialogTitle>
               <DialogDescription>
                 Here you can find more information and options.
               </DialogDescription>

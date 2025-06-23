@@ -1,6 +1,7 @@
 import * as React from "react";
 import { twMerge } from "tailwind-merge";
 import { Drawer as DrawerPrimitive } from "vaul";
+import { HeadingProps, makeHeadingClasses } from "./Heading";
 
 function Drawer({
   ...props
@@ -92,14 +93,15 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function DrawerTitle({
+function DrawerTitle<T extends React.ElementType = "h1">({
   className,
+  size = "xl",
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Title>) {
+}: React.ComponentProps<typeof DrawerPrimitive.Title> & HeadingProps<T>) {
   return (
     <DrawerPrimitive.Title
       data-slot="drawer-title"
-      className={twMerge("font-semibold", className)}
+      className={twMerge(makeHeadingClasses({ size }), className)}
       {...props}
     />
   );

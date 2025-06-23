@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 type Size = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 
-type HeadingProps<T extends React.ElementType> = {
+export type HeadingProps<T extends React.ElementType> = {
   as?: T;
   size?: Size;
   className?: string;
@@ -20,7 +20,7 @@ const sizeClasses: Record<Size, string> = {
   "3xl": "text-3xl",
 };
 
-const makeHeadingClasses = (args?: { size: Size }) => {
+export const makeHeadingClasses = (args?: { size: Size }) => {
   const { size = "md" } = args ?? {};
 
   return twMerge(

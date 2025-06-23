@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Field from "../../components/Field";
 import Heading from "../../components/Heading";
+import LinkButton from "../../components/LinkButton";
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -24,12 +25,14 @@ export const LoginPage = () => {
 
   return (
     <div className="w-screen min-h-screen flex items-center justify-center">
-      <Link
+      <LinkButton
         to="/"
-        className="absolute top-4 left-4 text-sm text-gray-500 dark:text-gray-400"
+        size="small"
+        variant="tertiary"
+        className="absolute top-4 left-4"
       >
         Back to home
-      </Link>
+      </LinkButton>
       <div className="flex flex-col items-start gap-4 max-w-md w-full px-4">
         <div className="w-full">
           <Heading as="h2" size="3xl" className="mt-6 text-center">
