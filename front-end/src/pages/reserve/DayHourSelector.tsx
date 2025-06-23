@@ -96,6 +96,26 @@ const getDurationStringFromMinutes = (minutes: number) => {
   return `${padWithZero(hours)}:${padWithZero(remainingMinutes)}`;
 };
 
+const isSelectionOverlappingWithEvent = (
+  event1: { startTime: string; endTime: string } | undefined,
+  event2: { startTime: string; endTime: string }
+) => {
+  if (!event1) {
+    return false;
+  }
+
+  const event1Start = getTimeStringAsMinutes(event1.startTime);
+  const event1End = getTimeStringAsMinutes(event1.endTime);
+  const event2Start = getTimeStringAsMinutes(event2.startTime);
+  const event2End = getTimeStringAsMinutes(event2.endTime);
+
+  return (
+    (event1Start >= event2Start && event1Start < event2End) ||
+    (event1End > event2Start && event1End <= event2End) ||
+    (event1Start <= event2Start && event1End >= event2End)
+  );
+};
+
 const DayHourSelector = <T extends { startTime: string; endTime: string }>({
   events,
   renderEvent = (event) => (
@@ -294,6 +314,22 @@ const DayHourSelector = <T extends { startTime: string; endTime: string }>({
     selectionCursorPadding = "py-1 px-2";
   }
 
+  const isOverlappingWithEvent = useMemo(() => {
+    if (!selectionState) {
+      return false;
+    }
+
+    return events.some((event) =>
+      isSelectionOverlappingWithEvent(
+        {
+          startTime: selectionState.start,
+          endTime: selectionState.end,
+        },
+        event
+      )
+    );
+  }, [selectionState, events]);
+
   return (
     <div
       ref={scrollContainerRef}
@@ -344,10 +380,26 @@ const DayHourSelector = <T extends { startTime: string; endTime: string }>({
           style={{
             left: `${HOUR_LABEL_CELL_WIDTH}px`,
             width: `calc(100% - ${HOUR_LABEL_CELL_WIDTH}px)`,
+            zIndex: 1,
           }}
         >
           <div className="h-px w-full bg-gray-500/50" />
-          <div className="text-xs">+</div>
+          <div className="text-xs">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6v12m6-6h-12"
+              />
+            </svg>
+          </div>
           <div className="h-px w-full bg-gray-500/50" />
         </div>
         {/* Selection cursor */}
@@ -357,10 +409,15 @@ const DayHourSelector = <T extends { startTime: string; endTime: string }>({
             selectionCursorPadding
           )}
           style={{
-            left: `${HOUR_LABEL_CELL_WIDTH}px`,
+            left: `${isOverlappingWithEvent ? HOUR_LABEL_CELL_WIDTH * 2 : HOUR_LABEL_CELL_WIDTH}px`,
             opacity: selectionState ? 1 : 0,
-            width: `calc(100% - ${HOUR_LABEL_CELL_WIDTH}px)`,
+            width: `calc(100% - ${
+              isOverlappingWithEvent
+                ? HOUR_LABEL_CELL_WIDTH * 2
+                : HOUR_LABEL_CELL_WIDTH
+            }px)`,
             top: `${getYOffsetForTime(selectionState?.start ?? "") + 1}px`,
+            backdropFilter: "blur(5px)",
             height:
               selectionState?.start && selectionState?.end
                 ? `${Math.max(

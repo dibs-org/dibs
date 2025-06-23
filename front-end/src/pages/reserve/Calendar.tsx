@@ -4,6 +4,7 @@ import { ButtonHTMLAttributes, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { ReservationWithListingAndHostUserAndRenterUser } from "../../services/reservation/useReservations";
 import { twMerge } from "tailwind-merge";
+import { dateStringToDate, dateToDateString } from "./utils";
 
 export function DayButton(
   props: {
@@ -55,10 +56,11 @@ export const Calendar = ({
   const [month, setMonth] = useState(new Date());
 
   const handleDayPickerSelect = (date: Date | undefined) => {
+    console.log("date", date);
     if (!date) {
       onChange(undefined);
     } else {
-      const formattedDate = format(date, "yyyy-MM-dd");
+      const formattedDate = dateToDateString(date);
       setMonth(date);
       onChange(formattedDate);
     }
@@ -69,8 +71,8 @@ export const Calendar = ({
       month={month}
       onMonthChange={setMonth}
       mode="single"
-      timeZone="UTC"
-      selected={value ? new Date(value) : undefined}
+      // timeZone="UTC"
+      selected={value ? dateStringToDate(value) : undefined}
       disabled={{ dayOfWeek: [0, 6] }}
       onSelect={handleDayPickerSelect}
       components={{

@@ -1,5 +1,11 @@
 import { Link } from "@tanstack/react-router";
+
 import { useState } from "react";
+import Button from "../../components/Button";
+import Input, { makeInputClasses } from "../../components/Input";
+import Field from "../../components/Field";
+import { twMerge } from "tailwind-merge";
+import Heading from "../../components/Heading";
 
 export const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -24,18 +30,18 @@ export const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="w-screen min-h-screen flex items-center justify-center">
       <Link
         to="/"
         className="absolute top-4 left-4 text-sm text-gray-500 dark:text-gray-400"
       >
         Back to home
       </Link>
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold dark:text-gray-100">
+      <div className="flex flex-col items-start gap-4 max-w-md w-full px-4">
+        <div className="w-full">
+          <Heading as="h2" size="3xl" className="mt-6 text-center">
             Create your account
-          </h2>
+          </Heading>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Already have an account?{" "}
             <Link
@@ -46,110 +52,72 @@ export const SignupPage = () => {
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6 w-full" onSubmit={handleSubmit}>
           <div className="space-y-4">
-            <div>
-              <label
-                htmlFor="fullName"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Full Name
-              </label>
-              <input
+            <Field label="Full Name">
+              <Input
                 id="fullName"
                 name="fullName"
                 type="text"
                 required
                 value={formData.fullName}
                 onChange={handleInputChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400 dark:text-gray-100 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
                 placeholder="Enter your full name"
+                className="w-full"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="userType"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                I am a
-              </label>
+            </Field>
+            <Field label="I am a">
               <select
                 id="userType"
                 name="userType"
                 value={formData.userType}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 bg-surface dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
+                className={twMerge(makeInputClasses(), "w-full")}
               >
                 <option value="renter">Pool Renter</option>
                 <option value="owner">Pool Owner</option>
               </select>
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Email address
-              </label>
-              <input
+            </Field>
+            <Field label="Email address">
+              <Input
                 id="email"
                 name="email"
                 type="email"
-                // autoComplete="email"
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400 dark:text-gray-100 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
                 placeholder="Enter your email"
+                className="w-full"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Password
-              </label>
-              <input
+            </Field>
+            <Field label="Password">
+              <Input
                 id="password"
                 name="password"
                 type="password"
-                // autoComplete="new-password"
                 required
                 value={formData.password}
                 onChange={handleInputChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400 dark:text-gray-100 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
                 placeholder="Enter your password"
+                className="w-full"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Confirm Password
-              </label>
-              <input
+            </Field>
+            <Field label="Confirm Password">
+              <Input
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
                 required
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400 dark:text-gray-100 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400"
                 placeholder="Confirm your password"
+                className="w-full"
               />
-            </div>
+            </Field>
           </div>
-
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900"
-            >
-              Sign up
-            </button>
-          </div>
+          <Button type="submit" variant="primary" className="w-full">
+            Sign up
+          </Button>
         </form>
       </div>
     </div>

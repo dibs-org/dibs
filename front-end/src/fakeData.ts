@@ -19,6 +19,12 @@ export const users = [
     email: "xanderbernhardt@gmail.com",
     phone: "(717) 917-5881",
   },
+  {
+    id: "4",
+    name: "Rick",
+    email: "rickbernhardt@gmail.com",
+    phone: "(717) 917-5881",
+  },
 ];
 
 export const reservations: Reservation[] = [
@@ -26,9 +32,9 @@ export const reservations: Reservation[] = [
     id: "1",
     listingId: "1",
     userId: "3",
-    date: "2025-06-23",
+    date: "2025-06-26",
     startTime: "08:00",
-    endTime: "12:15",
+    endTime: "12:30",
     numberOfGuests: 3,
     createdAt: "2025-01-01",
     updatedAt: "2025-01-01",
@@ -42,6 +48,18 @@ export const reservations: Reservation[] = [
     startTime: "17:00",
     endTime: "19:00",
     numberOfGuests: 1,
+    createdAt: "2025-01-01",
+    updatedAt: "2025-01-01",
+    status: "confirmed",
+  },
+  {
+    id: "2",
+    listingId: "1",
+    userId: "4",
+    date: "2025-06-27",
+    startTime: "18:00",
+    endTime: "22:00",
+    numberOfGuests: 7,
     createdAt: "2025-01-01",
     updatedAt: "2025-01-01",
     status: "confirmed",
