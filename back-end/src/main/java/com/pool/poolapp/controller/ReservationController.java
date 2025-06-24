@@ -147,7 +147,12 @@ public class ReservationController {
                 .filter(reservation -> reservation.getCreatedAt().toLocalDate().toString().equals(createdAt))
                 .toList();
     }
-   
+    @GetMapping("/user/{userId}")
+    public List<Reservation> getReservationsByUserId(@PathVariable UUID userId) {
+        return reservationRepo.findAll().stream()
+                .filter(reservation -> reservation.getUser() != null && reservation.getUser().getId().equals(userId))
+                .toList();
+    }
     @PostMapping("/batch")
     public List<Reservation> addMultipleReservations(@RequestBody List<Reservation> res) {
         return reservationRepo.saveAll(res);
