@@ -10,32 +10,26 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
-import { Route as ReserveRouteImport } from './routes/reserve'
 import { Route as LoginPhoneRouteImport } from './routes/login-phone'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ReservationsRouteRouteImport } from './routes/reservations/route'
 import { Route as ManageRouteRouteImport } from './routes/manage/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReservationsIndexRouteImport } from './routes/reservations/index'
+import { Route as PoolsIndexRouteImport } from './routes/pools/index'
 import { Route as ManageIndexRouteImport } from './routes/manage/index'
-import { Route as ListingsIndexRouteImport } from './routes/listings/index'
+import { Route as ReservePoolIdRouteImport } from './routes/reserve/$poolId'
 import { Route as ReservationsReservationIdRouteImport } from './routes/reservations/$reservationId'
-import { Route as ManageListingRouteImport } from './routes/manage/listing'
-import { Route as ListingsListingIdRouteImport } from './routes/listings/$listingId'
+import { Route as PoolsPoolIdRouteImport } from './routes/pools/$poolId'
 import { Route as ManageReservationsIndexRouteImport } from './routes/manage/reservations/index'
-import { Route as ManageListingsIndexRouteImport } from './routes/manage/listings/index'
+import { Route as ManagePoolsIndexRouteImport } from './routes/manage/pools/index'
 import { Route as ManageReservationsReservationIdRouteImport } from './routes/manage/reservations/$reservationId'
-import { Route as ManageListingsNewRouteImport } from './routes/manage/listings/new'
-import { Route as ManageListingsListingIdRouteImport } from './routes/manage/listings/$listingId'
+import { Route as ManagePoolsNewRouteImport } from './routes/manage/pools/new'
+import { Route as ManagePoolsPoolIdRouteImport } from './routes/manage/pools/$poolId'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReserveRoute = ReserveRouteImport.update({
-  id: '/reserve',
-  path: '/reserve',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginPhoneRoute = LoginPhoneRouteImport.update({
@@ -68,14 +62,19 @@ const ReservationsIndexRoute = ReservationsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ReservationsRouteRoute,
 } as any)
+const PoolsIndexRoute = PoolsIndexRouteImport.update({
+  id: '/pools/',
+  path: '/pools/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ManageIndexRoute = ManageIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ManageRouteRoute,
 } as any)
-const ListingsIndexRoute = ListingsIndexRouteImport.update({
-  id: '/listings/',
-  path: '/listings/',
+const ReservePoolIdRoute = ReservePoolIdRouteImport.update({
+  id: '/reserve/$poolId',
+  path: '/reserve/$poolId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReservationsReservationIdRoute =
@@ -84,14 +83,9 @@ const ReservationsReservationIdRoute =
     path: '/$reservationId',
     getParentRoute: () => ReservationsRouteRoute,
   } as any)
-const ManageListingRoute = ManageListingRouteImport.update({
-  id: '/listing',
-  path: '/listing',
-  getParentRoute: () => ManageRouteRoute,
-} as any)
-const ListingsListingIdRoute = ListingsListingIdRouteImport.update({
-  id: '/listings/$listingId',
-  path: '/listings/$listingId',
+const PoolsPoolIdRoute = PoolsPoolIdRouteImport.update({
+  id: '/pools/$poolId',
+  path: '/pools/$poolId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManageReservationsIndexRoute = ManageReservationsIndexRouteImport.update({
@@ -99,9 +93,9 @@ const ManageReservationsIndexRoute = ManageReservationsIndexRouteImport.update({
   path: '/reservations/',
   getParentRoute: () => ManageRouteRoute,
 } as any)
-const ManageListingsIndexRoute = ManageListingsIndexRouteImport.update({
-  id: '/listings/',
-  path: '/listings/',
+const ManagePoolsIndexRoute = ManagePoolsIndexRouteImport.update({
+  id: '/pools/',
+  path: '/pools/',
   getParentRoute: () => ManageRouteRoute,
 } as any)
 const ManageReservationsReservationIdRoute =
@@ -110,14 +104,14 @@ const ManageReservationsReservationIdRoute =
     path: '/reservations/$reservationId',
     getParentRoute: () => ManageRouteRoute,
   } as any)
-const ManageListingsNewRoute = ManageListingsNewRouteImport.update({
-  id: '/listings/new',
-  path: '/listings/new',
+const ManagePoolsNewRoute = ManagePoolsNewRouteImport.update({
+  id: '/pools/new',
+  path: '/pools/new',
   getParentRoute: () => ManageRouteRoute,
 } as any)
-const ManageListingsListingIdRoute = ManageListingsListingIdRouteImport.update({
-  id: '/listings/$listingId',
-  path: '/listings/$listingId',
+const ManagePoolsPoolIdRoute = ManagePoolsPoolIdRouteImport.update({
+  id: '/pools/$poolId',
+  path: '/pools/$poolId',
   getParentRoute: () => ManageRouteRoute,
 } as any)
 
@@ -127,36 +121,34 @@ export interface FileRoutesByFullPath {
   '/reservations': typeof ReservationsRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/login-phone': typeof LoginPhoneRoute
-  '/reserve': typeof ReserveRoute
   '/signup': typeof SignupRoute
-  '/listings/$listingId': typeof ListingsListingIdRoute
-  '/manage/listing': typeof ManageListingRoute
+  '/pools/$poolId': typeof PoolsPoolIdRoute
   '/reservations/$reservationId': typeof ReservationsReservationIdRoute
-  '/listings': typeof ListingsIndexRoute
+  '/reserve/$poolId': typeof ReservePoolIdRoute
   '/manage/': typeof ManageIndexRoute
+  '/pools': typeof PoolsIndexRoute
   '/reservations/': typeof ReservationsIndexRoute
-  '/manage/listings/$listingId': typeof ManageListingsListingIdRoute
-  '/manage/listings/new': typeof ManageListingsNewRoute
+  '/manage/pools/$poolId': typeof ManagePoolsPoolIdRoute
+  '/manage/pools/new': typeof ManagePoolsNewRoute
   '/manage/reservations/$reservationId': typeof ManageReservationsReservationIdRoute
-  '/manage/listings': typeof ManageListingsIndexRoute
+  '/manage/pools': typeof ManagePoolsIndexRoute
   '/manage/reservations': typeof ManageReservationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/login-phone': typeof LoginPhoneRoute
-  '/reserve': typeof ReserveRoute
   '/signup': typeof SignupRoute
-  '/listings/$listingId': typeof ListingsListingIdRoute
-  '/manage/listing': typeof ManageListingRoute
+  '/pools/$poolId': typeof PoolsPoolIdRoute
   '/reservations/$reservationId': typeof ReservationsReservationIdRoute
-  '/listings': typeof ListingsIndexRoute
+  '/reserve/$poolId': typeof ReservePoolIdRoute
   '/manage': typeof ManageIndexRoute
+  '/pools': typeof PoolsIndexRoute
   '/reservations': typeof ReservationsIndexRoute
-  '/manage/listings/$listingId': typeof ManageListingsListingIdRoute
-  '/manage/listings/new': typeof ManageListingsNewRoute
+  '/manage/pools/$poolId': typeof ManagePoolsPoolIdRoute
+  '/manage/pools/new': typeof ManagePoolsNewRoute
   '/manage/reservations/$reservationId': typeof ManageReservationsReservationIdRoute
-  '/manage/listings': typeof ManageListingsIndexRoute
+  '/manage/pools': typeof ManagePoolsIndexRoute
   '/manage/reservations': typeof ManageReservationsIndexRoute
 }
 export interface FileRoutesById {
@@ -166,18 +158,17 @@ export interface FileRoutesById {
   '/reservations': typeof ReservationsRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/login-phone': typeof LoginPhoneRoute
-  '/reserve': typeof ReserveRoute
   '/signup': typeof SignupRoute
-  '/listings/$listingId': typeof ListingsListingIdRoute
-  '/manage/listing': typeof ManageListingRoute
+  '/pools/$poolId': typeof PoolsPoolIdRoute
   '/reservations/$reservationId': typeof ReservationsReservationIdRoute
-  '/listings/': typeof ListingsIndexRoute
+  '/reserve/$poolId': typeof ReservePoolIdRoute
   '/manage/': typeof ManageIndexRoute
+  '/pools/': typeof PoolsIndexRoute
   '/reservations/': typeof ReservationsIndexRoute
-  '/manage/listings/$listingId': typeof ManageListingsListingIdRoute
-  '/manage/listings/new': typeof ManageListingsNewRoute
+  '/manage/pools/$poolId': typeof ManagePoolsPoolIdRoute
+  '/manage/pools/new': typeof ManagePoolsNewRoute
   '/manage/reservations/$reservationId': typeof ManageReservationsReservationIdRoute
-  '/manage/listings/': typeof ManageListingsIndexRoute
+  '/manage/pools/': typeof ManagePoolsIndexRoute
   '/manage/reservations/': typeof ManageReservationsIndexRoute
 }
 export interface FileRouteTypes {
@@ -188,36 +179,34 @@ export interface FileRouteTypes {
     | '/reservations'
     | '/login'
     | '/login-phone'
-    | '/reserve'
     | '/signup'
-    | '/listings/$listingId'
-    | '/manage/listing'
+    | '/pools/$poolId'
     | '/reservations/$reservationId'
-    | '/listings'
+    | '/reserve/$poolId'
     | '/manage/'
+    | '/pools'
     | '/reservations/'
-    | '/manage/listings/$listingId'
-    | '/manage/listings/new'
+    | '/manage/pools/$poolId'
+    | '/manage/pools/new'
     | '/manage/reservations/$reservationId'
-    | '/manage/listings'
+    | '/manage/pools'
     | '/manage/reservations'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/login-phone'
-    | '/reserve'
     | '/signup'
-    | '/listings/$listingId'
-    | '/manage/listing'
+    | '/pools/$poolId'
     | '/reservations/$reservationId'
-    | '/listings'
+    | '/reserve/$poolId'
     | '/manage'
+    | '/pools'
     | '/reservations'
-    | '/manage/listings/$listingId'
-    | '/manage/listings/new'
+    | '/manage/pools/$poolId'
+    | '/manage/pools/new'
     | '/manage/reservations/$reservationId'
-    | '/manage/listings'
+    | '/manage/pools'
     | '/manage/reservations'
   id:
     | '__root__'
@@ -226,18 +215,17 @@ export interface FileRouteTypes {
     | '/reservations'
     | '/login'
     | '/login-phone'
-    | '/reserve'
     | '/signup'
-    | '/listings/$listingId'
-    | '/manage/listing'
+    | '/pools/$poolId'
     | '/reservations/$reservationId'
-    | '/listings/'
+    | '/reserve/$poolId'
     | '/manage/'
+    | '/pools/'
     | '/reservations/'
-    | '/manage/listings/$listingId'
-    | '/manage/listings/new'
+    | '/manage/pools/$poolId'
+    | '/manage/pools/new'
     | '/manage/reservations/$reservationId'
-    | '/manage/listings/'
+    | '/manage/pools/'
     | '/manage/reservations/'
   fileRoutesById: FileRoutesById
 }
@@ -247,10 +235,10 @@ export interface RootRouteChildren {
   ReservationsRouteRoute: typeof ReservationsRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
   LoginPhoneRoute: typeof LoginPhoneRoute
-  ReserveRoute: typeof ReserveRoute
   SignupRoute: typeof SignupRoute
-  ListingsListingIdRoute: typeof ListingsListingIdRoute
-  ListingsIndexRoute: typeof ListingsIndexRoute
+  PoolsPoolIdRoute: typeof PoolsPoolIdRoute
+  ReservePoolIdRoute: typeof ReservePoolIdRoute
+  PoolsIndexRoute: typeof PoolsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -260,13 +248,6 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reserve': {
-      id: '/reserve'
-      path: '/reserve'
-      fullPath: '/reserve'
-      preLoaderRoute: typeof ReserveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login-phone': {
@@ -311,6 +292,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReservationsIndexRouteImport
       parentRoute: typeof ReservationsRouteRoute
     }
+    '/pools/': {
+      id: '/pools/'
+      path: '/pools'
+      fullPath: '/pools'
+      preLoaderRoute: typeof PoolsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/manage/': {
       id: '/manage/'
       path: '/'
@@ -318,11 +306,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManageIndexRouteImport
       parentRoute: typeof ManageRouteRoute
     }
-    '/listings/': {
-      id: '/listings/'
-      path: '/listings'
-      fullPath: '/listings'
-      preLoaderRoute: typeof ListingsIndexRouteImport
+    '/reserve/$poolId': {
+      id: '/reserve/$poolId'
+      path: '/reserve/$poolId'
+      fullPath: '/reserve/$poolId'
+      preLoaderRoute: typeof ReservePoolIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reservations/$reservationId': {
@@ -332,18 +320,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReservationsReservationIdRouteImport
       parentRoute: typeof ReservationsRouteRoute
     }
-    '/manage/listing': {
-      id: '/manage/listing'
-      path: '/listing'
-      fullPath: '/manage/listing'
-      preLoaderRoute: typeof ManageListingRouteImport
-      parentRoute: typeof ManageRouteRoute
-    }
-    '/listings/$listingId': {
-      id: '/listings/$listingId'
-      path: '/listings/$listingId'
-      fullPath: '/listings/$listingId'
-      preLoaderRoute: typeof ListingsListingIdRouteImport
+    '/pools/$poolId': {
+      id: '/pools/$poolId'
+      path: '/pools/$poolId'
+      fullPath: '/pools/$poolId'
+      preLoaderRoute: typeof PoolsPoolIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manage/reservations/': {
@@ -353,11 +334,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManageReservationsIndexRouteImport
       parentRoute: typeof ManageRouteRoute
     }
-    '/manage/listings/': {
-      id: '/manage/listings/'
-      path: '/listings'
-      fullPath: '/manage/listings'
-      preLoaderRoute: typeof ManageListingsIndexRouteImport
+    '/manage/pools/': {
+      id: '/manage/pools/'
+      path: '/pools'
+      fullPath: '/manage/pools'
+      preLoaderRoute: typeof ManagePoolsIndexRouteImport
       parentRoute: typeof ManageRouteRoute
     }
     '/manage/reservations/$reservationId': {
@@ -367,40 +348,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManageReservationsReservationIdRouteImport
       parentRoute: typeof ManageRouteRoute
     }
-    '/manage/listings/new': {
-      id: '/manage/listings/new'
-      path: '/listings/new'
-      fullPath: '/manage/listings/new'
-      preLoaderRoute: typeof ManageListingsNewRouteImport
+    '/manage/pools/new': {
+      id: '/manage/pools/new'
+      path: '/pools/new'
+      fullPath: '/manage/pools/new'
+      preLoaderRoute: typeof ManagePoolsNewRouteImport
       parentRoute: typeof ManageRouteRoute
     }
-    '/manage/listings/$listingId': {
-      id: '/manage/listings/$listingId'
-      path: '/listings/$listingId'
-      fullPath: '/manage/listings/$listingId'
-      preLoaderRoute: typeof ManageListingsListingIdRouteImport
+    '/manage/pools/$poolId': {
+      id: '/manage/pools/$poolId'
+      path: '/pools/$poolId'
+      fullPath: '/manage/pools/$poolId'
+      preLoaderRoute: typeof ManagePoolsPoolIdRouteImport
       parentRoute: typeof ManageRouteRoute
     }
   }
 }
 
 interface ManageRouteRouteChildren {
-  ManageListingRoute: typeof ManageListingRoute
   ManageIndexRoute: typeof ManageIndexRoute
-  ManageListingsListingIdRoute: typeof ManageListingsListingIdRoute
-  ManageListingsNewRoute: typeof ManageListingsNewRoute
+  ManagePoolsPoolIdRoute: typeof ManagePoolsPoolIdRoute
+  ManagePoolsNewRoute: typeof ManagePoolsNewRoute
   ManageReservationsReservationIdRoute: typeof ManageReservationsReservationIdRoute
-  ManageListingsIndexRoute: typeof ManageListingsIndexRoute
+  ManagePoolsIndexRoute: typeof ManagePoolsIndexRoute
   ManageReservationsIndexRoute: typeof ManageReservationsIndexRoute
 }
 
 const ManageRouteRouteChildren: ManageRouteRouteChildren = {
-  ManageListingRoute: ManageListingRoute,
   ManageIndexRoute: ManageIndexRoute,
-  ManageListingsListingIdRoute: ManageListingsListingIdRoute,
-  ManageListingsNewRoute: ManageListingsNewRoute,
+  ManagePoolsPoolIdRoute: ManagePoolsPoolIdRoute,
+  ManagePoolsNewRoute: ManagePoolsNewRoute,
   ManageReservationsReservationIdRoute: ManageReservationsReservationIdRoute,
-  ManageListingsIndexRoute: ManageListingsIndexRoute,
+  ManagePoolsIndexRoute: ManagePoolsIndexRoute,
   ManageReservationsIndexRoute: ManageReservationsIndexRoute,
 }
 
@@ -427,10 +406,10 @@ const rootRouteChildren: RootRouteChildren = {
   ReservationsRouteRoute: ReservationsRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   LoginPhoneRoute: LoginPhoneRoute,
-  ReserveRoute: ReserveRoute,
   SignupRoute: SignupRoute,
-  ListingsListingIdRoute: ListingsListingIdRoute,
-  ListingsIndexRoute: ListingsIndexRoute,
+  PoolsPoolIdRoute: PoolsPoolIdRoute,
+  ReservePoolIdRoute: ReservePoolIdRoute,
+  PoolsIndexRoute: PoolsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

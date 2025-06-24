@@ -1,9 +1,19 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useMyReservations } from "../../services/reservation/useMyReservations";
+import { useMyReservations } from "../../services/reservations/useMyReservations";
 
 export const MyReservationsListPage = () => {
   const navigate = useNavigate();
-  const { data: reservations = [] } = useMyReservations({ userId: "3" });
+  const {
+    data: reservations = [],
+    isError,
+    error,
+  } = useMyReservations({
+    userId: "ec7a91a2-bf9b-4c49-a7a1-abcdef123456",
+  });
+
+  if (isError) {
+    return <div>Error: {error?.message}</div>;
+  }
 
   return (
     <div className="space-y-6 w-full">
@@ -31,7 +41,7 @@ export const MyReservationsListPage = () => {
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">
                   <h3 className="text-lg font-medium">
-                    {reservation.listing?.name}
+                    {reservation.pool?.name}
                   </h3>
                   <span
                     className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full`}

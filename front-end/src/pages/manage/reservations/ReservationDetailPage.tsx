@@ -1,47 +1,27 @@
 import { useParams, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import Button from "../../../components/Button";
+import { useReservation } from "../../../services/reservations/useReservation";
 
 export const ReservationDetailPage = () => {
   const { reservationId } = useParams({
     from: "/manage/reservations/$reservationId",
   });
   const [showCancelModal, setShowCancelModal] = useState(false);
-
-  // Mock data - in a real app, this would be fetched based on bookingId
-  const booking = {
+  const { data: reservation, isLoading } = useReservation({
     id: reservationId,
-    guestName: "John Doe",
-    guestEmail: "john@example.com",
-    guestPhone: "(717) 917-5881",
-    poolName: "Beautiful Backyard Pool",
-    date: "2024-01-15",
-    startTime: "14:00",
-    endTime: "16:00",
-    guests: 4,
-    guestList: ["John Doe", "Jane Doe", "Bob Smith", "Alice Johnson"],
-    status: "confirmed" as "confirmed" | "pending" | "cancelled",
-    totalAmount: 70,
-    pricePerHour: 35,
-    duration: 2,
-    createdAt: "2024-01-10T10:30:00Z",
-    specialRequests:
-      "Please have the pool heated to 85°F. We'll be celebrating a birthday!",
-    address: "123 Pool Lane, Miami, FL 33101",
-    wifiPassword: "PoolParty2024",
-    contactInstructions:
-      "Ring doorbell and wait by the pool gate. I'll come let you in.",
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "confirmed":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
       case "pending":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
       case "cancelled":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
     }
   };
 
@@ -56,234 +36,263 @@ export const ReservationDetailPage = () => {
     setShowCancelModal(false);
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  } else if (!reservation) {
+    return <div>Reservation not found</div>;
+  }
+
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="flex flex-col gap-8">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-medium">Booking Details</h1>
-            <p className="text-gray-600">Reservation #{booking.id}</p>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+              Booking Details
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Reservation #{reservation.id}
+            </p>
           </div>
           <Link
             to="/manage/reservations"
-            className="text-gray-600 hover:text-gray-900"
+            className="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
           >
             Back to reservations
           </Link>
         </div>
-      </div>
 
-      <div className="bg-surface shadow rounded-lg overflow-hidden">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold">{booking.guestName}</h2>
-              <p className="text-sm text-gray-500">
-                Booked on {new Date(booking.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span
-                className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${getStatusColor(booking.status)}`}
-              >
-                {booking.status}
-              </span>
-              <span className="text-xl font-medium">
-                ${booking.totalAmount}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Details Grid */}
-        <div className="px-6 py-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Reservation Details */}
-            <div>
-              <h3 className="text-lg font-medium mb-4">Reservation Details</h3>
-              <dl className="space-y-3">
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">Pool</dt>
-                  <dd className="text-sm">{booking.poolName}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">
-                    Date & Time
-                  </dt>
-                  <dd className="text-sm">
-                    {booking.date} • {booking.startTime} - {booking.endTime} (
-                    {booking.duration}h)
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">
-                    Number of Guests
-                  </dt>
-                  <dd className="text-sm">{booking.guests}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">Price</dt>
-                  <dd className="text-sm">
-                    ${booking.pricePerHour}/hour × {booking.duration} hours = $
-                    {booking.totalAmount}
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            {/* Guest Information */}
-            <div>
-              <h3 className="text-lg font-medium mb-4">Guest Information</h3>
-              <dl className="space-y-3">
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">Contact</dt>
-                  <dd className="text-sm">
-                    <div>{booking.guestEmail}</div>
-                    <div>{booking.guestPhone}</div>
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">
-                    Guest List
-                  </dt>
-                  <dd className="text-sm">
-                    <ul className="list-disc list-inside">
-                      {booking.guestList.map((guest, index) => (
-                        <li key={index}>{guest}</li>
-                      ))}
-                    </ul>
-                  </dd>
-                </div>
-              </dl>
+        <div className="bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl overflow-hidden">
+          {/* Header */}
+          <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-1">
+                <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">
+                  {reservation.user?.name}
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Booked on{" "}
+                  {new Date(reservation.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <span
+                  className={`inline-flex px-3 py-1 text-sm font-medium rounded-xl ${getStatusColor(reservation.status)}`}
+                >
+                  {reservation.status}
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Special Requests */}
-          {booking.specialRequests && (
-            <div className="mt-6">
-              <h3 className="text-lg font-medium mb-2">Special Requests</h3>
-              <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-md">
-                {booking.specialRequests}
-              </p>
-            </div>
-          )}
-
-          {/* Information to Share */}
-          {booking.status === "confirmed" && (
-            <div className="mt-6">
-              <h3 className="text-lg font-medium mb-4">
-                Information Shared with Guest
-              </h3>
-              <div className="bg-blue-50 p-4 rounded-md">
-                <dl className="space-y-2">
+          {/* Details Grid */}
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Reservation Details */}
+              <div className="flex flex-col gap-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                  Reservation Details
+                </h3>
+                <dl className="flex flex-col gap-3">
                   <div>
-                    <dt className="text-sm font-medium text-blue-900">
-                      Address
+                    <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Pool
                     </dt>
-                    <dd className="text-sm text-blue-800">{booking.address}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-sm font-medium text-blue-900">
-                      WiFi Password
-                    </dt>
-                    <dd className="text-sm text-blue-800">
-                      {booking.wifiPassword}
+                    <dd className="text-sm text-gray-900 dark:text-gray-100">
+                      {reservation.pool?.name}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-blue-900">
-                      Contact Instructions
+                    <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Date & Time
                     </dt>
-                    <dd className="text-sm text-blue-800">
-                      {booking.contactInstructions}
+                    <dd className="text-sm text-gray-900 dark:text-gray-100">
+                      {reservation.startTime} - {reservation.endTime}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Number of Guests
+                    </dt>
+                    <dd className="text-sm text-gray-900 dark:text-gray-100">
+                      99
+                      {/* {reservation.guests} */}
                     </dd>
                   </div>
                 </dl>
               </div>
+
+              {/* Guest Information */}
+              <div className="flex flex-col gap-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                  Guest Information
+                </h3>
+                <dl className="flex flex-col gap-3">
+                  <div>
+                    <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Contact
+                    </dt>
+                    <dd className="text-sm text-gray-900 dark:text-gray-100">
+                      <div>{reservation.user?.email}</div>
+                      <div>{reservation.user?.phone}</div>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Guest List
+                    </dt>
+                    TBD
+                    {/* <dd className="text-sm text-gray-900 dark:text-gray-100">
+                      <ul className="list-disc list-inside">
+                        {reservation.guestList.map((guest, index) => (
+                          <li key={index}>{guest}</li>
+                        ))}
+                      </ul>
+                    </dd> */}
+                  </div>
+                </dl>
+              </div>
             </div>
-          )}
-        </div>
 
-        {/* Actions */}
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-          <div className="flex items-center justify-between">
-            <div className="flex space-x-3">
-              <a
-                href={`tel:${booking.guestPhone}`}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Call Guest
-              </a>
-              <a
-                href={`mailto:${booking.guestEmail}`}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-surface hover:bg-gray-50"
-              >
-                Email Guest
-              </a>
-            </div>
-
-            <div className="flex space-x-3">
-              {booking.status === "pending" && (
-                <>
-                  <button
-                    onClick={handleConfirm}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
-                  >
-                    Confirm Booking
-                  </button>
-                  <button
-                    onClick={() => setShowCancelModal(true)}
-                    className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-red-700 bg-surface hover:bg-red-50"
-                  >
-                    Decline
-                  </button>
-                </>
-              )}
-
-              {booking.status === "confirmed" && (
-                <button
-                  onClick={() => setShowCancelModal(true)}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-red-700 bg-surface hover:bg-red-50"
-                >
-                  Cancel Booking
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Cancel Modal */}
-      {showCancelModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-surface">
-            <div className="mt-3 text-center">
-              <h3 className="text-lg font-medium">Cancel Booking</h3>
-              <div className="mt-2 px-7 py-3">
-                <p className="text-sm text-gray-500">
-                  Are you sure you want to cancel this booking? This action
-                  cannot be undone.
+            {/* Special Requests */}
+            {/* {reservation.specialRequests && (
+              <div className="mt-6 flex flex-col gap-2">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                  Special Requests
+                </h3>
+                <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl">
+                  {reservation.specialRequests}
                 </p>
               </div>
-              <div className="items-center px-4 py-3">
-                <button
-                  onClick={handleCancel}
-                  className="px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+            )} */}
+
+            {/* Information to Share */}
+            {reservation.status === "confirmed" && (
+              <div className="mt-6 flex flex-col gap-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                  Information Shared with Guest
+                </h3>
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-2xl">
+                  <dl className="flex flex-col gap-2">
+                    <div>
+                      <dt className="text-sm font-medium text-blue-900 dark:text-blue-400">
+                        Address
+                      </dt>
+                      <dd className="text-sm text-blue-800 dark:text-blue-300">
+                        {reservation.pool?.address}
+                      </dd>
+                    </div>
+                    {/* <div>
+                      <dt className="text-sm font-medium text-blue-900 dark:text-blue-400">
+                        WiFi Password
+                      </dt>
+                      <dd className="text-sm text-blue-800 dark:text-blue-300">
+                        {reservation.pool?.wifiPassword}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-sm font-medium text-blue-900 dark:text-blue-400">
+                        Contact Instructions
+                      </dt>
+                      <dd className="text-sm text-blue-800 dark:text-blue-300">
+                        {reservation.pool?.contactInstructions}
+                      </dd>
+                    </div> */}
+                  </dl>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="p-6 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex gap-3">
+                <a
+                  href={`tel:${reservation.user?.phone}`}
+                  className="inline-block"
                 >
-                  Yes, Cancel Booking
-                </button>
-                <button
-                  onClick={() => setShowCancelModal(false)}
-                  className="mt-3 px-4 py-2 bg-surface text-gray-500 text-base font-medium rounded-md w-full shadow-sm border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  <Button variant="primary">Call Guest</Button>
+                </a>
+                <a
+                  href={`mailto:${reservation.user?.email}`}
+                  className="inline-block"
                 >
-                  No, Keep Booking
-                </button>
+                  <Button variant="secondary">Email Guest</Button>
+                </a>
+              </div>
+
+              <div className="flex gap-3">
+                {reservation.status === "pending" && (
+                  <>
+                    <Button
+                      onClick={handleConfirm}
+                      variant="primary"
+                      className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
+                    >
+                      Confirm Booking
+                    </Button>
+                    <Button
+                      onClick={() => setShowCancelModal(true)}
+                      variant="secondary"
+                      className="text-red-600 hover:text-red-500 border-red-200 hover:border-red-300 dark:text-red-400 dark:hover:text-red-300 dark:border-red-800 dark:hover:border-red-700"
+                    >
+                      Decline
+                    </Button>
+                  </>
+                )}
+
+                {reservation.status === "confirmed" && (
+                  <Button
+                    onClick={() => setShowCancelModal(true)}
+                    variant="secondary"
+                    className="text-red-600 hover:text-red-500 border-red-200 hover:border-red-300 dark:text-red-400 dark:hover:text-red-300 dark:border-red-800 dark:hover:border-red-700"
+                  >
+                    Cancel Booking
+                  </Button>
+                )}
               </div>
             </div>
           </div>
         </div>
-      )}
+
+        {/* Cancel Modal */}
+        {showCancelModal && (
+          <div className="fixed inset-0 bg-gray-900/50 dark:bg-gray-900/80 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+            <div className="relative border border-gray-200 dark:border-gray-800 w-full max-w-md bg-surface rounded-2xl shadow-xl">
+              <div className="p-6">
+                <div className="text-center">
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    Cancel Booking
+                  </h3>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Are you sure you want to cancel this booking? This action
+                      cannot be undone.
+                    </p>
+                  </div>
+                  <div className="mt-6 flex flex-col gap-3">
+                    <Button
+                      onClick={handleCancel}
+                      variant="primary"
+                      className="w-full bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"
+                    >
+                      Yes, Cancel Booking
+                    </Button>
+                    <Button
+                      onClick={() => setShowCancelModal(false)}
+                      variant="secondary"
+                      className="w-full"
+                    >
+                      No, Keep Booking
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

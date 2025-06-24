@@ -24,10 +24,10 @@ function RouteComponent() {
                 Manage
               </Link>
               <Link
-                to="/manage/listings"
+                to="/manage/pools"
                 inactiveProps={{ className: `text-gray-500` }}
               >
-                Listings
+                Pools
               </Link>
               <Link
                 to="/manage/reservations"

@@ -3,8 +3,8 @@ import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 
-export const ListingDetailPage = () => {
-  const { listingId } = useParams({ from: "/listings/$listingId" });
+export const PoolDetailPage = () => {
+  const { poolId } = useParams({ from: "/pools/$poolId" });
 
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [startTime, setStartTime] = useState("10:00");
@@ -12,9 +12,9 @@ export const ListingDetailPage = () => {
   const [guests, setGuests] = useState(4);
   const [showBookingForm, setShowBookingForm] = useState(false);
 
-  // Mock data - in a real app, this would be fetched based on listingId
-  const listing = {
-    id: listingId,
+  // Mock data - in a real app, this would be fetched based on poolId
+  const poolData = {
+    id: poolId,
     name: "Beautiful Backyard Pool",
     description:
       "A stunning 20x40 pool with spa and outdoor kitchen. Perfect for family gatherings, birthday parties, or just relaxing with friends. The pool is heated year-round and features a beautiful waterfall feature.",
@@ -62,18 +62,17 @@ export const ListingDetailPage = () => {
     const start = new Date(`2024-01-01T${startTime}:00`);
     const end = new Date(`2024-01-01T${endTime}:00`);
     const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
-    return Math.max(0, hours * listing.pricePerHour);
+    return Math.max(0, hours * poolData.pricePerHour);
   };
 
   const handleBooking = () => {
     // TODO: Implement booking logic
     console.log("Booking request:", {
-      listingId,
+      poolId,
       date: selectedDate,
       startTime,
       endTime,
       guests,
-      total: calculateTotal(),
     });
   };
 
@@ -81,19 +80,19 @@ export const ListingDetailPage = () => {
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-medium">{listing.name}</h1>
+        <h1 className="text-3xl font-medium">{poolData.name}</h1>
         <div className="flex items-center space-x-4 mt-2">
           <div className="flex items-center space-x-1">
             <span className="text-yellow-400">★</span>
-            <span className="font-medium">{listing.rating}</span>
+            <span className="font-medium">{poolData.rating}</span>
             <span className="text-gray-500">
-              ({listing.reviewCount} reviews)
+              ({poolData.reviewCount} reviews)
             </span>
           </div>
           <span className="text-gray-500">•</span>
-          <span className="text-gray-500">{listing.location}</span>
+          <span className="text-gray-500">{poolData.location}</span>
           <span className="text-gray-500">•</span>
-          <span className="text-gray-500">Hosted by {listing.ownerName}</span>
+          <span className="text-gray-500">Hosted by {poolData.ownerName}</span>
         </div>
       </div>
 
@@ -103,16 +102,16 @@ export const ListingDetailPage = () => {
           {/* Images */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <img
-              src={listing.images[0]}
-              alt={listing.name}
+              src={poolData.images[0]}
+              alt={poolData.name}
               className="w-full h-64 object-cover rounded-lg"
             />
             <div className="grid grid-cols-2 gap-2">
-              {listing.images.slice(1).map((image, index) => (
+              {poolData.images.slice(1).map((image, index) => (
                 <img
                   key={index}
                   src={image}
-                  alt={`${listing.name} ${index + 2}`}
+                  alt={`${poolData.name} ${index + 2}`}
                   className="w-full h-31 object-cover rounded-lg"
                 />
               ))}
@@ -123,7 +122,7 @@ export const ListingDetailPage = () => {
           <div>
             <h2 className="text-xl font-semibold mb-4">About this pool</h2>
             <p className="text-gray-700 leading-relaxed">
-              {listing.description}
+              {poolData.description}
             </p>
           </div>
 
@@ -133,7 +132,7 @@ export const ListingDetailPage = () => {
               What this place offers
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {listing.features.map((feature, index) => (
+              {poolData.features.map((feature, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                   <span className="text-sm text-gray-700">{feature}</span>
@@ -146,7 +145,7 @@ export const ListingDetailPage = () => {
           <div>
             <h2 className="text-xl font-semibold mb-4">Included amenities</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {listing.amenities.map((amenity, index) => (
+              {poolData.amenities.map((amenity, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <span className="text-sm text-gray-700">{amenity}</span>
@@ -159,7 +158,7 @@ export const ListingDetailPage = () => {
           <div>
             <h2 className="text-xl font-semibold mb-4">Pool rules</h2>
             <ul className="space-y-2">
-              {listing.rules.map((rule, index) => (
+              {poolData.rules.map((rule, index) => (
                 <li key={index} className="text-sm text-gray-700">
                   • {rule}
                 </li>
@@ -174,7 +173,7 @@ export const ListingDetailPage = () => {
             <div className="mb-4">
               <div className="flex items-baseline space-x-1">
                 <span className="text-2xl font-medium">
-                  ${listing.pricePerHour}
+                  ${poolData.pricePerHour}
                 </span>
                 <span className="text-gray-500">per hour</span>
               </div>
@@ -215,8 +214,8 @@ export const ListingDetailPage = () => {
                       type="time"
                       value={startTime}
                       onChange={(e) => setStartTime(e.target.value)}
-                      min={listing.availableHours.start}
-                      max={listing.availableHours.end}
+                      min={poolData.availableHours.start}
+                      max={poolData.availableHours.end}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                     />
                   </div>
@@ -229,7 +228,7 @@ export const ListingDetailPage = () => {
                       value={endTime}
                       onChange={(e) => setEndTime(e.target.value)}
                       min={startTime}
-                      max={listing.availableHours.end}
+                      max={poolData.availableHours.end}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                     />
                   </div>
@@ -256,16 +255,6 @@ export const ListingDetailPage = () => {
                     </button>
                   </div>
                 </div>
-
-                {/* Total */}
-                {selectedDate && (
-                  <div className="border-t pt-4">
-                    <div className="flex justify-between text-sm">
-                      <span>Total</span>
-                      <span className="font-medium">${calculateTotal()}</span>
-                    </div>
-                  </div>
-                )}
 
                 {/* Book Button */}
                 <button

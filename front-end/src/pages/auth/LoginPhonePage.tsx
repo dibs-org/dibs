@@ -1,30 +1,76 @@
-import { useState } from "react";
+"use client";
+
+import * as React from "react";
 import Button from "../../components/Button";
-import Input from "../../components/Input";
 import Field from "../../components/Field";
 import LinkButton from "../../components/LinkButton";
 import Heading from "../../components/Heading";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useSendOTP } from "../../services/auth/useSendOTP";
+import Input from "../../components/Input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "../../components/InputOTP";
+import { useConfirmOTP } from "../../services/auth/useConfirmOTP";
 
 export const LoginPhonePage = () => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({
+  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = React.useState(0);
+  const [formData, setFormData] = React.useState({
     phone: "",
     code: "",
   });
+  const {
+    mutate: sendOTP,
+    isPending: isSendingOTP,
+    isSuccess: successfullySentOTP,
+  } = useSendOTP();
+
+  const {
+    mutate: confirmOTP,
+    isPending: isConfirmingOTP,
+    isSuccess: successfullyConfirmedOTP,
+  } = useConfirmOTP();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSendOTP = () => {
+    sendOTP(formData.phone);
+  };
+
+  const handleConfirmOTP = () => {
+    confirmOTP({ phone: formData.phone, code: formData.code });
+  };
+
+  if (successfullySentOTP && currentStep === 0) {
+    setCurrentStep(1);
+    return;
+  } else if (successfullyConfirmedOTP && currentStep === 1) {
+    setCurrentStep(2);
+    setTimeout(() => {
+      navigate({ to: "/" });
+    }, 1000);
+    return;
+  }
+
   const steps = [
     {
       render: () => (
         <div className="flex flex-col items-center gap-8 max-w-md w-full px-4">
-          <Heading as="h2" size="3xl">
-            Log in to your account
-          </Heading>
+          <div className="flex flex-col">
+            <Heading as="h2" size="3xl">
+              Log in to your account
+            </Heading>
+            <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+              We'll send a code to your phone to log in.
+            </p>
+          </div>
           <div className="flex flex-col gap-4 w-full">
             <div className="space-y-4">
               <Field label="Phone number">
@@ -32,6 +78,7 @@ export const LoginPhonePage = () => {
                   id="phone"
                   name="phone"
                   type="tel"
+                  autoComplete="tel-national"
                   required
                   value={formData.phone}
                   onChange={handleInputChange}
@@ -43,9 +90,10 @@ export const LoginPhonePage = () => {
             <Button
               variant="primary"
               className="w-full"
-              onClick={() => setCurrentStep(1)}
+              onClick={handleSendOTP}
+              disabled={isSendingOTP}
             >
-              Continue with phone number
+              {isSendingOTP ? "Sending" : "Continue with phone number"}
             </Button>
           </div>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
@@ -63,35 +111,81 @@ export const LoginPhonePage = () => {
     {
       render: () => (
         <div className="flex flex-col items-center gap-8 max-w-md w-full px-4">
-          <div className="flex flex-col">
+          <div className="flex flex-col items-center gap-2">
             <Heading as="h2" size="3xl">
               Enter the code, silly
             </Heading>
             <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-              We sent a code to {formData.phone}
+              We sent a code to {formData.phone}. Didn't get it?{" "}
+              <button
+                onClick={handleSendOTP}
+                className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
+                disabled={isSendingOTP}
+              >
+                {isSendingOTP ? "Resending" : "Resend"}
+              </button>
             </p>
           </div>
           <div className="flex flex-col gap-4 w-full">
             <div className="space-y-4">
               <Field label="Code">
-                <Input
-                  id="code"
-                  name="code"
-                  type="text"
-                  required
+                <InputOTP
+                  maxLength={6}
                   value={formData.code}
-                  onChange={handleInputChange}
-                  placeholder="Enter the code"
-                  className="w-full"
-                />
+                  onChange={(value) => {
+                    setFormData((prev) => ({ ...prev, code: value }));
+                    if (value.length === 6) {
+                      handleConfirmOTP();
+                    }
+                  }}
+                  autoFocus
+                  autoComplete="one-time-code"
+                >
+                  <InputOTPGroup className="w-full">
+                    <InputOTPSlot
+                      index={0}
+                      size="large"
+                      className="w-full !h-[64px] !rounded-l-xl"
+                    />
+                    <InputOTPSlot
+                      index={1}
+                      size="large"
+                      className="w-full !h-[64px]"
+                    />
+                    <InputOTPSlot
+                      index={2}
+                      size="large"
+                      className="w-full !h-[64px] !rounded-r-xl"
+                    />
+                  </InputOTPGroup>
+                  <InputOTPSeparator />
+                  <InputOTPGroup className="w-full">
+                    <InputOTPSlot
+                      index={3}
+                      size="large"
+                      className="w-full !h-[64px] !rounded-l-xl"
+                    />
+                    <InputOTPSlot
+                      index={4}
+                      size="large"
+                      className="w-full !h-[64px]"
+                    />
+                    <InputOTPSlot
+                      index={5}
+                      size="large"
+                      className="w-full !h-[64px] !rounded-r-xl"
+                    />
+                  </InputOTPGroup>
+                </InputOTP>
               </Field>
             </div>
             <Button
               variant="primary"
               className="w-full"
-              onClick={() => setCurrentStep(1)}
+              onClick={handleConfirmOTP}
+              disabled={isConfirmingOTP}
             >
-              Continue with phone number
+              {isConfirmingOTP ? "Submitting" : "Submit"}
             </Button>
           </div>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
@@ -102,6 +196,15 @@ export const LoginPhonePage = () => {
             >
               Sign up
             </Link>
+          </p>
+        </div>
+      ),
+    },
+    {
+      render: () => (
+        <div className="flex flex-col items-center gap-8 max-w-md w-full px-4">
+          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+            Redirecting to home...
           </p>
         </div>
       ),

@@ -1,217 +1,233 @@
 import { Link } from "@tanstack/react-router";
-import { useListings } from "../../services/listing/useListings";
-import { useReservations } from "../../services/reservation/useReservations";
+import { usePools } from "../../services/pools/usePools";
+import { useReservations } from "../../services/reservations/useReservations";
+import Button from "../../components/Button";
 
 export const OwnerDashboard = () => {
-  const { data: listings = [] } = useListings();
+  const { data: pools = [] } = usePools();
   const { data: reservations = [] } = useReservations();
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "confirmed":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
       case "pending":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
       case "cancelled":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
     }
   };
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-medium">Dashboard</h1>
-        <p className="text-gray-600">
+    <div className="flex flex-col gap-8 max-w-6xl mx-auto p-6">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          Dashboard
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
           Welcome back! Here's an overview of your pool business.
         </p>
       </div>
 
       {/* Reservations Section */}
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-xl font-medium">Recent Reservations</h2>
-          <p className="text-gray-600">Your latest pool reservations</p>
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">
+            Recent Reservations
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Your latest pool reservations
+          </p>
         </div>
 
-        <div className="bg-surface shadow overflow-hidden sm:rounded-md">
-          <ul className="divide-y divide-gray-200">
+        <div className="bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl overflow-hidden">
+          <div className="divide-y divide-gray-200 dark:divide-gray-800">
             {reservations.map((reservation) => (
-              <li key={reservation.id}>
-                <div className="px-4 py-4 sm:px-6">
+              <div key={reservation.id} className="p-6">
+                <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-medium">
-                          {reservation.renterUser?.name}
-                        </h3>
-                        <div className="flex items-center space-x-2">
-                          <span
-                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(reservation.status)}`}
-                          >
-                            {reservation.status}
-                          </span>
-                        </div>
-                      </div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                      {reservation.user?.name}
+                    </h3>
+                    <span
+                      className={`inline-flex px-3 py-1 text-xs font-medium rounded-xl ${getStatusColor(reservation.status)}`}
+                    >
+                      {reservation.status}
+                    </span>
+                  </div>
 
-                      <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-500">
-                        <div>
-                          <span className="font-medium">Pool:</span>{" "}
-                          {reservation.listing?.name}
-                        </div>
-                        <div>
-                          <span className="font-medium">Date:</span>{" "}
-                          {reservation.date}
-                        </div>
-                        <div>
-                          <span className="font-medium">Time:</span>{" "}
-                          {reservation.startTime} - {reservation.endTime}
-                        </div>
-                        <div>
-                          <span className="font-medium">Guests:</span>{" "}
-                          {reservation.numberOfGuests}
-                        </div>
-                      </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-600 dark:text-gray-400">
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-gray-100">
+                        Pool:
+                      </span>{" "}
+                      {reservation.pool?.name}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-gray-100">
+                        Time:
+                      </span>{" "}
+                      {reservation.startTime} - {reservation.endTime}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-gray-100">
+                        Guests:
+                      </span>{" "}
+                      {reservation.numberOfGuests}
                     </div>
                   </div>
 
-                  <div className="mt-4 flex items-center space-x-3">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <Link
                       to="/manage/reservations/$reservationId"
                       params={{ reservationId: reservation.id }}
-                      className="text-blue-600 hover:text-blue-500 text-sm font-medium"
+                      className="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
                     >
                       View Details
                     </Link>
 
                     {reservation.status === "pending" && (
                       <>
-                        <button className="text-green-600 hover:text-green-500 text-sm font-medium">
+                        <Button
+                          variant="primary"
+                          size="small"
+                          className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
+                        >
                           Confirm
-                        </button>
-                        <button className="text-red-600 hover:text-red-500 text-sm font-medium">
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="small"
+                          className="text-red-600 hover:text-red-500 border-red-200 hover:border-red-300 dark:text-red-400 dark:hover:text-red-300 dark:border-red-800 dark:hover:border-red-700"
+                        >
                           Decline
-                        </button>
+                        </Button>
                       </>
                     )}
 
                     {reservation.status === "confirmed" && (
                       <a
-                        href={`tel:${reservation.renterUser?.phone}`}
-                        className="text-blue-600 hover:text-blue-500 text-sm font-medium"
+                        href={`tel:${reservation.user?.phone}`}
+                        className="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
                       >
                         Call Guest
                       </a>
                     )}
                   </div>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
 
         {reservations.length === 0 && (
-          <div className="text-center py-12">
-            <div className="mx-auto h-12 w-12 text-gray-400">
-              <svg
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
+          <div className="text-center py-12 bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl">
+            <div className="flex justify-center mb-4">
+              <div className="h-12 w-12 text-gray-400 dark:text-gray-600">
+                <svg
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
             </div>
-            <h3 className="mt-2 text-sm font-medium">No reservations</h3>
-            <p className="mt-1 text-sm text-gray-500">No reservations yet.</p>
+            <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              No reservations
+            </h3>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              No reservations yet.
+            </p>
           </div>
         )}
       </div>
 
-      {/* Listings Section */}
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-xl font-medium">My Listings</h2>
-            <p className="text-gray-600">Your pool listings</p>
-          </div>
+      {/* Pools Section */}
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">
+            My pools
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">Your pools</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {listings.map((listing) => (
+          {pools.map((pool) => (
             <div
-              key={listing.id}
-              className="bg-surface overflow-hidden shadow rounded-lg"
+              key={pool.id}
+              className="bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl overflow-hidden"
             >
-              <div className="px-4 py-5 sm:p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium">{listing.name}</h3>
-                </div>
+              <div className="p-6 flex flex-col gap-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                  {pool.name}
+                </h3>
 
-                <p className="text-sm text-gray-600 mb-4">
-                  {listing.description}
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {pool.description}
                 </p>
 
-                <div className="mb-4">
-                  <div className="flex flex-wrap gap-1">
-                    {listing.amenities.map((amenity) => (
-                      <span
-                        key={amenity}
-                        className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800"
-                      >
-                        {amenity}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                {/* <div className="flex flex-wrap gap-2">
+                  {pool.amenities.map((amenity) => (
+                    <span
+                      key={amenity}
+                      className="inline-flex items-center px-3 py-1 rounded-xl text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
+                    >
+                      {amenity}
+                    </span>
+                  ))}
+                </div> */}
 
-                <div className="flex space-x-2">
-                  <Link
-                    to="/manage/listings/$listingId"
-                    params={{ listingId: listing.id }}
-                    className="flex-1 inline-flex justify-center items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-surface hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
+                <Link
+                  to="/manage/pools/$poolId"
+                  params={{ poolId: pool.id }}
+                  className="w-full"
+                >
+                  <Button variant="secondary" className="w-full">
                     Edit
-                  </Link>
-                </div>
+                  </Button>
+                </Link>
               </div>
             </div>
           ))}
         </div>
 
-        {listings.length === 0 && (
-          <div className="text-center py-12">
-            <div className="mx-auto h-12 w-12 text-gray-400">
-              <svg
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                />
-              </svg>
+        {pools.length === 0 && (
+          <div className="text-center py-12 bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl">
+            <div className="flex justify-center mb-4">
+              <div className="h-12 w-12 text-gray-400 dark:text-gray-600">
+                <svg
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                  />
+                </svg>
+              </div>
             </div>
-            <h3 className="mt-2 text-sm font-medium">No listings</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Get started by creating your first pool listing.
+            <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              No pools
+            </h3>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              Get started by creating your first pool.
             </p>
             <div className="mt-6">
-              <Link
-                to="/manage/listings/new"
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Add Listing
+              <Link to="/manage/pools/new">
+                <Button variant="primary">Add Pool</Button>
               </Link>
             </div>
           </div>

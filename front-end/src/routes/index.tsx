@@ -26,18 +26,18 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="w-screen min-h-screen flex items-center justify-center">
-      <div className="flex flex-col items-start gap-4 max-w-4xl w-full px-4">
+      <div className="flex flex-col items-start gap-4 max-w-4xl w-full p-4">
         <h3 className="text-2xl font-semibold mb-4">Pool reservation 🏖️</h3>
 
         <div className="flex flex-col md:flex-row gap-8 w-full">
           <div className="w-full">
             <span className="text-sm text-gray-500 font-medium">Auth</span>
             <div className="flex flex-col gap-3 w-full mt-2">
-              <Link to="/login" className={makeButtonClasses()}>
-                Login
-              </Link>
               <Link to="/login-phone" className={makeButtonClasses()}>
                 Login with phone
+              </Link>
+              <Link to="/login" className={makeButtonClasses()}>
+                Login
               </Link>
               <Link to="/signup" className={makeButtonClasses()}>
                 Signup
@@ -51,11 +51,11 @@ function Index() {
               <Link to="/manage" className={makeButtonClasses()}>
                 Owner dashboard
               </Link>
-              <Link to="/manage/listings" className={makeButtonClasses()}>
-                Manage listings
+              <Link to="/manage/pools" className={makeButtonClasses()}>
+                Manage pools
               </Link>
-              <Link to="/manage/listings/new" className={makeButtonClasses()}>
-                Create listing
+              <Link to="/manage/pools/new" className={makeButtonClasses()}>
+                Create pool
               </Link>
               <Link to="/manage/reservations" className={makeButtonClasses()}>
                 Manage reservations
@@ -66,7 +66,11 @@ function Index() {
           <div className="w-full">
             <span className="text-sm text-gray-500 font-medium">Renter</span>
             <div className="flex flex-col gap-3 w-full mt-2">
-              <Link to="/reserve" className={makeButtonClasses()}>
+              <Link
+                to="/reserve/$poolId"
+                params={{ poolId: "04011455-c63b-445c-8426-aa21fbe5c2ff" }}
+                className={makeButtonClasses()}
+              >
                 Reserve
               </Link>
               <Link to="/reservations" className={makeButtonClasses()}>
@@ -74,7 +78,9 @@ function Index() {
               </Link>
               <Link
                 to="/reservations/$reservationId"
-                params={{ reservationId: "1" }}
+                params={{
+                  reservationId: "2655e9b3-7ac2-4c78-b210-f9f5aef08392",
+                }}
                 className={makeButtonClasses()}
               >
                 Reservation details
@@ -83,8 +89,8 @@ function Index() {
           </div>
         </div>
 
-        {/* <Link to="/listings">Browse listings (future)</Link>
-        <Link to="/listings/$listingId" params={{ listingId: "1" }}>
+        {/* <Link to="/pools">Browse pools (future)</Link>
+        <Link to="/pools/$listingId" params={{ listingId: "1" }}>
           Listing details (future)
         </Link> */}
         <Drawer>

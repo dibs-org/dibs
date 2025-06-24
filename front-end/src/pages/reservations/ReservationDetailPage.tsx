@@ -1,5 +1,5 @@
 import { useParams } from "@tanstack/react-router";
-import { useReservation } from "../../services/reservation/useReservation";
+import { useReservation } from "../../services/reservations/useReservation";
 
 export const ReservationDetailPage = () => {
   const { reservationId } = useParams({
@@ -52,10 +52,10 @@ export const ReservationDetailPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-semibold">
-                {reservation.listing?.name}
+                {reservation.pool?.name}
               </h2>
               <p className="text-sm text-gray-500">
-                Hosted by {reservation.hostUser?.name}
+                Hosted by {reservation.pool?.owner?.name}
               </p>
               <p className="text-sm text-gray-500">
                 Booked on {new Date(reservation.createdAt).toLocaleDateString()}

@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const BrowseListingsPage = () => {
+export const BrowsePoolsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [priceFilter, setPriceFilter] = useState<string>("all");
   const [featureFilter, setFeatureFilter] = useState<string[]>([]);
 
   // Mock data - in a real app, this would come from an API
-  const listings = [
+  const pools = [
     {
       id: "1",
       name: "Beautiful Backyard Pool",
@@ -49,22 +49,22 @@ export const BrowseListingsPage = () => {
     },
   ];
 
-  const filteredListings = listings.filter((listing) => {
+  const filteredPools = pools.filter((pool) => {
     const matchesSearch =
-      listing.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      listing.location.toLowerCase().includes(searchQuery.toLowerCase());
+      pool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pool.location.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesPrice =
       priceFilter === "all" ||
-      (priceFilter === "under30" && listing.pricePerHour < 30) ||
+      (priceFilter === "under30" && pool.pricePerHour < 30) ||
       (priceFilter === "30to50" &&
-        listing.pricePerHour >= 30 &&
-        listing.pricePerHour <= 50) ||
-      (priceFilter === "over50" && listing.pricePerHour > 50);
+        pool.pricePerHour >= 30 &&
+        pool.pricePerHour <= 50) ||
+      (priceFilter === "over50" && pool.pricePerHour > 50);
 
     const matchesFeatures =
       featureFilter.length === 0 ||
-      featureFilter.every((feature) => listing.features.includes(feature));
+      featureFilter.every((feature) => pool.features.includes(feature));
 
     return matchesSearch && matchesPrice && matchesFeatures;
   });
@@ -156,20 +156,20 @@ export const BrowseListingsPage = () => {
       {/* Results */}
       <div>
         <p className="text-sm text-gray-600 mb-4">
-          {filteredListings.length} pool
-          {filteredListings.length !== 1 ? "s" : ""} found
+          {filteredPools.length} pool
+          {filteredPools.length !== 1 ? "s" : ""} found
         </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredListings.map((listing) => (
+          {filteredPools.map((pool) => (
             <div
-              key={listing.id}
+              key={pool.id}
               className="bg-surface overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow"
             >
               <div className="aspect-w-16 aspect-h-9">
                 <img
-                  src={listing.images[0]}
-                  alt={listing.name}
+                  src={pool.images[0]}
+                  alt={pool.name}
                   className="w-full h-48 object-cover"
                 />
               </div>
@@ -177,30 +177,24 @@ export const BrowseListingsPage = () => {
               <div className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="text-lg font-medium">{listing.name}</h3>
-                    <p className="text-sm text-gray-500">
-                      by {listing.ownerName}
-                    </p>
-                    <p className="text-sm text-gray-500">{listing.location}</p>
+                    <h3 className="text-lg font-medium">{pool.name}</h3>
+                    <p className="text-sm text-gray-500">by {pool.ownerName}</p>
+                    <p className="text-sm text-gray-500">{pool.location}</p>
                   </div>
                   <div className="flex items-center space-x-1">
                     <span className="text-yellow-400">★</span>
-                    <span className="text-sm font-medium">
-                      {listing.rating}
-                    </span>
+                    <span className="text-sm font-medium">{pool.rating}</span>
                     <span className="text-sm text-gray-500">
-                      ({listing.reviewCount})
+                      ({pool.reviewCount})
                     </span>
                   </div>
                 </div>
 
-                <p className="text-sm text-gray-600 mt-2">
-                  {listing.description}
-                </p>
+                <p className="text-sm text-gray-600 mt-2">{pool.description}</p>
 
                 <div className="mt-3">
                   <div className="flex flex-wrap gap-1">
-                    {listing.features.slice(0, 3).map((feature) => (
+                    {pool.features.slice(0, 3).map((feature) => (
                       <span
                         key={feature}
                         className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800"
@@ -208,9 +202,9 @@ export const BrowseListingsPage = () => {
                         {feature}
                       </span>
                     ))}
-                    {listing.features.length > 3 && (
+                    {pool.features.length > 3 && (
                       <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800">
-                        +{listing.features.length - 3} more
+                        +{pool.features.length - 3} more
                       </span>
                     )}
                   </div>
@@ -219,15 +213,15 @@ export const BrowseListingsPage = () => {
                 <div className="mt-4 flex items-center justify-between">
                   <div>
                     <span className="text-lg font-medium">
-                      ${listing.pricePerHour}
+                      ${pool.pricePerHour}
                     </span>
                     <span className="text-sm text-gray-500">/hour</span>
                   </div>
                   <div className="flex space-x-2">
-                    {listing.available ? (
+                    {pool.available ? (
                       <Link
-                        to="/listings/$listingId"
-                        params={{ listingId: listing.id }}
+                        to="/pools/$poolId"
+                        params={{ poolId: pool.id }}
                         className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                       >
                         View Details
@@ -244,7 +238,7 @@ export const BrowseListingsPage = () => {
           ))}
         </div>
 
-        {filteredListings.length === 0 && (
+        {filteredPools.length === 0 && (
           <div className="text-center py-12">
             <div className="mx-auto h-12 w-12 text-gray-400">
               <svg

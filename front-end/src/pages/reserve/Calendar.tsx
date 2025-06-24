@@ -2,9 +2,8 @@ import { CalendarDay, DayPicker, Modifiers } from "react-day-picker";
 import "react-day-picker/style.css";
 import { ButtonHTMLAttributes, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
-import { ReservationWithListingAndHostUserAndRenterUser } from "../../services/reservation/useReservations";
+import { ReservationWithPoolAndUser } from "../../services/reservations/useReservations";
 import { twMerge } from "tailwind-merge";
-import { dateStringToDate, dateToDateString } from "./utils";
 
 export function DayButton(
   props: {
@@ -49,9 +48,9 @@ export const Calendar = ({
   onChange,
   existingReservations,
 }: {
-  value: string | undefined;
-  onChange: (date: string | undefined) => void;
-  existingReservations: ReservationWithListingAndHostUserAndRenterUser[];
+  value: Date | undefined;
+  onChange: (date: Date | undefined) => void;
+  existingReservations: ReservationWithPoolAndUser[];
 }) => {
   const [month, setMonth] = useState(new Date());
 
@@ -60,9 +59,8 @@ export const Calendar = ({
     if (!date) {
       onChange(undefined);
     } else {
-      const formattedDate = dateToDateString(date);
       setMonth(date);
-      onChange(formattedDate);
+      onChange(date);
     }
   };
 
@@ -72,7 +70,7 @@ export const Calendar = ({
       onMonthChange={setMonth}
       mode="single"
       // timeZone="UTC"
-      selected={value ? dateStringToDate(value) : undefined}
+      selected={value}
       disabled={{ dayOfWeek: [0, 6] }}
       onSelect={handleDayPickerSelect}
       components={{

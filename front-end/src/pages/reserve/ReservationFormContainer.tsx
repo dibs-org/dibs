@@ -1,58 +1,80 @@
 import "react-day-picker/style.css";
 import { useState, useId, useMemo } from "react";
-import { useCreateReservation } from "../../services/reservation/useCreateReservation";
-import { ReservationRequestFormShape } from "../../types";
+import { useCreateReservation } from "../../services/reservations/useCreateReservation";
+import { type ReservationForm, ReservationFormShape } from "../../types";
 import z from "zod/v4";
 import Field from "../../components/Field";
-import { useListingDetails } from "../../services/listing/useListing";
+import { usePool } from "../../services/pools/usePool";
 import { Calendar } from "./Calendar";
-import { useReservations } from "../../services/reservation/useReservations";
-import DayHourSelector, { formatTimeRange } from "./DayHourSelector";
-import { format } from "date-fns";
-import { dateStringToDate, dateToDateString } from "./utils";
+import { useReservations } from "../../services/reservations/useReservations";
+import { formatTimeRange } from "./DayHourSelector";
+import { addHours, format, parse, setHours, setMinutes } from "date-fns";
+import {
+  dateStringToDate,
+  dateToDateInputString,
+  dateToDateString,
+} from "./utils";
 import { twMerge } from "tailwind-merge";
 import Button from "../../components/Button";
+import { useParams } from "@tanstack/react-router";
 
 const MIN_GUESTS = 1;
 const MAX_GUESTS = 50;
 
-type ReservationFormState = {
-  date: string | undefined;
-  startTime: string;
-  endTime: string;
-  numberOfGuests: number;
-};
-
 type ValueOf<T> = T[keyof T];
 
 const presets = [
-  { id: "morning", label: "Morning", start: "08:00", end: "12:00" },
-  { id: "lunch", label: "Lunch", start: "12:00", end: "14:00" },
-  { id: "afternoon", label: "Afternoon", start: "14:00", end: "18:00" },
-  { id: "evening", label: "Evening", start: "18:00", end: "22:00" },
+  {
+    id: "morning",
+    label: "Morning",
+    startTimestamp: "08:00",
+    endTimestamp: "12:00",
+  },
+  {
+    id: "lunch",
+    label: "Lunch",
+    startTimestamp: "12:00",
+    endTimestamp: "14:00",
+  },
+  {
+    id: "afternoon",
+    label: "Afternoon",
+    startTimestamp: "14:00",
+    endTimestamp: "18:00",
+  },
+  {
+    id: "evening",
+    label: "Evening",
+    startTimestamp: "18:00",
+    endTimestamp: "22:00",
+  },
   { id: "custom", label: "Custom" },
 ];
 
-export const ReservationForm = ({ listingId }: { listingId: string }) => {
+// const DEFAULT_START_TIME = dateToDateString(new Date());
+// const DEFAULT_END_TIME = dateToDateString(addHours(new Date(), 1));
+
+export const ReservationFormContainer = () => {
+  const { poolId } = useParams({ from: "/reserve/$poolId" });
   const [selectedPreset, setSelectedPreset] = useState<string | undefined>(
     undefined
   );
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});
-  const { data: listingDetails, isLoading: isLoadingListingDetails } =
-    useListingDetails({ listingId });
+  const { data: poolDetails, isLoading: isLoadingPoolDetails } = usePool({
+    poolId,
+  });
 
   const { data: existingReservations = [] } = useReservations({
-    listingId,
+    poolId,
   });
 
   const [reservationFormState, setReservationFormState] =
-    useState<ReservationFormState>({
-      date: dateToDateString(new Date()),
-      startTime: "17:00",
-      endTime: "18:00",
-      numberOfGuests: 1,
+    useState<ReservationForm>({
+      startTime: dateToDateString(new Date()),
+      endTime: dateToDateString(addHours(new Date(), 1)),
+      guestCount: 1,
     });
 
   const inputId = useId();
@@ -66,8 +88,12 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
 
   const handleSubmit = () => {
     try {
-      const parsed = ReservationRequestFormShape.parse(reservationFormState);
-      createReservation(parsed);
+      const parsed = ReservationFormShape.parse(reservationFormState);
+      createReservation({
+        ...parsed,
+        poolId: "38eb8d87-041d-48a6-9ddb-1a8d82de5712",
+        userId: "ec7a91a2-bf9b-4c49-a7a1-abcdef123456",
+      });
     } catch (error) {
       if (error instanceof z.ZodError) {
         error.issues.forEach((issue) => {
@@ -80,9 +106,15 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
     }
   };
 
-  const handleDateChange = (
-    key: keyof ReservationFormState,
-    value: ValueOf<ReservationFormState>
+  const reservationsForSelectedDate = useMemo(() => {
+    return existingReservations.filter((reservation) => {
+      return reservation.startTime === reservationFormState.startTime;
+    });
+  }, [existingReservations, reservationFormState.startTime]);
+
+  const handleFieldChange = (
+    key: keyof ReservationForm,
+    value: ValueOf<ReservationForm>
   ) => {
     setReservationFormState((prev) => ({
       ...prev,
@@ -94,51 +126,86 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
     }));
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Simply use the input value directly since HTML date inputs are already in YYYY-MM-DD format
-    const dateValue = e.target.value;
-
-    if (dateValue) {
-      handleDateChange("date", dateValue);
-    } else {
-      handleDateChange("date", undefined);
+  const handleUpdateDate = (date: Date | undefined) => {
+    if (!date) {
+      return;
     }
+
+    // Date is represented as the substring of the startTime and endTime, so we need to update both strings
+    const newStartTime = dateToDateString(date);
+    const newEndTime = dateToDateString(addHours(date, 1));
+    handleFieldChange("startTime", newStartTime);
+    handleFieldChange("endTime", newEndTime);
   };
 
-  const reservationsForSelectedDate = useMemo(() => {
-    return existingReservations.filter(
-      (reservation) => reservation.date === reservationFormState.date
-    );
-  }, [existingReservations, reservationFormState.date]);
+  const dateOfStartTime = useMemo(() => {
+    return dateStringToDate(reservationFormState.startTime);
+  }, [reservationFormState.startTime]);
+
+  const handleUpdateTimes = ({
+    startTimestamp,
+    endTimestamp,
+  }: {
+    startTimestamp?: string;
+    endTimestamp?: string;
+  }) => {
+    if (!startTimestamp && !endTimestamp) {
+      return;
+    }
+
+    let newStartTime: string | undefined;
+    let newEndTime: string | undefined;
+    if (startTimestamp) {
+      newStartTime = format(
+        setHours(
+          setMinutes(dateOfStartTime, parseInt(startTimestamp.slice(3, 5))),
+          parseInt(startTimestamp.slice(0, 2))
+        ),
+        "yyyy-MM-dd'T'HH:mm:ss"
+      );
+    }
+    if (endTimestamp) {
+      newEndTime = format(
+        setHours(
+          setMinutes(dateOfStartTime, parseInt(endTimestamp.slice(3, 5))),
+          parseInt(endTimestamp.slice(0, 2))
+        ),
+        "yyyy-MM-dd'T'HH:mm:ss"
+      );
+    }
+
+    if (newStartTime) {
+      handleFieldChange("startTime", newStartTime);
+    }
+    if (newEndTime) {
+      handleFieldChange("endTime", newEndTime);
+    }
+  };
 
   const reservationForm = (
     <>
       <div className="flex flex-col gap-2 border-b border-gray-200 dark:border-gray-800 p-6">
         <h4 className="text-xl font-semibold leading-none">
-          Reserve{" "}
-          {isLoadingListingDetails ? "Loading..." : listingDetails?.name}
+          Reserve {isLoadingPoolDetails ? "Loading..." : poolDetails?.name}
         </h4>
         <p className="text-sm text-gray-500 leading-none">
-          {isLoadingListingDetails ? "Loading..." : listingDetails?.description}
+          {isLoadingPoolDetails ? "Loading..." : poolDetails?.description}
         </p>
       </div>
       <div className="flex flex-col md:flex-row gap-2 items-start p-6">
         {/* Left column */}
         <div className="w-full md:w-[300px]">
           <Calendar
-            value={reservationFormState.date}
-            onChange={(date) => handleDateChange("date", date)}
+            value={dateOfStartTime}
+            onChange={handleUpdateDate}
             existingReservations={existingReservations}
           />
         </div>
         {/* Right column */}
         <div className="w-full md:w-[300px] flex flex-col gap-4">
           <h4 className="text-sm font-medium leading-none">
-            {reservationFormState.date
-              ? format(
-                  dateStringToDate(reservationFormState.date),
-                  "EEEE, MMMM d, yyyy"
-                )
+            {dateOfStartTime
+              ? format(dateOfStartTime, "EEEE, MMMM d, yyyy")
               : "Select a date"}
           </h4>
           {reservationsForSelectedDate.length === 0 ? (
@@ -154,19 +221,46 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
                   onClick={() => {
                     setSelectedPreset(preset.id);
                     if (preset.id === "custom") {
-                      handleDateChange("startTime", "08:00");
-                      handleDateChange("endTime", "12:00");
-                    } else {
-                      handleDateChange("startTime", preset.start);
-                      handleDateChange("endTime", preset.end);
+                      const customStartTime = "08:00";
+                      const customEndTime = "12:00";
+                      const newStartTime = format(
+                        setHours(
+                          setMinutes(
+                            dateOfStartTime,
+                            parseInt(customStartTime.slice(3, 5))
+                          ),
+                          parseInt(customStartTime.slice(0, 2))
+                        ),
+                        "yyyy-MM-dd'T'HH:mm:ss"
+                      );
+                      const newEndTime = format(
+                        setHours(
+                          setMinutes(
+                            dateOfStartTime,
+                            parseInt(customEndTime.slice(3, 5))
+                          ),
+                          parseInt(customEndTime.slice(0, 2))
+                        ),
+                        "yyyy-MM-dd'T'HH:mm:ss"
+                      );
+                      handleFieldChange("startTime", newStartTime);
+                      handleFieldChange("endTime", newEndTime);
+                    } else if (preset.startTimestamp && preset.endTimestamp) {
+                      handleUpdateTimes({
+                        startTimestamp: preset.startTimestamp,
+                        endTimestamp: preset.endTimestamp,
+                      });
                     }
                   }}
                 >
                   <div className="flex flex-col items-start text-sm">
                     <div className="font-medium">{preset.label}</div>
                     <div className="opacity-50">
-                      {preset.start
-                        ? formatTimeRange(preset.start, preset.end)
+                      {preset.startTimestamp && preset.endTimestamp
+                        ? formatTimeRange(
+                            preset.startTimestamp,
+                            preset.endTimestamp
+                          )
                         : "Select hours"}
                     </div>
                   </div>
@@ -201,7 +295,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
               >
                 <div className="flex flex-col">
                   <div className="text-sm leading-none font-medium">
-                    {reservation.renterUser?.name}
+                    {reservation.user?.name}
                     {reservation.numberOfGuests - 1 > 0
                       ? ` & ${reservation.numberOfGuests - 1} others`
                       : ""}
@@ -216,8 +310,8 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
               </div>
             ))
           )}
-          {/* eslint-disable-next-line no-constant-binary-expression */}
-          {false && (
+          {}
+          {/* {false && (
             <DayHourSelector
               events={existingReservations.filter(
                 (reservation) => reservation.date === reservationFormState.date
@@ -226,7 +320,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
                 <div className="w-full flex flex-col justify-between gap-2 h-full bg-blue-200/80 dark:bg-blue-800/50 border border-blue-500/10 rounded-lg p-2">
                   <div className="flex flex-col">
                     <div className="text-xs leading-none font-medium">
-                      Reserved by: {reservation.renterUser?.name}
+                      Reserved by: {reservation.user?.name}
                       {reservation.numberOfGuests - 1 > 0
                         ? ` & ${reservation.numberOfGuests - 1} others`
                         : ""}
@@ -240,12 +334,12 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
                   </div>
                   {/* <button className="w-full text-blue-800 dark:text-blue-200  bg-blue-500/10 hover:bg-blue-500/20 rounded-md p-2 text-xs border border-blue-500/10">
                   Request to join
-                </button> */}
+                </button>
                 </div>
               )}
               onSelect={(start, end) => {
-                handleDateChange("startTime", start);
-                handleDateChange("endTime", end);
+                handleFieldChange("startTime", start);
+                handleFieldChange("endTime", end);
               }}
               selectedRange={
                 reservationFormState.startTime && reservationFormState.endTime
@@ -256,8 +350,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
                   : null
               }
             />
-          )}
-          {}
+          )} */}
           {selectedPreset === "custom" && (
             <>
               <Field label="Date" errorMessage={fieldErrors.date}>
@@ -265,8 +358,12 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
                   id={inputId}
                   type="date"
                   className="border border-gray-300 dark:border-gray-800 rounded-md p-2"
-                  value={reservationFormState.date}
-                  onChange={handleInputChange}
+                  value={dateToDateInputString(dateOfStartTime)}
+                  onChange={(e) =>
+                    handleUpdateDate(
+                      parse(e.target.value, "yyyy-MM-dd", new Date())
+                    )
+                  }
                 />
               </Field>
               <Field label="Time">
@@ -275,10 +372,12 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
                     <input
                       type="time"
                       className="border border-gray-300 dark:border-gray-800 rounded-md p-2 flex-1"
-                      value={reservationFormState.startTime}
-                      onChange={(e) =>
-                        handleDateChange("startTime", e.target.value)
-                      }
+                      value={format(dateOfStartTime, "HH:mm")}
+                      onChange={(e) => {
+                        handleUpdateTimes({
+                          startTimestamp: e.target.value,
+                        });
+                      }}
                     />
                   </Field>
                   <span className="text-xs">to</span>
@@ -286,9 +385,14 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
                     <input
                       type="time"
                       className="border border-gray-300 dark:border-gray-800 rounded-md p-2 flex-1"
-                      value={reservationFormState.endTime}
+                      value={format(
+                        dateStringToDate(reservationFormState.endTime),
+                        "HH:mm"
+                      )}
                       onChange={(e) =>
-                        handleDateChange("endTime", e.target.value)
+                        handleUpdateTimes({
+                          endTimestamp: e.target.value,
+                        })
                       }
                     />
                   </Field>
@@ -304,12 +408,9 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
               <button
                 className="flex items-center justify-center bg-bg-surface border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-300 rounded-full p-2 h-10 w-10 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                 onClick={() =>
-                  handleDateChange(
-                    "numberOfGuests",
-                    Math.max(
-                      reservationFormState.numberOfGuests - 1,
-                      MIN_GUESTS
-                    )
+                  handleFieldChange(
+                    "guestCount",
+                    Math.max(reservationFormState.guestCount - 1, MIN_GUESTS)
                   )
                 }
               >
@@ -319,22 +420,19 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
                 type="number"
                 inputMode="numeric"
                 className="border border-gray-300 dark:border-gray-800 rounded-md p-2 flex-1 text-center"
-                value={reservationFormState.numberOfGuests}
+                value={reservationFormState.guestCount}
                 min={MIN_GUESTS}
                 max={MAX_GUESTS}
                 onChange={(e) =>
-                  handleDateChange("numberOfGuests", parseInt(e.target.value))
+                  handleFieldChange("guestCount", parseInt(e.target.value))
                 }
               />
               <button
                 className="flex items-center justify-center bg-bg-surface border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-300 rounded-full p-2 h-10 w-10 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
                 onClick={() => {
-                  handleDateChange(
-                    "numberOfGuests",
-                    Math.min(
-                      reservationFormState.numberOfGuests + 1,
-                      MAX_GUESTS
-                    )
+                  handleFieldChange(
+                    "guestCount",
+                    Math.min(reservationFormState.guestCount + 1, MAX_GUESTS)
                   );
                 }}
               >
@@ -369,6 +467,7 @@ export const ReservationForm = ({ listingId }: { listingId: string }) => {
       ) : (
         reservationForm
       )}
+      <pre>{JSON.stringify({ formState: reservationFormState }, null, 2)}</pre>
     </div>
   );
 };
