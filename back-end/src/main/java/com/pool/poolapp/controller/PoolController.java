@@ -58,11 +58,15 @@ public class PoolController {
 
     @PostMapping("/batch")
     public List<Pool> addMultiplePools(@RequestBody List<Pool> pools) {
+        // log the number of pools being added
+        System.out.println("Adding " + pools.size() + " pools");
         return poolRepo.saveAll(pools);
     }
 
     @GetMapping
     public List<Pool> getAllPools() {
+        // log the retrieval of all pools
+        System.out.println("Retrieving all pools");
         return poolRepo.findAll();
     }
 

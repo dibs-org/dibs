@@ -10,5 +10,6 @@ public record CreateReservationRequest(
     String email,
     LocalDateTime date,
     ZonedDateTime startTime,
-    ZonedDateTime endTime
+    ZonedDateTime endTime,
+    int guestCount
 ) {}

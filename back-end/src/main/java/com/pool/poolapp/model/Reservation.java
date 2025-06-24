@@ -46,6 +46,9 @@ public class Reservation {
     @Column
     private ZonedDateTime endTime; 
 
+    @Column(name = "guest_count")
+    private int guestCount;
+
     public UUID getId() {
         return id;
     }
@@ -100,6 +103,13 @@ public class Reservation {
 
     public void setEndTime(ZonedDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public int getGuestCount() {
+        return this.guestCount;
+    }
+    public void setGuestCount(int guestCount) {
+        this.guestCount = guestCount;
     }
 
 }

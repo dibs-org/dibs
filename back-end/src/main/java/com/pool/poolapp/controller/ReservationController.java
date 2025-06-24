@@ -57,7 +57,40 @@ public class ReservationController {
         reservation.setEmail(request.email());
         reservation.setStartTime(request.startTime());
         reservation.setEndTime(request.endTime());
+        reservation.setGuestCount(request.guestCount());
 
+        System.out.println("Creating reservation: " + reservation);
+        // Optional: Check for overlapping reservations
+        List<Reservation> overlappingReservations = reservationRepo.findAll().stream()
+            .filter(r -> r.getPool().getId().equals(pool.getId()) &&
+                         r.getStartTime().isBefore(request.endTime()) &&
+                         r.getEndTime().isAfter(request.startTime()))
+            .toList();
+        if (!overlappingReservations.isEmpty()) {
+            throw new RuntimeException("Reservation overlaps with existing reservations");
+        }
+        // Set createdAt to current time
+        reservation.setCreatedAt(java.time.ZonedDateTime.now());
+        // Save the reservation
+        System.out.println("Saving reservation: " + reservation);
+        if (reservation.getGuestCount() <= 0) {
+            throw new RuntimeException("Guest count must be greater than 0");
+        }
+        if (reservation.getStartTime().isAfter(reservation.getEndTime())) {
+            throw new RuntimeException("Start time must be before end time");
+        }
+        if (reservation.getStartTime().isBefore(java.time.ZonedDateTime.now())) {
+            throw new RuntimeException("Start time must be in the future");
+        }
+        if (reservation.getEndTime().isBefore(reservation.getStartTime())) {
+            throw new RuntimeException("End time must be after start time");
+        }
+        if (reservation.getEndTime().isBefore(java.time.ZonedDateTime.now())) {
+            throw new RuntimeException("End time must be in the future");
+        }
+        if (reservation.getStartTime().toLocalDate().isBefore(java.time.LocalDate.now())) {
+            throw new RuntimeException("Start time must be today or in the future");
+        }
         return reservationRepo.save(reservation);
     }
 
@@ -115,8 +148,6 @@ public class ReservationController {
                 .toList();
     }
    
-
-
     @PostMapping("/batch")
     public List<Reservation> addMultipleReservations(@RequestBody List<Reservation> res) {
         return reservationRepo.saveAll(res);

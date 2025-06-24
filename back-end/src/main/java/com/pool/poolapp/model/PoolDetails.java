@@ -90,6 +90,7 @@ public class PoolDetails {
     public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
     }
+   
     @Override
     public String toString() {
         return "PoolDetails{" +

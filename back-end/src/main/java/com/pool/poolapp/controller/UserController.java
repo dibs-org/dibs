@@ -33,6 +33,8 @@ public class UserController {
         if (existing.isPresent()) {
             throw new RuntimeException("Email already in use");
         }
+        // Log the user creation
+        System.out.println("Creating user: " + user);
         return userRepo.save(user);
     }
 
