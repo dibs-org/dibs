@@ -56,6 +56,11 @@ public class PoolController {
         this.poolRepo = poolRepo;
     }
 
+    @PostMapping("/batch")
+    public List<Pool> addMultiplePools(@RequestBody List<Pool> pools) {
+        return poolRepo.saveAll(pools);
+    }
+
     @GetMapping
     public List<Pool> getAllPools() {
         return poolRepo.findAll();

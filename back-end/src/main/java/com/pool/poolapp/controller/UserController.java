@@ -142,4 +142,14 @@ public class UserController {
                 .filter(user -> user.getCreatedAt().toInstant().isAfter(Instant.now().minusSeconds(60 * 60 * 24 * 30))) // Active in the last 30 days
                 .count();
     } 
+    @PostMapping("/batch")
+    public List<User> createUsers(@RequestBody List<User> users) {
+        users.forEach(user -> {
+            Optional<User> existing = userRepo.findByEmail(user.getEmail());
+            if (existing.isPresent()) {
+                throw new RuntimeException("Email already in use: " + user.getEmail());
+            }
+        });
+        return userRepo.saveAll(users);
+    }
 }

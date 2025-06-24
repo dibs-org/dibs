@@ -1,5 +1,6 @@
 /Users/emery/Desktop/pool-reservation/back-end/src/main/java/com/pool/poolapp/repository/UserRepository.java
 /Users/emery/Desktop/pool-reservation/back-end/src/main/java/com/pool/poolapp/model/Reservation.java
+/Users/emery/Desktop/pool-reservation/back-end/src/main/java/com/pool/poolapp/dto/CreateReservationRequest.java
 /Users/emery/Desktop/pool-reservation/back-end/src/main/java/com/pool/poolapp/model/Pool.java
 /Users/emery/Desktop/pool-reservation/back-end/src/main/java/com/pool/poolapp/model/User.java
 /Users/emery/Desktop/pool-reservation/back-end/src/main/java/com/pool/poolapp/controller/PoolController.java

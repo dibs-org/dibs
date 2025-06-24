@@ -32,8 +32,13 @@ public class Pool {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(nullable = false)
-    private UUID owner;
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
+    public User getOwner() {
+        return owner;
+    }
 
     public UUID getId() {
         return id;
@@ -83,11 +88,8 @@ public class Pool {
         this.createdAt = createdAt;
     }
 
-    public UUID getOwner() {
-        return owner;
-    }
 
-    public void setOwner(UUID owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 }

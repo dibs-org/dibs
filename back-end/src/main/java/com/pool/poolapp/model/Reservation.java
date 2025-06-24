@@ -1,13 +1,19 @@
 package com.pool.poolapp.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.ZonedDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -16,9 +22,8 @@ import java.time.ZonedDateTime;
 public class Reservation {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
     @Column(name = "created_at", nullable = false)
@@ -27,14 +32,13 @@ public class Reservation {
     @Column
     private String email;
 
-    @Column
-    private ZonedDateTime date;
+    @ManyToOne
+    @JoinColumn(name = "pool_id", nullable = false)
+    private Pool pool;
 
-    @Column
-    private UUID userId; 
-
-    @Column(nullable = false)
-    private UUID poolId; 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column
     private ZonedDateTime startTime; 
@@ -66,28 +70,20 @@ public class Reservation {
         this.email = email;
     }
 
-    public ZonedDateTime getDate() {
-        return date;
+    public User getUser() {
+        return user;
     }
 
-    public void setDate(ZonedDateTime date) {
-        this.date = date;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public Pool getPool() {
+        return pool;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
-    public UUID getPoolId() {
-        return poolId;
-    }
-
-    public void setPoolId(UUID poolId) {
-        this.poolId = poolId;
+    public void setPool(Pool pool) {
+        this.pool = pool;
     }
 
     public ZonedDateTime getStartTime() {
