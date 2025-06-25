@@ -3,6 +3,7 @@ import "react-day-picker/style.css";
 import { ButtonHTMLAttributes, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { ReservationWithPoolAndUser } from "../../services/reservations/useReservations";
+import { utcToLocal } from "../../types";
 import { twMerge } from "tailwind-merge";
 
 export function DayButton(
@@ -69,16 +70,17 @@ export const Calendar = ({
       month={month}
       onMonthChange={setMonth}
       mode="single"
-      // timeZone="UTC"
       selected={value}
       disabled={{ dayOfWeek: [0, 6] }}
       onSelect={handleDayPickerSelect}
       components={{
         DayButton: (props) => {
-          const hasReservation = existingReservations.some(
-            (reservation) =>
-              reservation.date === format(props.day.date, "yyyy-MM-dd")
-          );
+          const dayString = format(props.day.date, "yyyy-MM-dd");
+          const hasReservation = existingReservations.some((reservation) => {
+            // Convert UTC reservation time to local date for comparison
+            const localStart = utcToLocal(reservation.startTime);
+            return localStart.date === dayString;
+          });
           return <DayButton {...props} hasReservation={hasReservation} />;
         },
       }}

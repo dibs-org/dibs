@@ -1,19 +1,18 @@
 import "react-day-picker/style.css";
 import { useState, useId, useMemo } from "react";
 import { useCreateReservation } from "../../services/reservations/useCreateReservation";
-import { type ReservationForm, ReservationFormShape } from "../../types";
+import {
+  type ReservationForm,
+  ReservationFormSchema,
+  utcToLocal,
+} from "../../types";
 import z from "zod/v4";
 import Field from "../../components/Field";
 import { usePool } from "../../services/pools/usePool";
 import { Calendar } from "./Calendar";
 import { useReservations } from "../../services/reservations/useReservations";
 import { formatTimeRange } from "./DayHourSelector";
-import { addHours, format, parse, setHours, setMinutes } from "date-fns";
-import {
-  dateStringToDate,
-  dateToDateInputString,
-  dateToDateString,
-} from "./utils";
+import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import Button from "../../components/Button";
 import { useParams } from "@tanstack/react-router";
@@ -27,32 +26,29 @@ const presets = [
   {
     id: "morning",
     label: "Morning",
-    startTimestamp: "08:00",
-    endTimestamp: "12:00",
+    startTime: "08:00",
+    endTime: "12:00",
   },
   {
     id: "lunch",
     label: "Lunch",
-    startTimestamp: "12:00",
-    endTimestamp: "14:00",
+    startTime: "12:00",
+    endTime: "14:00",
   },
   {
     id: "afternoon",
     label: "Afternoon",
-    startTimestamp: "14:00",
-    endTimestamp: "18:00",
+    startTime: "14:00",
+    endTime: "18:00",
   },
   {
     id: "evening",
     label: "Evening",
-    startTimestamp: "18:00",
-    endTimestamp: "22:00",
+    startTime: "18:00",
+    endTime: "22:00",
   },
   { id: "custom", label: "Custom" },
 ];
-
-// const DEFAULT_START_TIME = dateToDateString(new Date());
-// const DEFAULT_END_TIME = dateToDateString(addHours(new Date(), 1));
 
 export const ReservationFormContainer = () => {
   const { poolId } = useParams({ from: "/reserve/$poolId" });
@@ -70,10 +66,13 @@ export const ReservationFormContainer = () => {
     poolId,
   });
 
+  // Initialize form with today's date and default times
+  const today = new Date();
   const [reservationFormState, setReservationFormState] =
     useState<ReservationForm>({
-      startTime: dateToDateString(new Date()),
-      endTime: dateToDateString(addHours(new Date(), 1)),
+      date: format(today, "yyyy-MM-dd"),
+      startTime: "08:00",
+      endTime: "12:00",
       guestCount: 1,
     });
 
@@ -88,11 +87,11 @@ export const ReservationFormContainer = () => {
 
   const handleSubmit = () => {
     try {
-      const parsed = ReservationFormShape.parse(reservationFormState);
+      const parsed = ReservationFormSchema.parse(reservationFormState);
       createReservation({
-        ...parsed,
-        poolId: "38eb8d87-041d-48a6-9ddb-1a8d82de5712",
-        userId: "ec7a91a2-bf9b-4c49-a7a1-abcdef123456",
+        form: parsed,
+        poolId,
+        userId: "ec7a91a2-bf9b-4c49-a7a1-abcdef123456", // TODO: Get from auth context
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -106,11 +105,23 @@ export const ReservationFormContainer = () => {
     }
   };
 
+  // Convert existing reservations to local time for comparison
   const reservationsForSelectedDate = useMemo(() => {
-    return existingReservations.filter((reservation) => {
-      return reservation.startTime === reservationFormState.startTime;
-    });
-  }, [existingReservations, reservationFormState.startTime]);
+    return existingReservations
+      .map((reservation) => {
+        const startLocal = utcToLocal(reservation.startTime);
+        const endLocal = utcToLocal(reservation.endTime);
+        return {
+          ...reservation,
+          localStartDate: startLocal.date,
+          localStartTime: startLocal.time,
+          localEndTime: endLocal.time,
+        };
+      })
+      .filter((reservation) => {
+        return reservation.localStartDate === reservationFormState.date;
+      });
+  }, [existingReservations, reservationFormState.date]);
 
   const handleFieldChange = (
     key: keyof ReservationForm,
@@ -130,55 +141,17 @@ export const ReservationFormContainer = () => {
     if (!date) {
       return;
     }
-
-    // Date is represented as the substring of the startTime and endTime, so we need to update both strings
-    const newStartTime = dateToDateString(date);
-    const newEndTime = dateToDateString(addHours(date, 1));
-    handleFieldChange("startTime", newStartTime);
-    handleFieldChange("endTime", newEndTime);
+    handleFieldChange("date", format(date, "yyyy-MM-dd"));
   };
 
-  const dateOfStartTime = useMemo(() => {
-    return dateStringToDate(reservationFormState.startTime);
-  }, [reservationFormState.startTime]);
-
-  const handleUpdateTimes = ({
-    startTimestamp,
-    endTimestamp,
-  }: {
-    startTimestamp?: string;
-    endTimestamp?: string;
-  }) => {
-    if (!startTimestamp && !endTimestamp) {
+  const handlePresetSelect = (preset: (typeof presets)[0]) => {
+    setSelectedPreset(preset.id);
+    if (preset.id === "custom") {
+      // Keep current times for custom
       return;
-    }
-
-    let newStartTime: string | undefined;
-    let newEndTime: string | undefined;
-    if (startTimestamp) {
-      newStartTime = format(
-        setHours(
-          setMinutes(dateOfStartTime, parseInt(startTimestamp.slice(3, 5))),
-          parseInt(startTimestamp.slice(0, 2))
-        ),
-        "yyyy-MM-dd'T'HH:mm:ss"
-      );
-    }
-    if (endTimestamp) {
-      newEndTime = format(
-        setHours(
-          setMinutes(dateOfStartTime, parseInt(endTimestamp.slice(3, 5))),
-          parseInt(endTimestamp.slice(0, 2))
-        ),
-        "yyyy-MM-dd'T'HH:mm:ss"
-      );
-    }
-
-    if (newStartTime) {
-      handleFieldChange("startTime", newStartTime);
-    }
-    if (newEndTime) {
-      handleFieldChange("endTime", newEndTime);
+    } else if (preset.startTime && preset.endTime) {
+      handleFieldChange("startTime", preset.startTime);
+      handleFieldChange("endTime", preset.endTime);
     }
   };
 
@@ -196,7 +169,7 @@ export const ReservationFormContainer = () => {
         {/* Left column */}
         <div className="w-full md:w-[300px]">
           <Calendar
-            value={dateOfStartTime}
+            value={new Date(reservationFormState.date + "T12:00:00")}
             onChange={handleUpdateDate}
             existingReservations={existingReservations}
           />
@@ -204,9 +177,7 @@ export const ReservationFormContainer = () => {
         {/* Right column */}
         <div className="w-full md:w-[300px] flex flex-col gap-4">
           <h4 className="text-sm font-medium leading-none">
-            {dateOfStartTime
-              ? format(dateOfStartTime, "EEEE, MMMM d, yyyy")
-              : "Select a date"}
+            {format(new Date(reservationFormState.date), "EEEE, MMMM d, yyyy")}
           </h4>
           {reservationsForSelectedDate.length === 0 ? (
             <div className="flex flex-col gap-2">
@@ -218,49 +189,13 @@ export const ReservationFormContainer = () => {
                     selectedPreset === preset.id &&
                       "bg-blue-100 dark:bg-blue-950/80 hover:bg-blue-200 dark:hover:bg-blue-900/50 border-blue-500/10 dark:border-blue-500/10 shadow-sm"
                   )}
-                  onClick={() => {
-                    setSelectedPreset(preset.id);
-                    if (preset.id === "custom") {
-                      const customStartTime = "08:00";
-                      const customEndTime = "12:00";
-                      const newStartTime = format(
-                        setHours(
-                          setMinutes(
-                            dateOfStartTime,
-                            parseInt(customStartTime.slice(3, 5))
-                          ),
-                          parseInt(customStartTime.slice(0, 2))
-                        ),
-                        "yyyy-MM-dd'T'HH:mm:ss"
-                      );
-                      const newEndTime = format(
-                        setHours(
-                          setMinutes(
-                            dateOfStartTime,
-                            parseInt(customEndTime.slice(3, 5))
-                          ),
-                          parseInt(customEndTime.slice(0, 2))
-                        ),
-                        "yyyy-MM-dd'T'HH:mm:ss"
-                      );
-                      handleFieldChange("startTime", newStartTime);
-                      handleFieldChange("endTime", newEndTime);
-                    } else if (preset.startTimestamp && preset.endTimestamp) {
-                      handleUpdateTimes({
-                        startTimestamp: preset.startTimestamp,
-                        endTimestamp: preset.endTimestamp,
-                      });
-                    }
-                  }}
+                  onClick={() => handlePresetSelect(preset)}
                 >
                   <div className="flex flex-col items-start text-sm">
                     <div className="font-medium">{preset.label}</div>
                     <div className="opacity-50">
-                      {preset.startTimestamp && preset.endTimestamp
-                        ? formatTimeRange(
-                            preset.startTimestamp,
-                            preset.endTimestamp
-                          )
+                      {preset.startTime && preset.endTime
+                        ? formatTimeRange(preset.startTime, preset.endTime)
                         : "Select hours"}
                     </div>
                   </div>
@@ -302,55 +237,15 @@ export const ReservationFormContainer = () => {
                   </div>
                   <div className="text-xs opacity-50">
                     {formatTimeRange(
-                      reservation.startTime,
-                      reservation.endTime
+                      reservation.localStartTime,
+                      reservation.localEndTime
                     )}
                   </div>
                 </div>
               </div>
             ))
           )}
-          {}
-          {/* {false && (
-            <DayHourSelector
-              events={existingReservations.filter(
-                (reservation) => reservation.date === reservationFormState.date
-              )}
-              renderEvent={(reservation) => (
-                <div className="w-full flex flex-col justify-between gap-2 h-full bg-blue-200/80 dark:bg-blue-800/50 border border-blue-500/10 rounded-lg p-2">
-                  <div className="flex flex-col">
-                    <div className="text-xs leading-none font-medium">
-                      Reserved by: {reservation.user?.name}
-                      {reservation.numberOfGuests - 1 > 0
-                        ? ` & ${reservation.numberOfGuests - 1} others`
-                        : ""}
-                    </div>
-                    <div className="text-xs opacity-50">
-                      {formatTimeRange(
-                        reservation.startTime,
-                        reservation.endTime
-                      )}
-                    </div>
-                  </div>
-                  {/* <button className="w-full text-blue-800 dark:text-blue-200  bg-blue-500/10 hover:bg-blue-500/20 rounded-md p-2 text-xs border border-blue-500/10">
-                  Request to join
-                </button>
-                </div>
-              )}
-              onSelect={(start, end) => {
-                handleFieldChange("startTime", start);
-                handleFieldChange("endTime", end);
-              }}
-              selectedRange={
-                reservationFormState.startTime && reservationFormState.endTime
-                  ? {
-                      start: reservationFormState.startTime,
-                      end: reservationFormState.endTime,
-                    }
-                  : null
-              }
-            />
-          )} */}
+
           {selectedPreset === "custom" && (
             <>
               <Field label="Date" errorMessage={fieldErrors.date}>
@@ -358,12 +253,8 @@ export const ReservationFormContainer = () => {
                   id={inputId}
                   type="date"
                   className="border border-gray-300 dark:border-gray-800 rounded-md p-2"
-                  value={dateToDateInputString(dateOfStartTime)}
-                  onChange={(e) =>
-                    handleUpdateDate(
-                      parse(e.target.value, "yyyy-MM-dd", new Date())
-                    )
-                  }
+                  value={reservationFormState.date}
+                  onChange={(e) => handleFieldChange("date", e.target.value)}
                 />
               </Field>
               <Field label="Time">
@@ -372,12 +263,10 @@ export const ReservationFormContainer = () => {
                     <input
                       type="time"
                       className="border border-gray-300 dark:border-gray-800 rounded-md p-2 flex-1"
-                      value={format(dateOfStartTime, "HH:mm")}
-                      onChange={(e) => {
-                        handleUpdateTimes({
-                          startTimestamp: e.target.value,
-                        });
-                      }}
+                      value={reservationFormState.startTime}
+                      onChange={(e) =>
+                        handleFieldChange("startTime", e.target.value)
+                      }
                     />
                   </Field>
                   <span className="text-xs">to</span>
@@ -385,14 +274,9 @@ export const ReservationFormContainer = () => {
                     <input
                       type="time"
                       className="border border-gray-300 dark:border-gray-800 rounded-md p-2 flex-1"
-                      value={format(
-                        dateStringToDate(reservationFormState.endTime),
-                        "HH:mm"
-                      )}
+                      value={reservationFormState.endTime}
                       onChange={(e) =>
-                        handleUpdateTimes({
-                          endTimestamp: e.target.value,
-                        })
+                        handleFieldChange("endTime", e.target.value)
                       }
                     />
                   </Field>
@@ -400,10 +284,7 @@ export const ReservationFormContainer = () => {
               </Field>
             </>
           )}
-          <Field
-            label="Number of Guests"
-            errorMessage={fieldErrors.numberOfGuests}
-          >
+          <Field label="Number of Guests" errorMessage={fieldErrors.guestCount}>
             <div className="flex gap-2 items-center w-full">
               <button
                 className="flex items-center justify-center bg-bg-surface border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-300 rounded-full p-2 h-10 w-10 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"

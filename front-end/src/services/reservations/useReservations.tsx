@@ -27,7 +27,7 @@ export const useReservations = (args?: { poolId?: string }) => {
         // TODO: Consider filtering on the server side
         return data.filter((reservation: ReservationWithPoolAndUser) => {
           if (poolId) {
-            return reservation.pool?.id === poolId;
+            return reservation.poolId === poolId;
           }
           return true;
         });

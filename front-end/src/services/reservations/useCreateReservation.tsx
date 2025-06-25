@@ -1,19 +1,36 @@
 import { useMutation } from "@tanstack/react-query";
-import { ReservationForm } from "../../types";
+import {
+  ReservationForm,
+  ReservationPostBodySchema,
+  transformFormToPostBody,
+} from "../../types";
 import { api, axiosInstance } from "../../urls";
-
-type CreateReservationForm = ReservationForm & {
-  poolId: string;
-  userId: string;
-};
 
 export const useCreateReservation = () => {
   return useMutation({
-    mutationFn: async (reservation: CreateReservationForm) => {
+    mutationFn: async ({
+      form,
+      poolId,
+      userId,
+    }: {
+      form: ReservationForm;
+      poolId: string;
+      userId: string;
+    }) => {
       try {
+        // Transform form data to the correct backend format
+        const postBody = transformFormToPostBody({
+          form,
+          poolId,
+          userId,
+        });
+
+        // Validate the transformed data
+        const validatedPostBody = ReservationPostBodySchema.parse(postBody);
+
         const response = await axiosInstance.post(
           api.makeReservationsURL(),
-          reservation
+          validatedPostBody
         );
         return response.data;
       } catch (error) {
