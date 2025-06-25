@@ -231,8 +231,8 @@ export const ReservationFormContainer = () => {
                 <div className="flex flex-col">
                   <div className="text-sm leading-none font-medium">
                     {reservation.user?.name}
-                    {reservation.numberOfGuests - 1 > 0
-                      ? ` & ${reservation.numberOfGuests - 1} others`
+                    {reservation.guestCount - 1 > 0
+                      ? ` & ${reservation.guestCount - 1} others`
                       : ""}
                   </div>
                   <div className="text-xs opacity-50">

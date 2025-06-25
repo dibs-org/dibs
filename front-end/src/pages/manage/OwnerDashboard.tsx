@@ -75,7 +75,7 @@ export const OwnerDashboard = () => {
                       <span className="font-medium text-gray-900 dark:text-gray-100">
                         Guests:
                       </span>{" "}
-                      {reservation.numberOfGuests}
+                      {reservation.guestCount}
                     </div>
                   </div>
 

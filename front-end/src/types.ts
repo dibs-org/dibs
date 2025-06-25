@@ -21,7 +21,7 @@ export const ReservationSchema = z.object({
   userId: z.string(),
   startTime: z.string().datetime(), // UTC ISO string
   endTime: z.string().datetime(), // UTC ISO string
-  numberOfGuests: z.number(),
+  guestCount: z.number(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   status: z.enum(["pending", "confirmed", "cancelled", "completed"]),
@@ -52,7 +52,7 @@ export const ReservationPostBodySchema = z.object({
   userId: z.string(),
   startTime: z.string().datetime(), // UTC ISO
   endTime: z.string().datetime(), // UTC ISO
-  numberOfGuests: z.number(),
+  guestCount: z.number(),
 });
 
 export type ReservationPostBody = z.infer<typeof ReservationPostBodySchema>;
@@ -129,7 +129,7 @@ export function transformFormToPostBody({
     userId,
     startTime: localToUtc(startLocal),
     endTime: localToUtc(endLocal),
-    numberOfGuests: form.guestCount,
+    guestCount: form.guestCount,
   };
 }
 
@@ -146,6 +146,6 @@ export function transformReservationToForm(
     date: startLocal.date,
     startTime: startLocal.time,
     endTime: endLocal.time,
-    guestCount: reservation.numberOfGuests,
+    guestCount: reservation.guestCount,
   };
 }
