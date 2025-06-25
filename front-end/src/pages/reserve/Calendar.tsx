@@ -3,7 +3,7 @@ import "react-day-picker/style.css";
 import { ButtonHTMLAttributes, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { ReservationWithPoolAndUser } from "../../services/reservations/useReservations";
-import { utcToLocal } from "../../types";
+import { utcToLocal } from "../../services/reservations/utils";
 import { twMerge } from "tailwind-merge";
 
 export function DayButton(

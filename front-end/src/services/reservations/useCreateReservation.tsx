@@ -1,9 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import {
-  ReservationForm,
-  ReservationPostBodySchema,
-  transformFormToPostBody,
-} from "../../types";
+import { ReservationForm, ReservationPostBodySchema } from "../../types";
+import { transformFormToPostBody } from "./utils";
 import { api, axiosInstance } from "../../urls";
 
 export const useCreateReservation = () => {

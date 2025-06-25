@@ -1,11 +1,8 @@
 import "react-day-picker/style.css";
 import { useState, useId, useMemo } from "react";
 import { useCreateReservation } from "../../services/reservations/useCreateReservation";
-import {
-  type ReservationForm,
-  ReservationFormSchema,
-  utcToLocal,
-} from "../../types";
+import { type ReservationForm, ReservationFormSchema } from "../../types";
+import { utcToLocal } from "../../services/reservations/utils";
 import z from "zod/v4";
 import Field from "../../components/Field";
 import { usePool } from "../../services/pools/usePool";
