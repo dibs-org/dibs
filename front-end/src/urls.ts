@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_API_URL = "https://dibs-production.up.railway.app/api";
+const BASE_API_URL = import.meta.env.VITE_API_URL || "https://dibs-production.up.railway.app/api";
+console.log("Using API URL:", BASE_API_URL);
 
 export const axiosInstance = axios.create({
   baseURL: BASE_API_URL,

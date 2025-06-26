@@ -1,0 +1,15 @@
+#!/bin/bash
+# Go into the backend directory
+cd back-end || exit
+
+# Step 1: Build the project
+echo "📦 Building the project..."
+./mvnw clean package -DskipTests
+
+# Step 2: Run the JAR with environment variables
+echo "🚀 Running the application..."
+SPRING_DATASOURCE_URL="jdbc:postgresql://<DB_HOST>:<DB_PORT>/<DB_NAME>?sslmode=require" \
+SPRING_DATASOURCE_USERNAME="<DB_USERNAME>" \
+SPRING_DATASOURCE_PASSWORD="<DB_PASSWORD>" \
+java -jar target/pool-1.0.0.jar
+
