@@ -71,7 +71,11 @@ export const Calendar = ({
       onMonthChange={setMonth}
       mode="single"
       selected={value}
-      disabled={{ dayOfWeek: [0, 6] }}
+      disabled={(date) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date < today;
+      }}
       onSelect={handleDayPickerSelect}
       components={{
         DayButton: (props) => {

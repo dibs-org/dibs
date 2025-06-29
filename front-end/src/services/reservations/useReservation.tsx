@@ -4,11 +4,11 @@ import { api, axiosInstance } from "../../urls";
 
 export const makeReservationKey = (id: string) => ["reservation", id];
 
-type ReservationWithListingAndHostUser = Reservation & {
-  pool?: Pool & {
-    owner?: User;
+type ReservationWithListingAndHostUser = Omit<Reservation, "pool" | "user"> & {
+  pool: Omit<Pool, "owner"> & {
+    owner: User;
   };
-  user?: User;
+  user: User;
 };
 
 export const useReservation = ({ id }: { id: string }) => {

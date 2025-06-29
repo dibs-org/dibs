@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { Pool, Reservation } from "../../types";
+import { Pool, Reservation, User } from "../../types";
 import { api, axiosInstance } from "../../urls";
 
 const makeMyReservationsKey = (userId?: string) => ["my-reservations", userId];
 
-type ReservationWithPool = Reservation & {
-  pool?: Pool;
+type ReservationWithPool = Omit<Reservation, "pool"> & {
+  pool: Omit<Pool, "owner"> & { owner: User };
 };
 
 export const useMyReservations = (args?: { userId?: string }) => {

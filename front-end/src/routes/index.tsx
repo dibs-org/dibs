@@ -76,15 +76,6 @@ function Index() {
               <Link to="/reservations" className={makeButtonClasses()}>
                 Reservations
               </Link>
-              <Link
-                to="/reservations/$reservationId"
-                params={{
-                  reservationId: "2655e9b3-7ac2-4c78-b210-f9f5aef08392",
-                }}
-                className={makeButtonClasses()}
-              >
-                Reservation details
-              </Link>
             </div>
           </div>
         </div>
