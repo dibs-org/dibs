@@ -7,7 +7,7 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite";
 export default defineConfig({
   server: {
     allowedHosts: [
-      "10e5-2600-4040-7ed9-ea00-7dd5-886-b490-a7d3.ngrok-free.app",
+      // e.g. "10e5-2600-4040-7ed9-ea00-7dd5-886-b490-a7d3.ngrok-free.app",
     ],
   },
   plugins: [
