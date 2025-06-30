@@ -1,13 +1,26 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "../supabase";
+import { makeAuthUserKey } from "./useAuthUser";
 
 export const useConfirmOTP = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ phone, code }: { phone: string; code: string }) => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({ data: { status: "success", phone, code } });
-        }, 1000);
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.verifyOtp({
+        phone: phone,
+        token: code,
+        type: "sms",
       });
+      if (error) {
+        throw error;
+      }
+      return session;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: makeAuthUserKey() });
     },
   });
 };

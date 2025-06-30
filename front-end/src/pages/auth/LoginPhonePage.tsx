@@ -15,6 +15,14 @@ import {
   InputOTPSlot,
 } from "../../components/InputOTP";
 import { useConfirmOTP } from "../../services/auth/useConfirmOTP";
+import { useCallback, useEffect } from "react";
+
+const formatPhoneNumber = (phone: string) => {
+  if (phone.startsWith("+1")) {
+    return phone;
+  }
+  return `+1${phone}`;
+};
 
 export const LoginPhonePage = () => {
   const navigate = useNavigate();
@@ -41,12 +49,21 @@ export const LoginPhonePage = () => {
   };
 
   const handleSendOTP = () => {
-    sendOTP(formData.phone);
+    sendOTP(formatPhoneNumber(formData.phone));
   };
 
-  const handleConfirmOTP = () => {
-    confirmOTP({ phone: formData.phone, code: formData.code });
-  };
+  const handleConfirmOTP = useCallback(() => {
+    confirmOTP({
+      phone: formatPhoneNumber(formData.phone),
+      code: formData.code,
+    });
+  }, [confirmOTP, formData.phone, formData.code]);
+
+  useEffect(() => {
+    if (formData.code.length === 6) {
+      handleConfirmOTP();
+    }
+  }, [formData.code, handleConfirmOTP]);
 
   if (successfullySentOTP && currentStep === 0) {
     setCurrentStep(1);
@@ -55,7 +72,7 @@ export const LoginPhonePage = () => {
     setCurrentStep(2);
     setTimeout(() => {
       navigate({ to: "/" });
-    }, 1000);
+    }, 100);
     return;
   }
 
@@ -134,9 +151,6 @@ export const LoginPhonePage = () => {
                   value={formData.code}
                   onChange={(value) => {
                     setFormData((prev) => ({ ...prev, code: value }));
-                    if (value.length === 6) {
-                      handleConfirmOTP();
-                    }
                   }}
                   autoFocus
                   autoComplete="one-time-code"

@@ -1,21 +1,42 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Field from "../../components/Field";
 import Heading from "../../components/Heading";
 import LinkButton from "../../components/LinkButton";
+import { useMutation } from "@tanstack/react-query";
+import { supabase } from "../../services/supabase";
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  const { mutate: handleLogin } = useMutation({
+    mutationFn: async ({
+      email,
+      password,
+    }: {
+      email: string;
+      password: string;
+    }) => {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        throw error;
+      }
+      navigate({ to: "/" });
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement login logic
-    console.log("Login submit:", formData);
+    handleLogin(formData);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
