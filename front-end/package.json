@@ -7,7 +7,7 @@
   "scripts": {
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
     "start:frontend": "npm install && vite",
-    "start:backend": "cd ../back-end && ./run.sh",
+    "start:backend": "cd .. && ./run.sh",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
