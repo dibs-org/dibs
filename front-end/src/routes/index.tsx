@@ -18,34 +18,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../components/Dialog";
-import { useAuthUser } from "../services/auth/useAuthUser";
-import { useSignOut } from "../services/auth/useSignOut";
+import AuthDropdown from "../components/AuthDropdown";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
 function Index() {
-  const { data: user } = useAuthUser();
-  const { mutate: signOut } = useSignOut();
-
   return (
     <div className="w-screen min-h-screen flex items-center justify-center">
       <div className="flex flex-col items-start gap-4 max-w-4xl w-full p-4">
         <div className="flex gap-2 items-center justify-between w-full">
           <h3 className="text-2xl font-semibold mb-4">Pool reservation 🏖️</h3>
-          {user && (
-            <div className="flex gap-2 items-center">
-              Welcome {user.email || user.phone}
-              <Button
-                variant="secondary"
-                size="small"
-                onClick={() => signOut()}
-              >
-                Sign out
-              </Button>
-            </div>
-          )}
+          <AuthDropdown />
         </div>
 
         <div className="flex flex-col md:flex-row gap-8 w-full">

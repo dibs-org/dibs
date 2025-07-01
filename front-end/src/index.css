@@ -6,12 +6,14 @@
   --color-bg-default: #fafafa;
   --color-fg-default: #111827;
   --color-surface: #ffffff;
+  --color-border-default: theme(colors.gray.200); /* border-gray-200 */
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg-default: #0a0d15;
     --color-fg-default: #fafafa;
     --color-surface: #0d111a;
+    --color-border-default: theme(colors.gray.900); /* border-gray-900 */
   }
 }
 
@@ -20,12 +22,14 @@
   --color-bg-default: var(--color-bg-default);
   --color-fg-default: var(--color-fg-default);
   --color-surface: var(--color-surface);
+  --color-border-default: var(--color-border-default);
 }
 
 /* Use tailwind variables */
 body {
   background-color: theme(colors.bg-default);
   color: theme(colors.fg-default);
+  border-color: theme(colors.border-default);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
