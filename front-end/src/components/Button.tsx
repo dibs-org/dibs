@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 type Variant = "primary" | "secondary" | "tertiary";
@@ -40,25 +40,34 @@ export const makeButtonClasses = (args?: {
   );
 };
 
-const Button = ({
-  variant = "secondary",
-  size = "medium",
-  className,
-  children,
-  onClick,
-  disabled = false,
-}: ButtonProps) => {
-  const combinedClasses = makeButtonClasses({ variant, size });
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      variant = "secondary",
+      size = "medium",
+      className,
+      children,
+      onClick,
+      disabled = false,
+      ...props
+    },
+    ref
+  ) => {
+    const combinedClasses = makeButtonClasses({ variant, size });
 
-  return (
-    <button
-      className={twMerge(combinedClasses, className)}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {children}
-    </button>
-  );
-};
+    return (
+      <button
+        className={twMerge(combinedClasses, className)}
+        onClick={onClick}
+        disabled={disabled}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  }
+);
+Button.displayName = "Button";
 
 export default Button;
