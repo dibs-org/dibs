@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 import com.pool.poolapp.repository.PoolRepository;
 import com.pool.poolapp.model.User;
 import com.pool.poolapp.repository.UserRepository;
+import com.pool.poolapp.security.JwtUtil;
+import io.jsonwebtoken.Claims;
+
 
 import java.util.UUID;
 
@@ -36,8 +39,10 @@ public class ReservationController {
     private final PoolRepository poolRepo;
     private final UserRepository userRepo;
     private final ReservationRepository reservationRepo;
+    private final JwtUtil jwtUtil;
 
-    public ReservationController(PoolRepository poolRepo, UserRepository userRepo, ReservationRepository reservationRepo) {
+    public ReservationController(PoolRepository poolRepo, UserRepository userRepo, ReservationRepository reservationRepo, JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
         this.poolRepo = poolRepo;
         this.userRepo = userRepo;
         this.reservationRepo = reservationRepo;
@@ -97,6 +102,27 @@ public class ReservationController {
     @GetMapping
     public List<Reservation> getAllReservations() {
         return reservationRepo.findAll();
+    }
+
+    @GetMapping("/myReservations")
+    public List<Reservation> getMyReservations(@RequestHeader("Authorization") String authHeader) {
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        throw new RuntimeException("Missing or invalid Authorization header");
+    }
+
+    String token = authHeader.substring(7);
+    String authUserId = getUserIdFromToken(token); // Supabase user ID
+
+    return reservationRepo.findAll().stream()
+            .filter(reservation ->
+                    reservation.getUser() != null &&
+                    reservation.getUser().getAuthUser().toString().equals(authUserId))
+            .toList();
+}
+
+    private String getUserIdFromToken(String token) {
+        Claims claims = jwtUtil.validateToken(token);
+        return claims.getSubject(); // "sub" = Supabase auth user ID
     }
 
     @GetMapping("/{id}")

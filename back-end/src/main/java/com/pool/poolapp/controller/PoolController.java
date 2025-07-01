@@ -40,6 +40,10 @@ package com.pool.poolapp.controller;
 
 import com.pool.poolapp.model.Pool;
 import com.pool.poolapp.repository.PoolRepository;
+import com.pool.poolapp.security.JwtUtil;
+
+import io.jsonwebtoken.Claims;
+
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
@@ -51,9 +55,12 @@ import java.util.List;
 public class PoolController {
 
     private final PoolRepository poolRepo;
+    private final JwtUtil jwtUtil;
 
-    public PoolController(PoolRepository poolRepo) {
+
+    public PoolController(PoolRepository poolRepo, JwtUtil jwtUtil) {
         this.poolRepo = poolRepo;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/batch")
@@ -68,6 +75,25 @@ public class PoolController {
         // log the retrieval of all pools
         System.out.println("Retrieving all pools");
         return poolRepo.findAll();
+    }
+
+    @GetMapping("/myPools")
+    public List<Pool> getMyPools(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Missing or invalid Authorization header");
+        }
+
+        String token = authHeader.substring(7);
+        String userId = getUserIdFromToken(token);
+
+        return poolRepo.findAll().stream()
+                .filter(pool -> pool.getOwner() != null && pool.getOwner().toString().equals(userId))
+                .toList();
+    }
+
+    private String getUserIdFromToken(String token) {
+        Claims claims = jwtUtil.validateToken(token);
+        return claims.getSubject(); // Supabase puts the user ID in "sub"
     }
 
     @PostMapping

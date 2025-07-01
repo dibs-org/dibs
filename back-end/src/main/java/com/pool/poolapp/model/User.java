@@ -25,6 +25,8 @@ public class User {
     private String email;
 
     private String phone;
+    
+    private UUID authUser;
 
     @Column(name = "created_at", nullable = false)
     private ZonedDateTime createdAt = ZonedDateTime.now();
@@ -67,5 +69,11 @@ public class User {
 
     public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+    public UUID getAuthUser() {
+        return authUser;
+    }
+    public void setAuthUser(UUID authUser) {
+        this.authUser = authUser;   
     }
 }
