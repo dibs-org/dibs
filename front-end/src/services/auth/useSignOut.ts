@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../supabase";
-import { makeAuthUserKey } from "./useAuthUser";
+import { makeAuthUserKey } from "./useAuthUserQuery";
 
-export const useSignOut = () => {
+export const useSignOut = ({ onSuccess }: { onSuccess?: () => void }) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async () => {
@@ -10,6 +10,7 @@ export const useSignOut = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: makeAuthUserKey() });
+      onSuccess?.();
     },
   });
 };

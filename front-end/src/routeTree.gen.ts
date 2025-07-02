@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginPhoneRouteImport } from './routes/login-phone'
 import { Route as LoginRouteImport } from './routes/login'
@@ -27,6 +28,11 @@ import { Route as ManageReservationsReservationIdRouteImport } from './routes/ma
 import { Route as ManagePoolsNewRouteImport } from './routes/manage/pools/new'
 import { Route as ManagePoolsPoolIdRouteImport } from './routes/manage/pools/$poolId'
 
+const SitemapRoute = SitemapRouteImport.update({
+  id: '/sitemap',
+  path: '/sitemap',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/login-phone': typeof LoginPhoneRoute
   '/signup': typeof SignupRoute
+  '/sitemap': typeof SitemapRoute
   '/pools/$poolId': typeof PoolsPoolIdRoute
   '/reservations/$reservationId': typeof ReservationsReservationIdRoute
   '/reserve/$poolId': typeof ReservePoolIdRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/login-phone': typeof LoginPhoneRoute
   '/signup': typeof SignupRoute
+  '/sitemap': typeof SitemapRoute
   '/pools/$poolId': typeof PoolsPoolIdRoute
   '/reservations/$reservationId': typeof ReservationsReservationIdRoute
   '/reserve/$poolId': typeof ReservePoolIdRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/login-phone': typeof LoginPhoneRoute
   '/signup': typeof SignupRoute
+  '/sitemap': typeof SitemapRoute
   '/pools/$poolId': typeof PoolsPoolIdRoute
   '/reservations/$reservationId': typeof ReservationsReservationIdRoute
   '/reserve/$poolId': typeof ReservePoolIdRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/login-phone'
     | '/signup'
+    | '/sitemap'
     | '/pools/$poolId'
     | '/reservations/$reservationId'
     | '/reserve/$poolId'
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/login-phone'
     | '/signup'
+    | '/sitemap'
     | '/pools/$poolId'
     | '/reservations/$reservationId'
     | '/reserve/$poolId'
@@ -216,6 +227,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/login-phone'
     | '/signup'
+    | '/sitemap'
     | '/pools/$poolId'
     | '/reservations/$reservationId'
     | '/reserve/$poolId'
@@ -236,6 +248,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   LoginPhoneRoute: typeof LoginPhoneRoute
   SignupRoute: typeof SignupRoute
+  SitemapRoute: typeof SitemapRoute
   PoolsPoolIdRoute: typeof PoolsPoolIdRoute
   ReservePoolIdRoute: typeof ReservePoolIdRoute
   PoolsIndexRoute: typeof PoolsIndexRoute
@@ -243,6 +256,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap': {
+      id: '/sitemap'
+      path: '/sitemap'
+      fullPath: '/sitemap'
+      preLoaderRoute: typeof SitemapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -407,6 +427,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   LoginPhoneRoute: LoginPhoneRoute,
   SignupRoute: SignupRoute,
+  SitemapRoute: SitemapRoute,
   PoolsPoolIdRoute: PoolsPoolIdRoute,
   ReservePoolIdRoute: ReservePoolIdRoute,
   PoolsIndexRoute: PoolsIndexRoute,

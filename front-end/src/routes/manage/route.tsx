@@ -1,18 +1,21 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import AuthDropdown from "../../components/AuthDropdown";
+import { useAuthUser } from "../../services/auth/useAuthUserQuery";
 
 export const Route = createFileRoute("/manage")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const { data: user } = useAuthUser();
+
   return (
     <div className="min-min-h-screen">
       <nav className="bg-surface border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center h-16 gap-10">
             <div className="flex items-center">
-              <Link to="/">
+              <Link to={user ? "/reservations" : "/"}>
                 <h1 className="text-xl font-semibold">Dibs</h1>
               </Link>
             </div>

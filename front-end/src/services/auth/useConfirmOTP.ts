@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../supabase";
-import { makeAuthUserKey } from "./useAuthUser";
+import { makeAuthUserKey } from "./useAuthUserQuery";
 
 export const useConfirmOTP = () => {
   const queryClient = useQueryClient();
