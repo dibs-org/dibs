@@ -22,7 +22,7 @@ function Index() {
       <div className="flex flex-col items-center gap-8 max-w-md w-full px-4">
         <div className="flex flex-col gap-2 items-center">
           <img
-            src="/images/pool-emoji.png"
+            src="pool-emoji.png"
             alt="dibs"
             className="w-14 h-14 mb-2 fade-in-up"
           />
