@@ -3,15 +3,17 @@
 
 /* Custom light/dark variables */
 :root {
-  --color-bg-default: #fafafa;
+  --color-bg-default: theme(colors.sky.50);
   --color-fg-default: #111827;
+  --color-fg-link: theme(colors.sky.600);
   --color-surface: #ffffff;
-  --color-border-default: theme(colors.gray.200); /* border-gray-200 */
+  --color-border-default: theme(colors.gray.200);
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg-default: #0a0d15;
+    --color-bg-default: #090c14;
     --color-fg-default: #fafafa;
+    --color-fg-link: theme(colors.sky.400);
     --color-surface: #0d111a;
     --color-border-default: theme(colors.gray.900); /* border-gray-900 */
   }
@@ -21,6 +23,7 @@
 @theme {
   --color-bg-default: var(--color-bg-default);
   --color-fg-default: var(--color-fg-default);
+  --color-fg-link: var(--color-fg-link);
   --color-surface: var(--color-surface);
   --color-border-default: var(--color-border-default);
 }
@@ -32,4 +35,36 @@ body {
   border-color: theme(colors.border-default);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 800ms cubic-bezier(0.15, 1.44, 0.24, 0.93);
+  animation-fill-mode: forwards;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 800ms cubic-bezier(0.15, 1.44, 0.24, 0.93);
+  animation-fill-mode: forwards;
 }

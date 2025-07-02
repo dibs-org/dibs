@@ -1,21 +1,24 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Field from "../../components/Field";
 import Heading from "../../components/Heading";
 import LinkButton from "../../components/LinkButton";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../../services/supabase";
+import { makeAuthUserKey } from "../../services/auth/useAuthUserQuery";
 
 export const LoginPage = () => {
+  const queryClient = useQueryClient();
+  const search = useSearch({ from: "/login" });
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const { mutate: handleLogin } = useMutation({
+  const { mutate: handleLogin, isPending: isLoggingIn } = useMutation({
     mutationFn: async ({
       email,
       password,
@@ -23,14 +26,18 @@ export const LoginPage = () => {
       email: string;
       password: string;
     }) => {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) {
         throw error;
       }
-      navigate({ to: "/" });
+      queryClient.setQueryData(makeAuthUserKey(), data.user);
+    },
+    onSuccess: () => {
+      const redirectUrl = search?.redirect || "/reservations";
+      navigate({ to: redirectUrl });
     },
   });
 
@@ -56,22 +63,33 @@ export const LoginPage = () => {
       </LinkButton>
       <div className="flex flex-col items-start gap-4 max-w-md w-full px-4">
         <div className="w-full">
-          <Heading as="h2" size="3xl" className="mt-6 text-center">
-            Log in to your account
+          <Heading as="h2" size="3xl" className="mt-6 text-center fade-in-up">
+            Log in
           </Heading>
-          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p
+            className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400 fade-in-up"
+            style={{ animationDelay: "0.05s" }}
+          >
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
+              className="font-medium text-fg-link hover:text-fg-link/80"
             >
               Sign up
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6 w-full" onSubmit={handleSubmit}>
+        <form
+          className="mt-8 space-y-6 w-full fade-in-up"
+          style={{ animationDelay: "0.1s" }}
+          onSubmit={handleSubmit}
+        >
           <div className="space-y-4">
-            <Field label="Email address">
+            <Field
+              label="Email address"
+              className="fade-in-up"
+              style={{ animationDelay: "0.15s" }}
+            >
               <Input
                 id="email"
                 name="email"
@@ -83,7 +101,11 @@ export const LoginPage = () => {
                 className="w-full"
               />
             </Field>
-            <Field label="Password">
+            <Field
+              label="Password"
+              className="fade-in-up"
+              style={{ animationDelay: "0.2s" }}
+            >
               <Input
                 id="password"
                 name="password"
@@ -96,8 +118,14 @@ export const LoginPage = () => {
               />
             </Field>
           </div>
-          <Button type="submit" variant="primary" className="w-full">
-            Log in
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full fade-in-up"
+            style={{ animationDelay: "0.25s" }}
+            disabled={isLoggingIn}
+          >
+            {isLoggingIn ? "Logging in..." : "Log in"}
           </Button>
         </form>
       </div>

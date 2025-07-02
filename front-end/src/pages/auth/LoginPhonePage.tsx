@@ -71,7 +71,7 @@ export const LoginPhonePage = () => {
   } else if (successfullyConfirmedOTP && currentStep === 1) {
     setCurrentStep(2);
     setTimeout(() => {
-      navigate({ to: "/" });
+      navigate({ to: "/reservations" });
     }, 100);
     return;
   }
@@ -80,15 +80,21 @@ export const LoginPhonePage = () => {
     {
       render: () => (
         <div className="flex flex-col items-center gap-8 max-w-md w-full px-4">
-          <div className="flex flex-col">
-            <Heading as="h2" size="3xl">
-              Log in to your account
+          <div className="flex flex-col items-center">
+            <Heading as="h2" size="3xl" className="fade-in-up">
+              Log in
             </Heading>
-            <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+            <p
+              className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400 fade-in-up"
+              style={{ animationDelay: "0.05s" }}
+            >
               We'll send a code to your phone to log in.
             </p>
           </div>
-          <div className="flex flex-col gap-4 w-full">
+          <div
+            className="flex flex-col gap-4 w-full fade-in-up"
+            style={{ animationDelay: "0.1s" }}
+          >
             <div className="space-y-4">
               <Field label="Phone number">
                 <Input
@@ -113,7 +119,10 @@ export const LoginPhonePage = () => {
               {isSendingOTP ? "Sending" : "Continue with phone number"}
             </Button>
           </div>
-          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p
+            className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400 fade-in-up"
+            style={{ animationDelay: "0.15s" }}
+          >
             Don't have an account?{" "}
             <Link
               to="/signup"
@@ -129,10 +138,13 @@ export const LoginPhonePage = () => {
       render: () => (
         <div className="flex flex-col items-center gap-8 max-w-md w-full px-4">
           <div className="flex flex-col items-center gap-2">
-            <Heading as="h2" size="3xl">
+            <Heading as="h2" size="3xl" className="fade-in-up">
               Enter the code, silly
             </Heading>
-            <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+            <p
+              className="text-center text-sm text-gray-600 dark:text-gray-400 fade-in-up"
+              style={{ animationDelay: "0.05s" }}
+            >
               We sent a code to {formData.phone}. Didn't get it?{" "}
               <button
                 onClick={handleSendOTP}
@@ -143,7 +155,10 @@ export const LoginPhonePage = () => {
               </button>
             </p>
           </div>
-          <div className="flex flex-col gap-4 w-full">
+          <div
+            className="flex flex-col gap-4 w-full fade-in-up"
+            style={{ animationDelay: "0.1s" }}
+          >
             <div className="space-y-4">
               <Field label="Code">
                 <InputOTP
@@ -202,7 +217,10 @@ export const LoginPhonePage = () => {
               {isConfirmingOTP ? "Submitting" : "Submit"}
             </Button>
           </div>
-          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p
+            className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400 fade-in-up"
+            style={{ animationDelay: "0.15s" }}
+          >
             Don't have an account?{" "}
             <Link
               to="/signup"
@@ -217,7 +235,10 @@ export const LoginPhonePage = () => {
     {
       render: () => (
         <div className="flex flex-col items-center gap-8 max-w-md w-full px-4">
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+          <p
+            className="text-center text-sm text-gray-600 dark:text-gray-400 fade-in-up"
+            style={{ animationDelay: "0.05s" }}
+          >
             Redirecting to home...
           </p>
         </div>

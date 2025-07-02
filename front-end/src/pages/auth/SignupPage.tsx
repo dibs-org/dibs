@@ -2,9 +2,8 @@ import { Link } from "@tanstack/react-router";
 
 import { useState } from "react";
 import Button from "../../components/Button";
-import Input, { makeInputClasses } from "../../components/Input";
+import Input from "../../components/Input";
 import Field from "../../components/Field";
-import { twMerge } from "tailwind-merge";
 import Heading from "../../components/Heading";
 import LinkButton from "../../components/LinkButton";
 
@@ -42,10 +41,13 @@ export const SignupPage = () => {
       </LinkButton>
       <div className="flex flex-col items-start gap-4 max-w-md w-full px-4">
         <div className="w-full">
-          <Heading as="h2" size="3xl" className="mt-6 text-center">
+          <Heading as="h2" size="3xl" className="mt-6 text-center fade-in-up">
             Create your account
           </Heading>
-          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p
+            className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400 fade-in-up"
+            style={{ animationDelay: "0.05s" }}
+          >
             Already have an account?{" "}
             <Link
               to="/login"
@@ -55,9 +57,17 @@ export const SignupPage = () => {
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6 w-full" onSubmit={handleSubmit}>
+        <form
+          className="mt-8 space-y-6 w-full fade-in-up"
+          style={{ animationDelay: "0.1s" }}
+          onSubmit={handleSubmit}
+        >
           <div className="space-y-4">
-            <Field label="Full Name">
+            <Field
+              label="Full name"
+              className="fade-in-up"
+              style={{ animationDelay: "0.15s" }}
+            >
               <Input
                 id="fullName"
                 name="fullName"
@@ -69,36 +79,11 @@ export const SignupPage = () => {
                 className="w-full"
               />
             </Field>
-            <Field label="I am a">
-              <div className="relative">
-                <select
-                  id="userType"
-                  name="userType"
-                  value={formData.userType}
-                  onChange={handleInputChange}
-                  className={twMerge(
-                    makeInputClasses(),
-                    "w-full appearance-none"
-                  )}
-                >
-                  <option value="renter">Pool Renter</option>
-                  <option value="owner">Pool Owner</option>
-                </select>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="size-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
-                >
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
-              </div>
-            </Field>
-            <Field label="Email address">
+            <Field
+              label="Email address"
+              className="fade-in-up"
+              style={{ animationDelay: "0.2s" }}
+            >
               <Input
                 id="email"
                 name="email"
@@ -110,7 +95,11 @@ export const SignupPage = () => {
                 className="w-full"
               />
             </Field>
-            <Field label="Password">
+            <Field
+              label="Password"
+              className="fade-in-up"
+              style={{ animationDelay: "0.25s" }}
+            >
               <Input
                 id="password"
                 name="password"
@@ -122,7 +111,11 @@ export const SignupPage = () => {
                 className="w-full"
               />
             </Field>
-            <Field label="Confirm Password">
+            <Field
+              label="Confirm Password"
+              className="fade-in-up"
+              style={{ animationDelay: "0.3s" }}
+            >
               <Input
                 id="confirmPassword"
                 name="confirmPassword"
@@ -135,7 +128,12 @@ export const SignupPage = () => {
               />
             </Field>
           </div>
-          <Button type="submit" variant="primary" className="w-full">
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full fade-in-up"
+            style={{ animationDelay: "0.35s" }}
+          >
             Sign up
           </Button>
         </form>
