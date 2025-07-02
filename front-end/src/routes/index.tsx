@@ -50,14 +50,14 @@ function Index() {
             className="fade-in-up"
             style={{ animationDelay: "0.15s" }}
           >
-            Login with email
+            Log in with email
           </LinkButton>
           <LinkButton
             to="/login-phone"
             className="fade-in-up"
             style={{ animationDelay: "0.2s" }}
           >
-            Login with phone
+            Log in with phone
           </LinkButton>
         </div>
         <p
