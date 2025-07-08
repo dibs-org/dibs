@@ -15,7 +15,7 @@ function RouteComponent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center h-16 gap-10">
             <div className="flex items-center">
-              <Link to={user ? "/reservations" : "/"}>
+              <Link to={user ? "/dashboard" : "/"}>
                 <h1 className="text-xl font-semibold">Dibs</h1>
               </Link>
             </div>

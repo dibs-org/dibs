@@ -2,7 +2,7 @@ import { CalendarDay, DayPicker, Modifiers } from "react-day-picker";
 import "react-day-picker/style.css";
 import { ButtonHTMLAttributes, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
-import { ReservationWithPoolAndUser } from "../../services/reservations/useReservations";
+import { ReservationWithPoolAndUser } from "../../services/reservations/useReservationsForMyPools";
 import { utcToLocal } from "../../services/reservations/utils";
 import { twMerge } from "tailwind-merge";
 

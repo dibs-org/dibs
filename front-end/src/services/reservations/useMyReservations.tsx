@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Pool, Reservation, User } from "../../types";
 import { api, axiosInstance } from "../../urls";
+import { useAuth } from "../../AuthProvider";
 
 const makeMyReservationsKey = (userId?: string) => ["my-reservations", userId];
 
@@ -8,15 +9,15 @@ type ReservationWithPool = Omit<Reservation, "pool"> & {
   pool: Omit<Pool, "owner"> & { owner: User };
 };
 
-export const useMyReservations = (args?: { userId?: string }) => {
-  const { userId } = args || {};
+export const useMyReservations = () => {
+  const { user } = useAuth();
 
   return useQuery<ReservationWithPool[]>({
-    queryKey: makeMyReservationsKey(userId),
+    queryKey: makeMyReservationsKey(user?.id),
     queryFn: async () => {
       try {
         const response = await axiosInstance.get(
-          api.makeReservationsForUserURL(userId)
+          api.makeReservationsForUserURL(user?.id)
         );
         return response.data;
       } catch (error) {
@@ -24,5 +25,6 @@ export const useMyReservations = (args?: { userId?: string }) => {
         throw error;
       }
     },
+    enabled: !!user?.id,
   });
 };

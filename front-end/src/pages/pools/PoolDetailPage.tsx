@@ -1,27 +1,38 @@
 import { useParams } from "@tanstack/react-router";
-import { useState } from "react";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/style.css";
+import LinkButton from "../../components/LinkButton";
+import Heading from "../../components/Heading";
+import {
+  Flame,
+  Waves,
+  Wine,
+  ChefHat,
+  Armchair,
+  Car,
+  Wifi,
+  Bath,
+  Shirt,
+  LifeBuoy,
+  Home,
+  DoorOpen,
+  Star,
+  MapPin,
+  User,
+} from "lucide-react";
+import { usePool } from "../../services/pools/usePool";
 
 export const PoolDetailPage = () => {
   const { poolId } = useParams({ from: "/pools/$poolId" });
-
-  const [selectedDate, setSelectedDate] = useState<Date>();
-  const [startTime, setStartTime] = useState("10:00");
-  const [endTime, setEndTime] = useState("14:00");
-  const [guests, setGuests] = useState(4);
-  const [showBookingForm, setShowBookingForm] = useState(false);
+  const { data: poolDetails } = usePool({ poolId: poolId! });
 
   // Mock data - in a real app, this would be fetched based on poolId
   const poolData = {
     id: poolId,
-    name: "Beautiful Backyard Pool",
+    name: poolDetails?.name,
     description:
       "A stunning 20x40 pool with spa and outdoor kitchen. Perfect for family gatherings, birthday parties, or just relaxing with friends. The pool is heated year-round and features a beautiful waterfall feature.",
-    ownerName: "David Smith",
-    location: "Miami, FL",
-    address: "123 Pool Lane, Miami, FL 33101",
-    pricePerHour: 35,
+    ownerName: poolDetails?.owner?.name,
+    location: poolDetails?.address,
+    address: poolDetails?.address,
     rating: 4.8,
     reviewCount: 24,
     features: [
@@ -49,231 +60,228 @@ export const PoolDetailPage = () => {
       "Maximum 8 guests",
     ],
     images: [
-      "/api/placeholder/600/400",
-      "/api/placeholder/600/400",
-      "/api/placeholder/600/400",
+      "https://fancyhouse-design.com/wp-content/uploads/2024/09/A-softly-bent-swimming-pool-adds-a-whimsical-element-to-the-compact-backyard-making-it-feel-larger-and-more-dynamic.jpg",
+      "https://avreecustompools.com/wp-content/uploads/2024/06/Jimi-Smith-Photgoraphy7.jpg",
+      "https://www.younghouselove.com/wp-content/uploads/2021/08/Pool-Post-Wide-Shot-Towards-House-No-People-Swimming-1024x768.jpg",
     ],
     availableDays: [1, 2, 3, 4, 5], // Monday to Friday
     availableHours: { start: "08:00", end: "20:00" },
   };
 
-  const calculateTotal = () => {
-    if (!selectedDate || !startTime || !endTime) return 0;
-    const start = new Date(`2024-01-01T${startTime}:00`);
-    const end = new Date(`2024-01-01T${endTime}:00`);
-    const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
-    return Math.max(0, hours * poolData.pricePerHour);
+  const getFeatureIcon = (feature: string) => {
+    switch (feature) {
+      case "Heated Pool":
+        return <Flame className="w-4 h-4 text-blue-600" />;
+      case "Hot Tub/Spa":
+        return <Waves className="w-4 h-4 text-blue-600" />;
+      case "Pool Bar":
+        return <Wine className="w-4 h-4 text-blue-600" />;
+      case "Outdoor Kitchen":
+        return <ChefHat className="w-4 h-4 text-blue-600" />;
+      case "BBQ Grill":
+        return <Flame className="w-4 h-4 text-blue-600" />;
+      case "Poolside Seating":
+        return <Armchair className="w-4 h-4 text-blue-600" />;
+      case "Parking Available":
+        return <Car className="w-4 h-4 text-blue-600" />;
+      case "WiFi":
+        return <Wifi className="w-4 h-4 text-blue-600" />;
+      case "Bathroom Access":
+        return <Bath className="w-4 h-4 text-blue-600" />;
+      default:
+        return <Home className="w-4 h-4 text-blue-600" />;
+    }
   };
 
-  const handleBooking = () => {
-    // TODO: Implement booking logic
-    console.log("Booking request:", {
-      poolId,
-      date: selectedDate,
-      startTime,
-      endTime,
-      guests,
-    });
+  const getAmenityIcon = (amenity: string) => {
+    switch (amenity) {
+      case "Towels Provided":
+        return <Shirt className="w-4 h-4 text-green-600" />;
+      case "Pool Floats":
+        return <LifeBuoy className="w-4 h-4 text-green-600" />;
+      case "Pool Noodles":
+        return <Waves className="w-4 h-4 text-green-600" />;
+      case "Changing Room":
+        return <DoorOpen className="w-4 h-4 text-green-600" />;
+      default:
+        return <Home className="w-4 h-4 text-green-600" />;
+    }
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="flex flex-col gap-8 max-w-6xl mx-auto pb-20 md:pb-0">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-medium">{poolData.name}</h1>
-        <div className="flex items-center space-x-4 mt-2">
-          <div className="flex items-center space-x-1">
-            <span className="text-yellow-400">★</span>
-            <span className="font-medium">{poolData.rating}</span>
-            <span className="text-gray-500">
-              ({poolData.reviewCount} reviews)
+      <div className="flex flex-col gap-4">
+        <Heading
+          as="h1"
+          size="3xl"
+          className="text-gray-900 dark:text-gray-100"
+        >
+          {poolData.name}
+        </Heading>
+        <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center gap-1">
+            <Star className="w-4 h-4 text-yellow-400 fill-current" />
+            <span className="font-medium text-gray-900 dark:text-gray-100">
+              {poolData.rating}
             </span>
+            <span>({poolData.reviewCount} reviews)</span>
           </div>
-          <span className="text-gray-500">•</span>
-          <span className="text-gray-500">{poolData.location}</span>
-          <span className="text-gray-500">•</span>
-          <span className="text-gray-500">Hosted by {poolData.ownerName}</span>
+          <div className="flex items-center gap-1">
+            <MapPin className="w-4 h-4" />
+            <span>{poolData.location}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <User className="w-4 h-4" />
+            <span>Hosted by {poolData.ownerName}</span>
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 flex flex-col gap-4">
           {/* Images */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <img
-              src={poolData.images[0]}
-              alt={poolData.name}
-              className="w-full h-64 object-cover rounded-lg"
-            />
-            <div className="grid grid-cols-2 gap-2">
-              {poolData.images.slice(1).map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={`${poolData.name} ${index + 2}`}
-                  className="w-full h-31 object-cover rounded-lg"
-                />
-              ))}
+          <div className="bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
+              <img
+                src={poolData.images[0]}
+                alt={poolData.name}
+                className="w-full h-64 object-cover rounded-lg"
+              />
+              <div className="grid grid-cols-2 gap-2">
+                {poolData.images.slice(1).map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`${poolData.name} ${index + 2}`}
+                    className="w-full h-31 object-cover rounded-lg"
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Description */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">About this pool</h2>
-            <p className="text-gray-700 leading-relaxed">
+          <div className="bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl p-6">
+            <Heading as="h2" size="lg" className="mb-4">
+              About this pool
+            </Heading>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
               {poolData.description}
             </p>
           </div>
 
           {/* Features */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">
+          <div className="bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl p-6">
+            <Heading as="h2" size="lg" className="mb-6">
               What this place offers
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            </Heading>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {poolData.features.map((feature, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">{feature}</span>
+                <div key={index} className="flex items-center gap-3">
+                  <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 mt-0.5 border border-gray-300 dark:border-gray-700 rounded-lg p-1">
+                    {getFeatureIcon(feature)}
+                  </div>
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      {feature}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Amenities */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Included amenities</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl p-6">
+            <Heading as="h2" size="lg" className="mb-6">
+              Included amenities
+            </Heading>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {poolData.amenities.map((amenity, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">{amenity}</span>
+                <div key={index} className="flex items-center gap-3">
+                  <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 mt-0.5 border border-gray-300 dark:border-gray-700 rounded-lg p-1">
+                    {getAmenityIcon(amenity)}
+                  </div>
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      {amenity}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Rules */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Pool rules</h2>
-            <ul className="space-y-2">
+          <div className="bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl p-6">
+            <Heading as="h2" size="lg" className="mb-3">
+              Pool rules
+            </Heading>
+            <div className="flex flex-col gap-1">
               {poolData.rules.map((rule, index) => (
-                <li key={index} className="text-sm text-gray-700">
-                  • {rule}
-                </li>
+                <div key={index} className="flex items-center gap-3">
+                  <div className="flex-shrink-0 w-2 h-2 bg-gray-400 rounded-full"></div>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    {rule}
+                  </span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
 
         {/* Booking Card */}
-        <div className="lg:col-span-1">
-          <div className="bg-surface border border-gray-200 rounded-lg shadow-lg p-6 sticky top-4">
-            <div className="mb-4">
-              <div className="flex items-baseline space-x-1">
-                <span className="text-2xl font-medium">
+        <div className="lg:col-span-1 hidden lg:block">
+          <div className="bg-surface border border-gray-200 dark:border-gray-900 rounded-2xl p-6 sticky top-4">
+            <div className="flex flex-col gap-6">
+              {/* <div className="flex items-baseline gap-2">
+                <Heading
+                  as="h3"
+                  size="2xl"
+                  className="text-gray-900 dark:text-gray-100"
+                >
                   ${poolData.pricePerHour}
+                </Heading>
+                <span className="text-gray-400 dark:text-gray-400">
+                  per hour
                 </span>
-                <span className="text-gray-500">per hour</span>
-              </div>
-            </div>
+              </div> */}
 
-            {!showBookingForm ? (
-              <button
-                onClick={() => setShowBookingForm(true)}
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <LinkButton
+                href={`/reserve/${poolId}`}
+                variant="primary"
+                className="w-full"
               >
                 Reserve Now
-              </button>
-            ) : (
-              <div className="space-y-4">
-                <h3 className="font-medium">Select your dates</h3>
+              </LinkButton>
 
-                {/* Calendar */}
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <DayPicker
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    disabled={[
-                      { dayOfWeek: [0, 6] }, // Disable weekends
-                      { before: new Date() }, // Disable past dates
-                    ]}
-                    className="text-sm"
-                  />
+              <div className="flex flex-col gap-2 text-center">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  You won't be charged yet
+                </p>
+                <div className="flex items-center justify-center gap-1">
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <span className="text-sm font-medium">{poolData.rating}</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    · {poolData.reviewCount} reviews
+                  </span>
                 </div>
-
-                {/* Time Selection */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Start Time
-                    </label>
-                    <input
-                      type="time"
-                      value={startTime}
-                      onChange={(e) => setStartTime(e.target.value)}
-                      min={poolData.availableHours.start}
-                      max={poolData.availableHours.end}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      End Time
-                    </label>
-                    <input
-                      type="time"
-                      value={endTime}
-                      onChange={(e) => setEndTime(e.target.value)}
-                      min={startTime}
-                      max={poolData.availableHours.end}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                  </div>
-                </div>
-
-                {/* Guests */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Number of Guests
-                  </label>
-                  <div className="flex items-center space-x-3">
-                    <button
-                      onClick={() => setGuests(Math.max(1, guests - 1))}
-                      className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center"
-                    >
-                      -
-                    </button>
-                    <span className="text-sm font-medium">{guests}</span>
-                    <button
-                      onClick={() => setGuests(Math.min(8, guests + 1))}
-                      className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-                {/* Book Button */}
-                <button
-                  onClick={handleBooking}
-                  disabled={!selectedDate || calculateTotal() === 0}
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-300 disabled:cursor-not-allowed"
-                >
-                  Request Booking
-                </button>
-
-                <button
-                  onClick={() => setShowBookingForm(false)}
-                  className="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
               </div>
-            )}
+            </div>
           </div>
+        </div>
+
+        {/* Sticky Footer for Mobile */}
+        <div className="fixed md:relative bottom-0 left-0 right-0 pt-8 md:pt-6 p-4 md:p-6 bg-gradient-to-b from-transparent to-30% to-bg-default md:bg-transparent md:from-transparent md:to-transparent block lg:hidden">
+          <LinkButton
+            href={`/reserve/${poolId}`}
+            variant="primary"
+            className="w-full"
+          >
+            Reserve Now
+          </LinkButton>
         </div>
       </div>
     </div>

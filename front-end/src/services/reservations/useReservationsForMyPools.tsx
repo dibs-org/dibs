@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { Pool, Reservation, User } from "../../types";
 import { api, axiosInstance } from "../../urls";
+import { useAuth } from "../../AuthProvider";
 
-export const makeReservationsKey = (poolId?: string) => [
-  "reservations",
+export const makeReservationsKey = (poolId?: string, userId?: string) => [
+  "reservations-for-my-pools",
   poolId,
+  userId,
 ];
 
 export type ReservationWithPoolAndUser = Reservation & {
@@ -14,11 +16,12 @@ export type ReservationWithPoolAndUser = Reservation & {
   user?: User;
 };
 
-export const useReservations = (args?: { poolId?: string }) => {
+export const useReservationsForMyPools = (args?: { poolId?: string }) => {
+  const { user } = useAuth();
   const { poolId } = args || {};
 
   return useQuery<ReservationWithPoolAndUser[]>({
-    queryKey: makeReservationsKey(poolId),
+    queryKey: makeReservationsKey(poolId, user?.id),
     queryFn: async () => {
       try {
         const response = await axiosInstance.get(api.makeReservationsURL());
@@ -27,14 +30,18 @@ export const useReservations = (args?: { poolId?: string }) => {
         // TODO: Consider filtering on the server side
         return data.filter((reservation: ReservationWithPoolAndUser) => {
           if (poolId) {
-            return reservation.pool?.id === poolId;
+            return (
+              reservation.pool?.id === poolId &&
+              reservation.pool?.owner === user?.id
+            );
           }
-          return true;
+          return reservation.pool?.owner === user?.id;
         });
       } catch (error) {
         console.error(error);
         throw error;
       }
     },
+    enabled: !!user?.id,
   });
 };

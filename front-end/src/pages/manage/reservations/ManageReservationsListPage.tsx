@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { useReservations } from "../../../services/reservations/useReservations";
+import { useReservationsForMyPools } from "../../../services/reservations/useReservationsForMyPools";
 import Button from "../../../components/Button";
 
 export const ManageReservationsListPage = () => {
-  const { data: reservations = [] } = useReservations();
+  const { data: reservations = [] } = useReservationsForMyPools();
 
   const getStatusColor = (status: string) => {
     switch (status) {

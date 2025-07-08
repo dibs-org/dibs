@@ -62,7 +62,7 @@ export const PoolShape = z.object({
   description: z.string(),
   isActive: z.boolean(),
   createdAt: z.string(),
-  owner: z.string(),
+  owner: UserShape,
 });
 
 export type Pool = z.infer<typeof PoolShape>;
