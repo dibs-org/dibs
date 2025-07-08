@@ -12,10 +12,30 @@ export const UserShape = z.object({
 
 export type User = z.infer<typeof UserShape>;
 
+export const PoolShape = z.object({
+  id: z.string(),
+  name: z.string(),
+  address: z.string(),
+  description: z.string(),
+  isActive: z.boolean(),
+  createdAt: z.string(),
+  owner: UserShape,
+});
+
+export type Pool = z.infer<typeof PoolShape>;
+
+export const PoolFormShape = z.object({
+  name: z.string(),
+  address: z.string(),
+  description: z.string(),
+});
+
+export type PoolForm = z.infer<typeof PoolFormShape>;
+
 // ✅ 1. Reservation Schema (Full Object From Backend)
 export const ReservationSchema = z.object({
   id: z.string(),
-  pool: z.string(),
+  pool: PoolShape,
   userId: z.string(),
   startTime: z.string().datetime(), // UTC ISO string
   endTime: z.string().datetime(), // UTC ISO string
@@ -54,23 +74,3 @@ export const ReservationPostBodySchema = z.object({
 });
 
 export type ReservationPostBody = z.infer<typeof ReservationPostBodySchema>;
-
-export const PoolShape = z.object({
-  id: z.string(),
-  name: z.string(),
-  address: z.string(),
-  description: z.string(),
-  isActive: z.boolean(),
-  createdAt: z.string(),
-  owner: UserShape,
-});
-
-export type Pool = z.infer<typeof PoolShape>;
-
-export const PoolFormShape = z.object({
-  name: z.string(),
-  address: z.string(),
-  description: z.string(),
-});
-
-export type PoolForm = z.infer<typeof PoolFormShape>;
