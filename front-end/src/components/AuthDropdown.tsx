@@ -37,11 +37,6 @@ const AuthDropdown = () => {
 
   return (
     <div className="flex gap-2 items-center">
-      {user && (
-        <span className="text-sm text-gray-500">
-          {user.email || user.phone}
-        </span>
-      )}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

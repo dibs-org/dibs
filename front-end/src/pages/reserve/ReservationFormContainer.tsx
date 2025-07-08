@@ -7,12 +7,12 @@ import z from "zod/v4";
 import Field from "../../components/Field";
 import { usePool } from "../../services/pools/usePool";
 import { Calendar } from "./Calendar";
-import { useReservations } from "../../services/reservations/useReservations";
 import { formatTimeRange } from "./DayHourSelector";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import Button from "../../components/Button";
 import { useParams } from "@tanstack/react-router";
+import { useReservationsForPool } from "../../services/reservations/useReservationsForPool";
 
 const MIN_GUESTS = 1;
 const MAX_GUESTS = 50;
@@ -59,7 +59,7 @@ export const ReservationFormContainer = () => {
     poolId,
   });
 
-  const { data: existingReservations = [] } = useReservations({
+  const { data: existingReservations = [] } = useReservationsForPool({
     poolId,
   });
 
@@ -345,7 +345,6 @@ export const ReservationFormContainer = () => {
       ) : (
         reservationForm
       )}
-      <pre>{JSON.stringify({ formState: reservationFormState }, null, 2)}</pre>
     </div>
   );
 };

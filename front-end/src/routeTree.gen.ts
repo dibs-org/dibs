@@ -13,6 +13,7 @@ import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginPhoneRouteImport } from './routes/login-phone'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ReservationsRouteRouteImport } from './routes/reservations/route'
 import { Route as ManageRouteRouteImport } from './routes/manage/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -46,6 +47,11 @@ const LoginPhoneRoute = LoginPhoneRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReservationsRouteRoute = ReservationsRouteRouteImport.update({
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/manage': typeof ManageRouteRouteWithChildren
   '/reservations': typeof ReservationsRouteRouteWithChildren
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/login-phone': typeof LoginPhoneRoute
   '/signup': typeof SignupRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/login-phone': typeof LoginPhoneRoute
   '/signup': typeof SignupRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/manage': typeof ManageRouteRouteWithChildren
   '/reservations': typeof ReservationsRouteRouteWithChildren
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/login-phone': typeof LoginPhoneRoute
   '/signup': typeof SignupRoute
@@ -186,6 +195,7 @@ export interface FileRouteTypes {
     | '/'
     | '/manage'
     | '/reservations'
+    | '/dashboard'
     | '/login'
     | '/login-phone'
     | '/signup'
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard'
     | '/login'
     | '/login-phone'
     | '/signup'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/'
     | '/manage'
     | '/reservations'
+    | '/dashboard'
     | '/login'
     | '/login-phone'
     | '/signup'
@@ -245,6 +257,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ManageRouteRoute: typeof ManageRouteRouteWithChildren
   ReservationsRouteRoute: typeof ReservationsRouteRouteWithChildren
+  DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   LoginPhoneRoute: typeof LoginPhoneRoute
   SignupRoute: typeof SignupRoute
@@ -282,6 +295,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reservations': {
@@ -424,6 +444,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ManageRouteRoute: ManageRouteRouteWithChildren,
   ReservationsRouteRoute: ReservationsRouteRouteWithChildren,
+  DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   LoginPhoneRoute: LoginPhoneRoute,
   SignupRoute: SignupRoute,

@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import Heading from "../components/Heading";
 import LinkButton from "../components/LinkButton";
+import { useAuth } from "../AuthProvider";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -17,6 +18,12 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { user } = useAuth();
+
+  if (user) {
+    return <Navigate to="/dashboard" />;
+  }
+
   return (
     <div className="w-screen min-h-screen flex items-center justify-center">
       <div className="flex flex-col items-center gap-8 max-w-md w-full px-4">

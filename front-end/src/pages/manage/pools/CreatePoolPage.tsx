@@ -324,8 +324,8 @@ export const CreatePoolPage = () => {
         >
           <div className="p-6">{renderStep()}</div>
 
-          {DISPLAY_MODE === "stepped" && (
-            <div className="flex justify-between items-center p-6 border-t border-gray-200 dark:border-gray-800">
+          <div className="flex justify-between items-center p-6 border-t border-gray-200 dark:border-gray-800">
+            {DISPLAY_MODE === "stepped" && (
               <Button
                 type="button"
                 variant="secondary"
@@ -334,24 +334,14 @@ export const CreatePoolPage = () => {
               >
                 Previous
               </Button>
+            )}
 
-              {currentStep === totalSteps ? (
-                <Button type="submit" variant="primary">
-                  Create pool
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  variant="primary"
-                  onClick={() =>
-                    setCurrentStep(Math.min(totalSteps, currentStep + 1))
-                  }
-                >
-                  Next
-                </Button>
-              )}
-            </div>
-          )}
+            <Button type="submit" variant="primary">
+              {DISPLAY_MODE === "stepped" && currentStep !== totalSteps
+                ? "Next"
+                : "Create pool"}
+            </Button>
+          </div>
         </form>
       </div>
     </div>

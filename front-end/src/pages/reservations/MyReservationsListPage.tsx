@@ -2,13 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useMyReservations } from "../../services/reservations/useMyReservations";
 
 export const MyReservationsListPage = () => {
-  const {
-    data: reservations = [],
-    isError,
-    error,
-  } = useMyReservations({
-    userId: "ec7a91a2-bf9b-4c49-a7a1-abcdef123456",
-  });
+  const { data: reservations = [], isError, error } = useMyReservations();
 
   const getStatusColor = (status: string) => {
     switch (status) {
