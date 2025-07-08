@@ -13,7 +13,9 @@ export const useMyPools = () => {
       try {
         const response = await axiosInstance.get(api.makePoolsURL());
         const pools = response.data;
-        const myPools = pools.filter((pool: Pool) => pool.owner === user?.id);
+        const myPools = pools.filter(
+          (pool: Pool) => pool.owner.id === user?.id
+        );
         return myPools;
       } catch (error) {
         console.error(error);

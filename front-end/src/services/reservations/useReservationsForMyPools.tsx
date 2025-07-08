@@ -32,10 +32,10 @@ export const useReservationsForMyPools = (args?: { poolId?: string }) => {
           if (poolId) {
             return (
               reservation.pool?.id === poolId &&
-              reservation.pool?.owner === user?.id
+              reservation.pool?.owner.id === user?.id
             );
           }
-          return reservation.pool?.owner === user?.id;
+          return reservation.pool?.owner.id === user?.id;
         });
       } catch (error) {
         console.error(error);
