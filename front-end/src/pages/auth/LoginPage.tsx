@@ -36,7 +36,7 @@ export const LoginPage = () => {
       queryClient.setQueryData(makeAuthUserKey(), data.user);
     },
     onSuccess: () => {
-      const redirectUrl = search?.redirect || "/reservations";
+      const redirectUrl = search?.redirect || "/dashboard";
       navigate({ to: redirectUrl });
     },
   });

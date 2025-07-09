@@ -30,6 +30,5 @@ export const api = {
   // Reservations
   makeReservationURL: (id: string) => `/reservations/${id}`,
   makeReservationsURL: () => `/reservations`,
-  makeReservationsForUserURL: (userId?: string) =>
-    `/reservations/user/${userId}`,
+  makeReservationsForUserURL: () => `/reservations/myReservations`,
 };
