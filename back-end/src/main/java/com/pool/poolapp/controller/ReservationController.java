@@ -104,7 +104,7 @@ public class ReservationController {
         return reservationRepo.findAll();
     }
 
-    @GetMapping("/myReservations")
+    @GetMapping("/mine/myReservations")
     public List<Reservation> getMyReservations(@RequestHeader("Authorization") String authHeader) {
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
         throw new RuntimeException("Missing or invalid Authorization header");
@@ -118,7 +118,7 @@ public class ReservationController {
                     reservation.getUser() != null &&
                     reservation.getUser().getAuthUser().toString().equals(authUserId))
             .toList();
-}
+    }
 
     private String getUserIdFromToken(String token) {
         Claims claims = jwtUtil.validateToken(token);
