@@ -33,6 +33,7 @@ declare module "@tanstack/react-router" {
 
 function InnerApp() {
   const { user } = useAuth();
+  console.log("InnerApp has user", !!user);
   return <RouterProvider router={router} context={{ user, queryClient }} />;
 }
 
